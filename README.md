@@ -1,8 +1,11 @@
-About OmniTrack
-A single place to track your life, habits, and mental well-being.
+## MentalTrack (STILL WORKING ON)
 
-All-in-One Tracking
-OmniTrack integrates journaling, workout tracking, and mood monitoring, work tasks, into a single platform so you can manage everything in one place.
+MentalTrack is a web application built with **ASP.NET MVC**.
 
-Mental Health Insights
-By analyzing patterns in your journal entries and habits, OmniTrack helps you discover correlations that can improve your mental well-being.
+### Main features
+
+1. **Journaling and mood tracking** – write daily entries and track your mood.
+2. **Workout tracking** – log workouts and monitor progress.
+3. **Task management** – set tasks and track their completion.
+
+The goal of this app is to have everything for **self-improvement and personal tracking in one place**.
