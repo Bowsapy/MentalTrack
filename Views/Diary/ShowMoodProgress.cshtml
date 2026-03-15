@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MentalTrack.Models.JournalEntry>
+
+@{
+    ViewData["Title"] = "Mood Chart";
+}
+
+@{
+    var labels = Model.Select(e => e.CreatedAt.ToString("dd/MM")).ToArray();
+    var moodValues = Model.Select(e => (int)e.Mood).ToArray(); // předpokládáme, že MoodEnum je int
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Your Mood Over Time</h2>
+    <div style="height:400px;">
+    <canvas id="moodChart"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('moodChart').getContext('2d');
+    const moodChart = new Chart(ctx, {
+        type: 'line', // nebo 'bar' pro sloupcový graf
+        data: {
+            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(labels)),
+            datasets: [{
+                label: 'Mood',
+                data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(moodValues)),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.3, // hladké křivky
+                pointRadius: 5,
+                pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min:0,
+                    max:4,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            // Převede číslo na název nálady
+                            const moods = ['Very Bad','Bad','Neutral','Good','Very Good'];
+                            return moods[value] || value;
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const moods = ['None','Happy','Sad','Anxious','Angry'];
+                            return moods[context.raw] || context.raw;
+                        }
+                    }
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
