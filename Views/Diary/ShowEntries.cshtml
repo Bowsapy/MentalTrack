@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MentalTrack.Models.JournalEntry>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Your Entries</h2>
+    <a asp-action="Create" class="btn btn-success shadow-sm">New Entry</a>
+    <a asp-action="ShowMoodProgress" class="btn btn-success shadow-sm">Show Graph</a>
+
+</div>
+
+
+<div class="row g-3">
+    @foreach (var entry in Model)
+    {
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a asp-action="ShowDiaryContent" asp-route-id="@entry.Id" class="text-decoration-none text-dark">
+                            @entry.Title
+                        </a>
+                    </h5>
+                    <p class="card-text text-muted mb-1">
+                        @entry.CreatedAt.ToString("dd MMM yyyy, HH:mm")
+                    </p>
+                    <span class="badge @GetMoodBadge(entry.Mood)">
+                        @entry.Mood
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@functions {
+    private string GetMoodBadge(MentalTrack.Models.MoodEnum mood)
+    {
+        return mood switch
+        {
+            MentalTrack.Models.MoodEnum.VeryGood => "bg-success",
+            MentalTrack.Models.MoodEnum.Good => "bg-primary",
+            MentalTrack.Models.MoodEnum.Neutral => "bg-warning text-dark",
+            MentalTrack.Models.MoodEnum.Bad => "bg-danger",
+            MentalTrack.Models.MoodEnum.VeryBad => "bg-danger",
+
+            _ => "bg-secondary"
+        };
+    }
+}

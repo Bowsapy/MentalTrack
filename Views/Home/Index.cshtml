@@ -2,7 +2,43 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex justify-content-center align-items-center min-vh-100"
+     style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+    <div class="card shadow-lg p-5 rounded-4" style="max-width: 720px; width: 100%; transition: transform 0.3s;">
+        <div class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-primary">Welcome</h1>
+        </div>
+        <div class="mb-4">
+            <p class="lead text-secondary">
+                Welcome to <span class="fw-bold">Mental Track</span>!
+            </p>
+            <p class="text-muted mb-2">
+                Mental Track is a space where you can record your thoughts, feelings, and daily experiences.
+                It helps you slow down, reflect on your day, and better understand what you’re going through.
+            </p>
+            <p class="text-muted mb-2">
+                Simply write a short entry about how your day was, what happened, or what’s on your mind.
+                Over time, your entries will become a personal journal where you can see patterns in your mood, thoughts, and personal growth.
+            </p>
+            <p class="text-muted fst-italic mb-0">
+                It doesn’t have to be perfect. Just be honest and write for yourself.
+            </p>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/Diary/Create" class="btn btn-primary btn-lg shadow-sm"
+               style="transition: transform 0.2s;">
+                <i class="bi bi-journal-text me-2"></i> Start Your First Entry
+            </a>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    a.btn:hover {
+        transform: scale(1.05);
+    }
+</style>
