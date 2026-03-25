@@ -62,4 +62,5 @@ public class EmbeddingService
             .Select(x => x.GetSingle())
             .ToArray();
     }
+    
 }
