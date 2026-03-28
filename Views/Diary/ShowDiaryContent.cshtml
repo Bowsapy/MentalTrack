@@ -1,0 +1,13 @@
+﻿@model MentalTrack.Models.JournalEntry;
+<h1> @Model.Title</h1>
+<h2> @Model.CreatedAt</h2>
+<p style="word-wrap:break-word; white-space:pre-wrap"> @Model.Content</p>
+<p> @Model.Mood</p>
+
+<form asp-action="DeleteDiaryEntry" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete entry</button>
+    <a asp-action="SimilarEntries" asp-route-id="@Model.Id" class="btn btn-success shadow-sm">
+        Show Similar Entries
+    </a>
+</form><a asp-action="ShowEntries" class="btn btn-primary">Back</a>
