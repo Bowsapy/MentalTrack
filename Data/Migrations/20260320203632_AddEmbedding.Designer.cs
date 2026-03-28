@@ -4,6 +4,7 @@ using MentalTrack.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalTrack.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260320203632_AddEmbedding")]
+    partial class AddEmbedding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,8 +25,6 @@ namespace MentalTrack.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("MentalTrack.Models.JournalEntry", b =>
                 {
                     b.Property<int>("Id")
@@ -60,7 +61,6 @@ namespace MentalTrack.Data.Migrations
                     b.ToTable("Entries");
                 });
 
->>>>>>> 4356dc2 (Pridani Embeddingu + zjsteni a serazeni podle cos podobnosti)
             modelBuilder.Entity("MentalTrack.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -261,6 +261,17 @@ namespace MentalTrack.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("MentalTrack.Models.JournalEntry", b =>
+                {
+                    b.HasOne("MentalTrack.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

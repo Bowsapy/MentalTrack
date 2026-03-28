@@ -1,0 +1,15 @@
+﻿@model List<JournalEntry>
+
+<h2>Podobné zápisy</h2>
+
+@foreach (var entry in Model)
+{
+    <div>
+        <p>@entry.Title</p>
+
+        <p>@entry.Content</p>
+        <p>@entry.Mood</p>
+
+        <hr />
+    </div>
+}

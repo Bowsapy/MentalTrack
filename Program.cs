@@ -3,12 +3,15 @@ using MentalTrack.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.WebHost.UseUrls("http://192.168.0.252:5000");
+
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddHttpClient<EmbeddingService>();
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 8;

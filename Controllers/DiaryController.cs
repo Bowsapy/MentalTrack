@@ -3,20 +3,22 @@ using MentalTrack.Data;
 using MentalTrack.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.Json;
 [Authorize]
 public class DiaryController : Controller
 {
     private readonly AppDbContext _context;
     private readonly ILogger<DiaryController> _logger;
-
-
-    public DiaryController(AppDbContext context, ILogger<DiaryController> logger)
+    private readonly EmbeddingService _embeddingService;
+    private readonly CosineSimilarityService _similarityService;
+    public DiaryController(AppDbContext context, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService)
     {
         _context = context;
         _logger = logger;
-
+        _embeddingService = embeddingService;
+        _similarityService = similarityService;
     }
 
     public IActionResult ShowEntries()
@@ -31,7 +33,7 @@ public class DiaryController : Controller
 
         return View(entries);  // předá seznam do Index.cshtml
     }
-
+    [HttpGet]
     public IActionResult Create()
     {
         return View();
@@ -71,42 +73,69 @@ public class DiaryController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(JournalEntry entry)
+    public async Task<IActionResult> Create(JournalEntry entry)
     {
-        _logger.LogInformation("---------------------------------------------------------------------");
-        foreach (var state in ModelState)
-        {
-            foreach (var error in state.Value.Errors)
-            {
-                _logger.LogInformation("Pole '{0}': {1}", state.Key, error.ErrorMessage);
-            }
-        }        // nastavení UserId a času před validací
+        _logger.LogInformation("Create called");
+
         entry.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         entry.CreatedAt = DateTime.Now;
 
-        // odstranění staré chyby a znovu validace
         ModelState.Remove("UserId");
         TryValidateModel(entry);
 
-
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            _context.Entries.Add(entry);
-            _context.SaveChanges();
-
-            return RedirectToAction("ShowEntries");
+            return View(entry);
         }
 
-        foreach (var state in ModelState)
+        if (string.IsNullOrWhiteSpace(entry.Content))
         {
-            foreach (var error in state.Value.Errors)
+            ModelState.AddModelError("Content", "Content cannot be empty");
+            return View(entry);
+        }
+
+        entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
+
+        _context.Entries.Add(entry);
+        _context.SaveChanges();
+
+        return RedirectToAction("ShowEntries");
+    }
+    public IActionResult SimilarEntries(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var target = _context.Entries
+            .FirstOrDefault(e => e.Id == id && e.UserId == userId);
+
+        if (target == null)
+            return NotFound();
+
+        var targetVector = (target.Embedding).ToList();
+
+        var entries = _context.Entries
+            .Where(e => e.UserId == userId && e.Embedding != null)
+            .ToList();
+
+
+        var sorted = entries
+            .Select(e => new
             {
-                _logger.LogInformation($"Pole '{state.Key}': {error.ErrorMessage}");
-            }
-        }
-        return View(entry);
+                Entry = e,
+                Score = _similarityService.Calculate(
+                    targetVector,
+                   e.Embedding.ToList()
+                )
+            })
+            .OrderByDescending(x => x.Score)
+            .Where(x => x.Score > 0.7)
+            .Select(x => x.Entry)
+            .ToList();
+
+        return View(sorted);
     }
 
-    
+
+
 
 }
