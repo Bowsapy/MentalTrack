@@ -128,7 +128,7 @@ public class DiaryController : Controller
                 )
             })
             .OrderByDescending(x => x.Score)
-            .Where(x => x.Score > 0.7)
+            .Where(x => x.Score > 0.5)
             .Select(x => x.Entry)
             .ToList();
 

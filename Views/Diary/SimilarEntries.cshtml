@@ -1,15 +1,78 @@
 ﻿@model List<JournalEntry>
 
-<h2>Podobné zápisy</h2>
+<style>
+    .entries-wrapper {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 16px;
+    }
 
-@foreach (var entry in Model)
-{
-    <div>
-        <p>@entry.Title</p>
+    .entry-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
 
-        <p>@entry.Content</p>
-        <p>@entry.Mood</p>
+        .entry-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+        }
 
-        <hr />
-    </div>
-}
+    .entry-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #111827;
+    }
+
+    .entry-content {
+        font-size: 14px;
+        color: #374151;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+
+    .entry-mood {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        background: #eef2ff;
+        color: #4338ca;
+    }
+
+    .page-title {
+        text-align: center;
+        font-size: 26px;
+        font-weight: 700;
+        margin: 30px 0;
+        color: #111827;
+    }
+</style>
+
+<div class="entries-wrapper">
+
+    <div class="page-title">Similar Entries</div>
+
+    @foreach (var entry in Model)
+    {
+        <div class="entry-card">
+
+            <div class="entry-title">@entry.Title</div>
+
+            <div class="entry-content">
+                @entry.Content
+            </div>
+
+            <span class="entry-mood">
+                @entry.Mood
+            </span>
+
+        </div>
+    }
+
+</div>
