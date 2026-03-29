@@ -10,8 +10,10 @@ namespace MentalTrack.Data
             : base(options)
         {
         }
+        public DbSet<JournalEntry> Entries { get; set; }
 
-   
+
+
     }
 }
 

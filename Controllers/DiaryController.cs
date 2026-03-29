@@ -134,10 +134,6 @@ public class DiaryController : Controller
 
         return View(sorted);
     }
-    public void FindAIState()
-    {
-        
-    }
 
 
 

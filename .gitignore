@@ -360,7 +360,5 @@ MigrationBackup/
 .ionide/
 
 # Fody - auto-generated XML schema
-FodyWeavers.xsd
-passwords.env.bak 
-passwords.env
-sf
+FodyWeavers.xsdpasswords.env 
+passwords.env 
