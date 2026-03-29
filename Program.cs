@@ -3,11 +3,11 @@ using MentalTrack.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
 //builder.WebHost.UseUrls("http://192.168.0.252:5000");
-
+builder.Services.AddScoped<CosineSimilarityService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
