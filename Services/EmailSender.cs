@@ -12,7 +12,7 @@ public class EmailSender : IEmailSender
         Console.WriteLine(htmlMessage);
         var smtp = new SmtpClient("smtp.gmail.com", 587)
         {
-            Credentials = new NetworkCredential("janbouza5@gmail.com", "jfeg hvsl nijx mquh"),
+            Credentials = new NetworkCredential("janbouza5@gmail.com", ""),
             EnableSsl = true
         };
 
