@@ -143,7 +143,7 @@ namespace MentalTrack.Controllers
             if (user == null )
             {
                 // nikdy neprozrazujeme existenci účtu
-                return RedirectToAction("Login");
+                return RedirectToAction("ForgotPasswordConfirmation");
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -168,6 +168,7 @@ namespace MentalTrack.Controllers
             if (token == null || email == null)
             {
                 return RedirectToAction("Index", "Home");
+
             }
 
             var model = new ResetPasswordViewModel

@@ -12,10 +12,8 @@ namespace MentalTrack.ViewModels
         [Required(ErrorMessage = "Password is required")]
 
         public string Password { get; set; }
-        [StringLength(40,MinimumLength =8,ErrorMessage ="the {0} must be at {2} and at mas {1} character")]
-        [DataType(DataType.Password)]
+   
         [Required(ErrorMessage = "PhoneNum is required")]
-
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Confirm Password is required")]
         [DataType(DataType.Password)]
