@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
+
 public class EmailSender : IEmailSender
 {
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -12,7 +13,7 @@ public class EmailSender : IEmailSender
         Console.WriteLine(htmlMessage);
         var smtp = new SmtpClient("smtp.gmail.com", 587)
         {
-            Credentials = new NetworkCredential("janbouza5@gmail.com", "jfeg hvsl nijx mquh"),
+            Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("GMAIL"), Environment.GetEnvironmentVariable("GMAIL_KEY")),
             EnableSsl = true
         };
 

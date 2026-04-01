@@ -6,7 +6,7 @@ namespace MentalTrack.Models
     {
         public int Id { get; set; }
         public UserStateEnum UserState { get; set; }
-        public float[]? Embedding { get; set; }
+        public string[]? Embedding { get; set; }
 
     }
 }

@@ -18,7 +18,7 @@ namespace MentalTrack.Models
         public string UserId { get; set; }
         public User? User { get; set; }
         public MoodEnum Mood { get; set; }
-        public float[]? Embedding { get; set; }
+        public string[]? Embedding { get; set; }
 
     }
 }

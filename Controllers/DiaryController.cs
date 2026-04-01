@@ -1,6 +1,7 @@
 ﻿using MentalTrack.Controllers;
 using MentalTrack.Data;
 using MentalTrack.Models;
+using MentalTrack.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,14 @@ public class DiaryController : Controller
     private readonly ILogger<DiaryController> _logger;
     private readonly EmbeddingService _embeddingService;
     private readonly CosineSimilarityService _similarityService;
-    public DiaryController(AppDbContext context, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService)
+    private readonly EmbeddingConverter _embeddingConverter;
+    public DiaryController(AppDbContext context, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService,EmbeddingConverter embeddingConverter)
     {
         _context = context;
         _logger = logger;
         _embeddingService = embeddingService;
         _similarityService = similarityService;
+        _embeddingConverter = embeddingConverter;
     }
 
     public IActionResult ShowEntries()
@@ -111,7 +114,7 @@ public class DiaryController : Controller
         if (target == null)
             return NotFound();
 
-        var targetVector = (target.Embedding).ToList();
+        var targetVector = _embeddingConverter.ConvertToFloatList(target.Embedding);
 
         var entries = _context.Entries
             .Where(e => e.UserId == userId && e.Embedding != null)
@@ -124,11 +127,11 @@ public class DiaryController : Controller
                 Entry = e,
                 Score = _similarityService.Calculate(
                     targetVector,
-                   e.Embedding.ToList()
+                   _embeddingConverter.ConvertToFloatList(e.Embedding)
                 )
             })
             .OrderByDescending(x => x.Score)
-            .Where(x => x.Score > 0.5)
+            .Where(x => x.Score > 0.6)
             .Select(x => x.Entry)
             .ToList();
 

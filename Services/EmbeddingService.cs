@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using MentalTrack.Services;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -6,12 +7,14 @@ public class EmbeddingService
 {
     private readonly HttpClient _http;
     private readonly ILogger<EmbeddingService> _logger;
+    private readonly EmbeddingConverter _embeddingConverter;
 
 
-    public EmbeddingService(HttpClient http, ILogger<EmbeddingService> logger)
+    public EmbeddingService(HttpClient http, ILogger<EmbeddingService> logger, EmbeddingConverter embeddingConverter)
     {
         _http = http;
         _logger = logger;
+        _embeddingConverter = embeddingConverter;
 
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
@@ -26,7 +29,7 @@ public class EmbeddingService
             new AuthenticationHeaderValue("Bearer", apiKey);
     }
 
-    public async Task<float[]> GetEmbedding(string text)
+    public async Task<string[]> GetEmbedding(string text)
     {
         var body = new
         {
@@ -55,11 +58,13 @@ public class EmbeddingService
 
         using var doc = JsonDocument.Parse(json);
 
-        return doc.RootElement
+        float[] floatEMB =  doc.RootElement
             .GetProperty("data")[0]
             .GetProperty("embedding")
             .EnumerateArray()
             .Select(x => x.GetSingle())
             .ToArray();
+
+        return (_embeddingConverter.ConvertToStringArray(floatEMB)); 
     }
 }
