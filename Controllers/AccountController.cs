@@ -90,14 +90,11 @@ namespace MentalTrack.Controllers
                 PhoneNumber = model.PhoneNumber
             };
 
-            _logger.LogInformation("RESULT SE TVORII USPESNE.................................");
 
             var result = await _userManager.CreateAsync(user, model.Password);
-            _logger.LogInformation("RESULT SE VYTVROIL USPESNE.................................");
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("POST metoda byla zavolána");
                 await _signInManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "Home");
 
@@ -142,7 +139,6 @@ namespace MentalTrack.Controllers
 
             if (user == null )
             {
-                // nikdy neprozrazujeme existenci účtu
                 return RedirectToAction("ForgotPasswordConfirmation");
             }
 

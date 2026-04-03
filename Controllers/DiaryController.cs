@@ -64,7 +64,6 @@ public class DiaryController : Controller
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        // najdeme záznam, který patří tomuto uživateli
         var entry = _context.Entries.FirstOrDefault(e => e.Id == id && e.UserId == userId);
         if (entry == null)
             return NotFound();
@@ -74,6 +73,8 @@ public class DiaryController : Controller
 
         return RedirectToAction("ShowEntries"); // 
     }
+
+    
 
     [HttpPost]
     public async Task<IActionResult> Create(JournalEntry entry)
