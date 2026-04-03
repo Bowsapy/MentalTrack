@@ -1,7 +1,18 @@
-﻿@model MentalTrack.Models.UserStatesEmb
+﻿@model MentalTrack.ViewModels.CreateNewUserStateViewModel
+@using MentalTrack.Enums
+<form asp-action="CreateNewUserState" method="post">
 
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+    <div>
+        <label>Text</label>
+        <input asp-for="Content" />
+    </div>
+
+    <div>
+        <label>State</label>
+        <select asp-for="State" asp-items="Html.GetEnumSelectList<UserStateEnum>()">
+        </select>
+    </div>
+
+    <button type="submit">Odeslat</button>
+
+</form>
