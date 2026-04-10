@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MentalTrack.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MentalTrack.Models
@@ -19,6 +20,7 @@ namespace MentalTrack.Models
         public User? User { get; set; }
         public MoodEnum Mood { get; set; }
         public string[]? Embedding { get; set; }
+        public string[]? UserStates { get; set; }
 
     }
 }

@@ -1,0 +1,34 @@
+﻿@model Dictionary<JournalEntry, IEnumerable<UserStatesEmb>>
+
+<h2>Podobné stavy</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Žádné podobné stavy nenalezeny.</p>
+}
+else
+{
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>Entry</th>
+                <th>Stav</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kvp in Model)
+            {
+                var entry = kvp.Key;
+                var states = kvp.Value;
+
+                foreach (var state in states)
+                {
+                    <tr>
+                        <td>@entry.Title</td> <!-- uprav podle property -->
+                        <td>@state.UserState</td> <!-- uprav podle property -->
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
