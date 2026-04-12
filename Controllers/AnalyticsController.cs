@@ -11,6 +11,7 @@ namespace MentalTrack.Controllers
 {
     public class AnalyticsController : Controller
     {
+        private readonly ILogger<AccountController> _logger;
         private readonly AppDbContext _context;
         private readonly EmbeddingService _embeddingService;
         private readonly EmbeddingConverter _embeddingConverter;
@@ -43,36 +44,37 @@ namespace MentalTrack.Controllers
         public IActionResult SimilarUserStates()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userEntries = _context.Entries.Where(e => e.UserId == userId).ToList();
-            var allUserStates = _context.UserStates .ToList();
-            
+
+            var userEntries = _context.Entries
+                .Where(e => e.UserId == userId && e.Embedding != null)
+                .ToList();
+
+            var allUserStates = _context.UserStates
+                .Where(s => s.Embedding != null)
+                .ToList();
+
             var matches = userEntries
-    .Where(e => e.Embedding != null)
-    .SelectMany(entry => allUserStates.Where(s => s.Embedding != null),
-        (entry, state) => new
-        {
-            Entry = entry,
-            State = state,
-            Score = _similarityService.Calculate(
+    .SelectMany(entry => allUserStates,
+        (entry, state) => new EntryStateScore(
+            entry.Id,
+            state.Id,
+            _similarityService.Calculate(
                 _embeddingConverter.ConvertToFloatList(entry.Embedding),
                 _embeddingConverter.ConvertToFloatList(state.Embedding)
             )
-        })
-    .Where(x => x.Score > 0.6)
-    .GroupBy(x => x.Entry)
-    .ToDictionary(
-        g => g.Key,
-        g => g
-            .OrderByDescending(x => x.Score) //  (seřazení podle relevance)
-            .Select(x => x.State)
-           
-    );
-
-
-            return View(matches);
+        )
+    )
+    .Where(x => x.SimScore > 0.4).ToList();
+   _context.EntryStates.AddRange(matches);
+    _context.SaveChanges();
 
 
 
+            return View();
         }
+
+        
+       
+
     }
 }
