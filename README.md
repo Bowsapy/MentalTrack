@@ -2,11 +2,8 @@
 
 MentalTrack is a web application built with **ASP.NET MVC**.
 
-### Main features
-
-1. **Journaling and mood tracking** – write daily entries and track your mood + using AI embeddings to compare entries and find out correlation.
-2. **Workout tracking** – log workouts and monitor progress.
-3. **Task management** – set tasks and track their completion.
+The main goal of the project is to combine journaling with data analysis to provide deeper insights into a user's mental state.
+Analyzing journal entries with AI embeddings to uncover triggers.
 
 The goal of this app is to have everything for **self-improvement and personal tracking in one place**.
 ![MT1](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/MT1.png)
