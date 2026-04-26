@@ -11,18 +11,19 @@ namespace MentalTrack.Controllers
 {
     public class AnalyticsController : Controller
     {
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger<AnalyticsController> _logger;
         private readonly AppDbContext _context;
         private readonly EmbeddingService _embeddingService;
         private readonly EmbeddingConverter _embeddingConverter;
         private readonly CosineSimilarityService _similarityService;
 
-        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService)
+        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger)
         {
             _context = context;
             _embeddingService = embeddingService;
             _embeddingConverter = embeddingConverter;
             _similarityService = similarityService;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -41,36 +42,68 @@ namespace MentalTrack.Controllers
             return RedirectToAction("AddNewUserState");
 
         }
-        public IActionResult SimilarUserStates()
+        public void SimilarUserStates()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var userEntries = _context.Entries
-                .Where(e => e.UserId == userId && e.Embedding != null)
+            var entryParts = _context.EntryParts
+                .Where(e => e.Embedding != null
+                    && e.JournalEntry.UserId == userId)
                 .ToList();
+
+
 
             var allUserStates = _context.UserStates
                 .Where(s => s.Embedding != null)
                 .ToList();
 
-            var matches = userEntries
-    .SelectMany(entry => allUserStates,
-        (entry, state) => new EntryStateScore(
-            entry.Id,
-            state.Id,
-            _similarityService.Calculate(
-                _embeddingConverter.ConvertToFloatList(entry.Embedding),
-                _embeddingConverter.ConvertToFloatList(state.Embedding)
-            )
-        )
-    )
-    .Where(x => x.SimScore > 0.4).ToList();
-   _context.EntryStates.AddRange(matches);
-    _context.SaveChanges();
+            var existingMatches = _context.EntryStates
+      .Where(x => x.JournalEntryPart.JournalEntry.UserId == userId)
+      .Select(x => new { x.JournalEntryPartId, x.UserStateId })
+      .AsEnumerable()
+      .Select(x => (x.JournalEntryPartId, x.UserStateId))
+      .ToHashSet();
+
+    //vytvorim hash set pro zjisteni duplicit, protoze list by sezral moc pameti
+
+            var matches = new List<EntryStateScore>();
+
+            foreach (var part in entryParts)
+            {
+                var entryVector = _embeddingConverter.ConvertToFloatList(part.Embedding);
+
+                var bestMatches = allUserStates
+                    .Select(state => new
+                    {
+                        state.Id,
+                        Score = _similarityService.Calculate(
+                            entryVector,
+                            _embeddingConverter.ConvertToFloatList(state.Embedding))
+                    })
+                    .OrderByDescending(x => x.Score)
+                    .Take(5); 
+
+                foreach (var match in bestMatches)
+                {
+                    if (match.Score > 0.05)
+                    {
+                        if (!existingMatches.Contains((part.Id, match.Id))){ 
+                        
+                            matches.Add(new EntryStateScore(part.Id, match.Id, match.Score));
+
+
+                        }
+                    }
+                }
+
+          
 
 
 
-            return View();
+            }
+
+            _context.EntryStates.AddRange(matches);
+            _context.SaveChanges();
         }
 
         

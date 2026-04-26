@@ -1,1 +1,9 @@
-﻿<p> sfs</p>
+﻿@model List<EntryStateScore>
+@foreach (var item in Model)
+{
+    <p>@item.JournalEntryPartId</p>
+    <p>@item.Id</p>
+    <p>@item.UserStateId</p>
+
+
+}

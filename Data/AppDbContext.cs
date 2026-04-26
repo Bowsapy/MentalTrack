@@ -14,7 +14,7 @@ namespace MentalTrack.Data
         public DbSet<JournalEntry> Entries { get; set; }
         public DbSet<UserStatesEmb> UserStates { get; set; }
         public DbSet<EntryStateScore> EntryStates { get; set; }
-
+        public DbSet<JournalEntryPart> EntryParts { get; set; }
 
 
     }
