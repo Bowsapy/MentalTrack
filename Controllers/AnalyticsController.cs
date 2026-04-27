@@ -3,6 +3,7 @@ using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
 
 
@@ -42,7 +43,13 @@ namespace MentalTrack.Controllers
             return RedirectToAction("AddNewUserState");
 
         }
-        public void SimilarUserStates()
+   
+        public IActionResult Features()
+        {
+            return View();
+        }
+
+        public void FindEntryStateMatches()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -59,9 +66,9 @@ namespace MentalTrack.Controllers
 
             var existingMatches = _context.EntryStates
       .Where(x => x.JournalEntryPart.JournalEntry.UserId == userId)
-      .Select(x => new { x.JournalEntryPartId, x.UserStateId })
+      .Select(x => new { x.JournalEntryPartId, x.UserStatesEmbId })
       .AsEnumerable()
-      .Select(x => (x.JournalEntryPartId, x.UserStateId))
+      .Select(x => (x.JournalEntryPartId, x.UserStatesEmbId))
       .ToHashSet();
 
     //vytvorim hash set pro zjisteni duplicit, protoze list by sezral moc pameti
@@ -85,7 +92,7 @@ namespace MentalTrack.Controllers
 
                 foreach (var match in bestMatches)
                 {
-                    if (match.Score > 0.05)
+                    if (match.Score > 0.3)
                     {
                         if (!existingMatches.Contains((part.Id, match.Id))){ 
                         
@@ -106,8 +113,33 @@ namespace MentalTrack.Controllers
             _context.SaveChanges();
         }
 
-        
-       
+
+        public Dictionary<MoodEnum, List<UserStateEnum>> GetMoodStatesMatches()
+        {
+            var result = new Dictionary<MoodEnum, List<UserStateEnum>>();
+
+            foreach (var mood in Enum.GetValues<MoodEnum>())
+            {
+                var userStates = _context.EntryStates
+                    .Where(es => es.JournalEntryPart.JournalEntry.Mood == mood)
+                    .Select(es => es.UserStatesEmb.UserState)
+                    .ToList();
+
+                result[mood] = userStates.Distinct().ToList();
+            }
+
+            return result;
+        }
+        public IActionResult ViewMatches()
+        {
+            //volání metody FindEntryStateMatches nějak lépe
+            FindEntryStateMatches();
+            return View(GetMoodStatesMatches());
+        }
+
+
+
+
 
     }
 }

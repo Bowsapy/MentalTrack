@@ -1,0 +1,12 @@
+﻿@using MentalTrack.Enums
+@model Dictionary<MoodEnum, List<UserStateEnum>>
+
+@foreach (var item in Model)
+{
+    <h3>@item.Key</h3>
+
+    @foreach (var cislo in item.Value)
+    {
+        <div>@cislo</div>
+    }
+}

@@ -7,13 +7,14 @@ namespace MentalTrack.Models
         public int Id { get; set; }
         public int JournalEntryPartId {  get; set; }
         public JournalEntryPart JournalEntryPart { get; set; }
-        public int UserStateId { get; set; }
+        public int UserStatesEmbId { get; set; }
+        public UserStatesEmb UserStatesEmb { get; set; }
         public double SimScore { get; set; }
 
         public EntryStateScore(int journalEntryId, int userStateId, double simScore)
         {
             JournalEntryPartId = journalEntryId;
-            UserStateId = userStateId;
+            UserStatesEmbId = userStateId;
             SimScore = simScore;
         }
         public EntryStateScore() { }
