@@ -24,7 +24,7 @@
                         @entry.CreatedAt.ToString("dd MMM yyyy, HH:mm")
                     </p>
                     <span class="badge @GetMoodBadge(entry.Mood)">
-                        @entry.Mood
+                        @entry.Mood.GetDisplayName()
                     </span>
                 </div>
             </div>

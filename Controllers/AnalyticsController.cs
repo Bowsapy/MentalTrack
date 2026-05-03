@@ -1,4 +1,5 @@
-﻿using MentalTrack.Data;
+﻿using MentalTrack.Constants;
+using MentalTrack.Data;
 using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.Services;
@@ -92,7 +93,7 @@ namespace MentalTrack.Controllers
 
                 foreach (var match in bestMatches)
                 {
-                    if (match.Score > 0.3)
+                    if (match.Score > AppConstants.MinScore)
                     {
                         if (!existingMatches.Contains((part.Id, match.Id))){ 
                         
@@ -124,7 +125,8 @@ namespace MentalTrack.Controllers
                     .Where(es => es.JournalEntryPart.JournalEntry.Mood == mood)
                     .Select(es => es.UserStatesEmb.UserState)
                     .ToList();
-
+              
+                ;
                 result[mood] = userStates.Distinct().ToList();
             }
 
