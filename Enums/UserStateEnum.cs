@@ -18,5 +18,13 @@ namespace MentalTrack.Enums
         [Display(Name = "Being alone")]
 
         Alone = 4,
+
+        [Display(Name = "Exercise / sport")]
+        Sport = 5,
+
+        [Display(Name = "Being with your girlfriend / boyfriend")]
+        Partner = 6,
+
+
     }
 }
