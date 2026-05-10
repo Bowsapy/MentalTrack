@@ -1,7 +1,17 @@
-﻿<form asp-controller="Analytics" asp-action="ViewMatches">
-    <button type="submit"> View mood analysis</button>
-</form>
-<form asp-controller="Analytics" asp-action="AddNewUserState">
-    <button type="submit"> Add new user state</button>
+﻿<form asp-controller="Analytics" asp-action="ViewMatches" class="d-inline">
+    <button type="submit" class="btn btn-primary m-1">
+        View mood analysis
+    </button>
 </form>
 
+<form asp-controller="Analytics" asp-action="ViewMoodOnWeekDays" class="d-inline">
+    <button type="submit" class="btn btn-success m-1">
+        View average mood on weekdays
+    </button>
+</form>
+
+<form asp-controller="Analytics" asp-action="AddNewUserState" class="d-inline">
+    <button type="submit" class="btn btn-outline-secondary m-1">
+        Add new user state
+    </button>
+</form>

@@ -18,14 +18,16 @@ namespace MentalTrack.Controllers
         private readonly EmbeddingService _embeddingService;
         private readonly EmbeddingConverter _embeddingConverter;
         private readonly CosineSimilarityService _similarityService;
+        private readonly WorkingWithDates _dateService;
 
-        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger)
+        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService)
         {
             _context = context;
             _embeddingService = embeddingService;
             _embeddingConverter = embeddingConverter;
             _similarityService = similarityService;
             _logger = logger;
+            _dateService = dateService;
         }
         public IActionResult Index()
         {
@@ -104,9 +106,6 @@ namespace MentalTrack.Controllers
                     }
                 }
 
-          
-
-
 
             }
 
@@ -136,18 +135,36 @@ namespace MentalTrack.Controllers
                     g => g.ToDictionary(x => x.UserState, x => x.Count)
                 );
             return result;
-            //vytvori Dictionary<Mood, Dictionary<UserStateEnum,count( userstates)>
+            //vytvori Dictionary<Mood, Dictionary<UserStateEnum,count( userstates) - umoznuje zjistit váhu shody>
         }
         public IActionResult ViewMatches()
         {
-            FindEntryStateMatches();
+            JournalEntry entry = _context.Entries
+                .FirstOrDefault(e => e.Id > 0);
+          
+
+
+        FindEntryStateMatches();
             return View(GetMoodStatesMatches());
-        }            //volání metody FindEntryStateMatches nějak lépe
+        }
+
+        //volání metody FindEntryStateMatches nějak lépe
 
 
-
-
-
+        public IActionResult ViewMoodOnWeekDays()
+        {
+            var data = _context.Entries
+       .AsEnumerable()
+       .GroupBy(e => e.CreatedAt.DayOfWeek)
+       .ToDictionary(
+           g => g.Key.ToString(),
+           g => (int)g.Average(x => (int)x.Mood)
+       );
+            return View(data);
+        }
         
+
+
+
     }
 }

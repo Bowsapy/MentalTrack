@@ -14,7 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<EmbeddingService>();
 builder.Services.AddScoped<ChunkJournalEntry>();
-builder.Services.AddSingleton<EmbeddingConverter>(); 
+builder.Services.AddSingleton<EmbeddingConverter>();
+builder.Services.AddScoped<WorkingWithDates>();
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 8;

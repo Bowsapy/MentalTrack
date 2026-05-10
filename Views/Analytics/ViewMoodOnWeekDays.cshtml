@@ -1,0 +1,20 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using MentalTrack.Enums
+
+
+<h1> Average mood in a week</h1>
+<br />
+@foreach (var item in Model)
+{
+    var mood = (MoodEnum)item.Value;
+
+    var display = mood.GetType()
+        .GetField(mood.ToString())
+        ?.GetCustomAttribute<DisplayAttribute>()
+        ?.Name ?? mood.ToString();
+
+    <div>
+        @item.Key : @display
+    </div>
+}
