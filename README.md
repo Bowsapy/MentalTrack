@@ -16,3 +16,5 @@ Done features:
 ![MT2](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt2.png)
 ![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt3.png)
 ![MT5](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt5.png)
+![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt7.png)
+
