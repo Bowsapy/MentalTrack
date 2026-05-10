@@ -1,23 +1,22 @@
 ﻿@using MentalTrack.Enums
-@model Dictionary<MoodEnum, List<UserStateEnum>>
+@model Dictionary<MoodEnum, Dictionary<UserStateEnum, int>>
 
-
-@*
-    pro kazdou mood vypis jeji list userstate
-*@
 @foreach (var item in Model)
 {
-    @if (item.Value.Count > 0)
+    if (item.Value.Count > 0)
     {
-    <h3>U tend to be in @item.Key.GetDisplayName() mood when u write about : </h3>
+        <h3>
+            U tend to be in @item.Key.GetDisplayName() mood when u write about:
+        </h3>
+
+        <ul>
+            @foreach (var state in item.Value)
+            {
+                <li>
+                    @state.Key.GetDisplayName(): <span>match in </span>@state.Value <span> entries</span>
+                 
+                </li>
+            }
+        </ul>
     }
-    @if(item.Value.Count> 0)
-
-        @foreach (var cislo in item.Value)
-        {
-            <p> @cislo.GetDisplayName()  </p>
-        }
-
-    
-
 }

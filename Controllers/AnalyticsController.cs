@@ -115,33 +115,39 @@ namespace MentalTrack.Controllers
         }
 
 
-        public Dictionary<MoodEnum, List<UserStateEnum>> GetMoodStatesMatches()
+        public Dictionary<MoodEnum, Dictionary<UserStateEnum,int>> GetMoodStatesMatches()
         {
-            var result = new Dictionary<MoodEnum, List<UserStateEnum>>();
-
-            foreach (var mood in Enum.GetValues<MoodEnum>())
-            {
-                var userStates = _context.EntryStates
-                    .Where(es => es.JournalEntryPart.JournalEntry.Mood == mood)
-                    .Select(es => es.UserStatesEmb.UserState)
-                    .ToList();
-              
-                ;
-                result[mood] = userStates.Distinct().ToList();
-            }
-
+            var result = _context.EntryStates
+                .GroupBy(es => new
+                {
+                    Mood = es.JournalEntryPart.JournalEntry.Mood,
+                    UserState = es.UserStatesEmb.UserState
+                })
+                .Select(g => new
+                {
+                    g.Key.Mood,
+                    g.Key.UserState,
+                    Count = g.Count()
+                })
+                .ToList()
+                .GroupBy(x => x.Mood)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.ToDictionary(x => x.UserState, x => x.Count)
+                );
             return result;
+            //vytvori Dictionary<Mood, Dictionary<UserStateEnum,count( userstates)>
         }
         public IActionResult ViewMatches()
         {
-            //volání metody FindEntryStateMatches nějak lépe
             FindEntryStateMatches();
             return View(GetMoodStatesMatches());
-        }
+        }            //volání metody FindEntryStateMatches nějak lépe
 
 
 
 
 
+        
     }
 }

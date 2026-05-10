@@ -22,7 +22,7 @@ namespace MentalTrack.Enums
         [Display(Name = "Exercise / sport")]
         Sport = 5,
 
-        [Display(Name = "Being with your girlfriend / boyfriend")]
+        [Display(Name = "Being with your friend / partner")]
         Partner = 6,
 
 
