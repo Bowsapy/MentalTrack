@@ -22,5 +22,7 @@ namespace MentalTrack.Models
         public string[]? Embedding { get; set; }
         public string[]? UserStates { get; set; }
 
+        public DayPhasesEnum DayPhase { get; set; }
+
     }
 }

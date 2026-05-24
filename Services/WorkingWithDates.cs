@@ -1,4 +1,5 @@
 ﻿using MentalTrack.Enums;
+using MentalTrack.Models;
 
 public class WorkingWithDates
 {
@@ -15,5 +16,33 @@ public class WorkingWithDates
             DayOfWeek.Sunday => DayInWeekEnum.Sunday,
             _ => throw new ArgumentOutOfRangeException()
         };
+    }
+
+    //zavest konstanty pro denni faze, by bylo fajn
+    public DayPhasesEnum GetDayPhase(DateTime date)
+    {
+        int hour = date.Hour;
+        DayPhasesEnum phase = DayPhasesEnum.Morning;
+        if (hour >= 0 & hour <= 6)
+        {
+            phase = DayPhasesEnum.Night;
+        }
+        else if (hour >= 6 & hour <= 12)
+        {
+            phase = DayPhasesEnum.Morning;
+
+        }
+        else if (hour >= 12 & hour <= 18)
+        {
+            phase = DayPhasesEnum.Afternoon;
+
+        }
+        else if (hour >= 18 & hour <= 24)
+        {
+            phase = DayPhasesEnum.Evening;
+
+        }
+        return phase;
+
     }
 }

@@ -162,7 +162,18 @@ namespace MentalTrack.Controllers
        );
             return View(data);
         }
-        
+        public IActionResult ViewMoodOnDayPhases()
+        {
+            var data = _context.Entries
+       .AsEnumerable()
+       .GroupBy(e => e.DayPhase)
+       .ToDictionary(
+           g => g.Key.ToString(),
+           g => (int)g.Average(x => (int)x.Mood)
+       );
+            return View(data);
+        }
+
 
 
 

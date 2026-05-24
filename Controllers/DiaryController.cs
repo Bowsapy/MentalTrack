@@ -16,7 +16,9 @@ public class DiaryController : Controller
     private readonly CosineSimilarityService _similarityService;
     private readonly EmbeddingConverter _embeddingConverter;
     private readonly ChunkJournalEntry _chunkJournalEntry;
-    public DiaryController(AppDbContext context, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService,EmbeddingConverter embeddingConverter,ChunkJournalEntry chunkJournalEntry)
+    private readonly WorkingWithDates _workingWithDates;
+   
+    public DiaryController(AppDbContext context, WorkingWithDates workingWithDates, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService,EmbeddingConverter embeddingConverter,ChunkJournalEntry chunkJournalEntry)
     {
         _context = context;
         _logger = logger;
@@ -24,6 +26,7 @@ public class DiaryController : Controller
         _similarityService = similarityService;
         _embeddingConverter = embeddingConverter;
         _chunkJournalEntry = chunkJournalEntry;
+        _workingWithDates = workingWithDates;
     }
 
     public IActionResult ShowEntries()
@@ -102,7 +105,7 @@ public class DiaryController : Controller
 
         entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
 
-
+        entry.DayPhase = _workingWithDates.GetDayPhase(entry.CreatedAt);
 
         _context.Entries.Add(entry);
         _context.SaveChanges();
@@ -116,6 +119,9 @@ public class DiaryController : Controller
         return RedirectToAction("ShowEntries");
 
     }
+ 
+
+
     public IActionResult SimilarEntries(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
