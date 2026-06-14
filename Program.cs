@@ -30,6 +30,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddHttpClient<EmbeddingService>();
 builder.Services.AddScoped<ChunkJournalEntry>();
 builder.Services.AddSingleton<EmbeddingConverter>();
+builder.Services.AddSingleton<JsonConverter>();
+
 builder.Services.AddScoped<WorkingWithDates>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
