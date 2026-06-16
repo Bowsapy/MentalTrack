@@ -5,6 +5,8 @@ namespace MentalTrack.Models
     public class MoodSummary
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; }
         public MoodEnum[] Mood { get; set; }
         public UserStateEnum[] UserStates { get; set; } 
         public DayPhasesEnum[] DayPhases { get; set; }

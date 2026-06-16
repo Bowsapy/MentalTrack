@@ -41,6 +41,10 @@ public class AppDbContext : IdentityDbContext<User>
         modelBuilder.Entity<MoodSummary>()
             .Property(x => x.WeekDays)
             .HasConversion(enumArrayConverter<DayInWeekEnum>());
+         modelBuilder.Entity<MoodSummary>()
+        .HasOne(x => x.User)
+        .WithMany()
+        .HasForeignKey(x => x.UserId);
     }
     private static ValueConverter<TEnum[], string> enumArrayConverter<TEnum>()
     {

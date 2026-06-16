@@ -131,6 +131,10 @@ namespace MentalTrack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserStates")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -140,6 +144,8 @@ namespace MentalTrack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MoodSummaries");
                 });
@@ -408,6 +414,17 @@ namespace MentalTrack.Migrations
                         .IsRequired();
 
                     b.Navigation("JournalEntry");
+                });
+
+            modelBuilder.Entity("MentalTrack.Models.MoodSummary", b =>
+                {
+                    b.HasOne("MentalTrack.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
