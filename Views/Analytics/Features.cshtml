@@ -1,12 +1,8 @@
-﻿<form asp-controller="Analytics" asp-action="ViewMatches" class="d-inline">
-    <button type="submit" class="btn btn-primary m-1">
-        View mood analysis
-    </button>
-</form>
+﻿
 
-<form asp-controller="Analytics" asp-action="ViewMoodOnWeekDays" class="d-inline">
+<form asp-controller="Analytics" asp-action="MoodSummary" class="d-inline">
     <button type="submit" class="btn btn-success m-1">
-        View average mood on weekdays
+        View analysis
     </button>
 </form>
 
@@ -16,14 +12,8 @@
     </button>
 </form>
 
-<form asp-controller="Diary" asp-action="ShowMoodProgress" class="d-inline">
+<form asp-controller="Analytics" asp-action="ShowMoodProgress" class="d-inline">
     <button type="submit" class="btn btn-outline-dark m-1">
        Show mood graph
-    </button>
-</form>
-
-<form asp-controller="Analytics" asp-action="ViewMoodOnDayPhases" class="d-inline">
-    <button type="submit" class="btn btn-outline-dark m-1">
-        Day phases
     </button>
 </form>

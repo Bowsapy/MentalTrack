@@ -2,6 +2,7 @@
 using MentalTrack.Data;
 using MentalTrack.Models;
 using MentalTrack.Services;
+using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,16 +47,25 @@ public class DiaryController : Controller
     {
         return View();
     }
-    public IActionResult ShowMoodProgress()
+
+
+    public IActionResult ShowMoodProgressMonthly()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var monthlyData = _context.Entries
+            .GroupBy(x => new { x.CreatedAt.Year, x.CreatedAt.Month })
+            .Select(g => new
+            {
+                Label = $"{g.Key.Month:D2}/{g.Key.Year}",
+                AverageMood = g.Average(x => (int)x.Mood)
+            })
+            .OrderBy(x => DateTime.ParseExact(x.Label, "MM/yyyy", null))
+            .ToList();
 
-        var entries = _context.Entries
-            .Where(e => e.Mood != null && e.CreatedAt != null && e.UserId ==userId)
-            .OrderBy(e => e.CreatedAt)
-            .ToList(); // ToList() vyhodnotí query a pošle jen validní data
-        return View(entries);
+
+        return View(monthlyData);
     }
+
     public IActionResult ShowDiaryContent(int id)
     {
 

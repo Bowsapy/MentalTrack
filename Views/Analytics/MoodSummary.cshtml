@@ -1,0 +1,58 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@model MentalTrack.Models.MoodSummaryViewModel
+
+<h1>General </h1>
+
+@foreach (var item in Model.UserStatesMatches)
+{
+    if (item.Value.Count > 0)
+    {
+        <h3>
+            U tend to be in @item.Key.GetDisplayName() mood when u write about:
+        </h3>
+
+        <ul>
+            @foreach (var state in item.Value)
+            {
+                <li>
+                    @state.Key.GetDisplayName(): <span>match in </span>@state.Value <span> entries</span>
+
+                </li>
+            }
+        </ul>
+    }
+}
+
+<h1> Average mood in a week</h1>
+@foreach (var item in Model.DaysInTheWeekMatches)
+{
+    var mood = (MoodEnum)item.Value;
+
+    var display = mood.GetType()
+        .GetField(mood.ToString())
+        ?.GetCustomAttribute<DisplayAttribute>()
+        ?.Name ?? mood.ToString();
+
+    <div>
+        @item.Key : @display
+    </div>
+}
+
+
+
+<h1> Average mood in a day phase</h1>
+<p> Your mood tend to be:</p>
+@foreach (var item in Model.DayPhasesMatches)
+{
+    var mood = (MoodEnum)item.Value;
+
+    var display = mood.GetType()
+        .GetField(mood.ToString())
+        ?.GetCustomAttribute<DisplayAttribute>()
+        ?.Name ?? mood.ToString();
+
+    <div>
+        @item.Key : @display
+    </div>
+}

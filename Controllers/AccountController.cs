@@ -1,8 +1,10 @@
-﻿using MentalTrack.Models;
+﻿using MentalTrack.Data;
+using MentalTrack.Models;
 using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MentalTrack.Controllers
 {
@@ -11,18 +13,19 @@ namespace MentalTrack.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<AccountController> _logger;
-
+        private readonly AppDbContext _context;
         private readonly IEmailSender _emailSender;
 
 
         public AccountController(
             UserManager<User> userManager,
-            SignInManager<User> signInManager, ILogger<AccountController> logger, IEmailSender emailSender)
+            SignInManager<User> signInManager, ILogger<AccountController> logger, IEmailSender emailSender, AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         public IActionResult Register()
@@ -79,7 +82,6 @@ namespace MentalTrack.Controllers
             }
             if (!ModelState.IsValid)
                 return View(model);
-            _logger.LogInformation("RESULT SE TVORII USPESNE 2222.................................");
 
             var user = new User
             {

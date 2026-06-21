@@ -3,6 +3,7 @@ using MentalTrack.Data;
 using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.Services;
+using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
@@ -54,15 +55,18 @@ namespace MentalTrack.Controllers
 
         public void FindEntryStateMatches()
         {
+            //ziska prihlaseneho usera
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+
+            //ziskej journal entry parts konkretniho usera jako list
             var entryParts = _context.EntryParts
                 .Where(e => e.Embedding != null
                     && e.JournalEntry.UserId == userId)
                 .ToList();
 
 
-
+            //ziskej userstates jako list
             var allUserStates = _context.UserStates
                 .Where(s => s.Embedding != null)
                 .ToList();
@@ -105,10 +109,7 @@ namespace MentalTrack.Controllers
                         }
                     }
                 }
-
-
             }
-
             _context.EntryStates.AddRange(matches);
             _context.SaveChanges();
         }
@@ -116,6 +117,7 @@ namespace MentalTrack.Controllers
 
         public Dictionary<MoodEnum, Dictionary<UserStateEnum,int>> GetMoodStatesMatches()
         {
+            FindEntryStateMatches();
             var result = _context.EntryStates
                 .GroupBy(es => new
                 {
@@ -137,21 +139,9 @@ namespace MentalTrack.Controllers
             return result;
             //vytvori Dictionary<Mood, Dictionary<UserStateEnum,count( userstates) - umoznuje zjistit váhu shody>
         }
-        public IActionResult ViewMatches()
-        {
-            JournalEntry entry = _context.Entries
-                .FirstOrDefault(e => e.Id > 0);
-          
+ 
 
-
-        FindEntryStateMatches();
-            return View(GetMoodStatesMatches());
-        }
-
-        //volání metody FindEntryStateMatches nějak lépe
-
-
-        public IActionResult ViewMoodOnWeekDays()
+        public Dictionary<string,int> ViewMoodOnWeekDays()
         {
             var data = _context.Entries
        .AsEnumerable()
@@ -160,9 +150,9 @@ namespace MentalTrack.Controllers
            g => g.Key.ToString(),
            g => (int)g.Average(x => (int)x.Mood)
        );
-            return View(data);
+            return data;
         }
-        public IActionResult ViewMoodOnDayPhases()
+        public Dictionary<string,int> ViewMoodOnDayPhases()
         {
             var data = _context.Entries
        .AsEnumerable()
@@ -171,8 +161,45 @@ namespace MentalTrack.Controllers
            g => g.Key.ToString(),
            g => (int)g.Average(x => (int)x.Mood)
        );
-            return View(data);
+            return data;
         }
+
+        public IActionResult MoodSummary()
+        {
+            Dictionary<MoodEnum,Dictionary<UserStateEnum,int>> USMatches = GetMoodStatesMatches();
+            Dictionary<string, int> WDMatches = ViewMoodOnWeekDays();
+            Dictionary<string, int> DPMatches = ViewMoodOnDayPhases();
+
+
+            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(USMatches, WDMatches, DPMatches);
+
+            return View(moodsumVM);
+        }
+        public IActionResult ShowMoodProgress()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var entries = _context.Entries
+                .Where(e => e.Mood != null && e.CreatedAt != null && e.UserId == userId)
+                .OrderBy(e => e.CreatedAt)
+                .ToList(); // ToList() vyhodnotí query a pošle jen validní data
+
+            var createdAts = entries
+            .Select(e => e.CreatedAt.ToString("dd.MM.yyyy"))
+            .ToArray();
+
+            var moods = entries
+                .Select(e => e.Mood)
+                .ToArray();
+
+            MoodGraphViewModel mgwm = new MoodGraphViewModel(createdAts, moods);
+            return View(mgwm);
+
+        }
+
+
+
+
 
 
     }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalTrack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260616181004_AddedMoodSummary2")]
-    partial class AddedMoodSummary2
+    [Migration("20260616190137_AddedMoodSummaryFixed")]
+    partial class AddedMoodSummaryFixed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

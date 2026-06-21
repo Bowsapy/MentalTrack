@@ -1,0 +1,78 @@
+﻿@model MentalTrack.ViewModels.MoodGraphViewModel
+
+@{
+    ViewData["Title"] = "Mood Chart";
+}
+
+<button>All Entries</button>
+<button>Month</button>
+<button>Week</button>
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Your Mood Over Time</h2>
+
+    <div style="height:400px;">
+        <canvas id="moodChart"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.axis_x));
+    const moodValuesRaw = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.axis_y));
+
+    // převod string → number (protože Y osa musí být čísla)
+    const moodValues = moodValuesRaw.map(x => Number(x));
+
+    const moods = ['Very Bad', 'Bad', 'Neutral', 'Good', 'Very Good'];
+
+    const ctx = document.getElementById('moodChart').getContext('2d');
+
+    const moodChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+    labels: labels,
+    datasets: [{
+    label: 'Mood',
+    data: moodValues,
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgba(54, 162, 235, 1)',
+    borderWidth: 2,
+    fill: true,
+    tension: 0.3,
+    pointRadius: 5,
+    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+    }]
+    },
+    options: {
+    scales: {
+    y: {
+    min: 1,
+    max: 5,
+    ticks: {
+    stepSize: 1,
+    callback: function(value) {
+    return moods[value-1] || value;
+    }
+    }
+    }
+    },
+    plugins: {
+    legend: {
+    display: false
+    },
+    tooltip: {
+    callbacks: {
+    label: function(context) {
+    return moods[context.raw] || context.raw;
+    }
+    }
+    }
+    },
+    responsive: true,
+    maintainAspectRatio: false
+    }
+    });
+</script>
