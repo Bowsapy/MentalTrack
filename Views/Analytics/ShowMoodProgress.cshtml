@@ -4,12 +4,18 @@
     ViewData["Title"] = "Mood Chart";
 }
 
-<button>All Entries</button>
-<button>Month</button>
-<button>Week</button>
+<a asp-action="ShowMoodProgress" class="btn btn-primary">
+    All entries
+</a>
+<a asp-action="ShowMoodProgressMonthly" class="btn btn-primary">
+    Monthly
+</a>
+<a asp-action="ShowMoodProgressDaily" class="btn btn-primary">
+    Daily
+</a>
 
 <div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">Your Mood Over Time</h2>
+    <h2 class="text-center text-primary mb-4"> @Model.description</h2>
 
     <div style="height:400px;">
         <canvas id="moodChart"></canvas>

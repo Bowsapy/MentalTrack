@@ -197,6 +197,76 @@ namespace MentalTrack.Controllers
 
         }
 
+        public IActionResult ShowMoodProgressMonthly()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var monthlyData = _context.Entries
+                .Where(e => e.Mood != null && e.UserId == userId)
+                .GroupBy(e => new
+                {
+                    e.CreatedAt.Year,
+                    e.CreatedAt.Month
+                })
+                .OrderBy(g => g.Key.Year)
+                .ThenBy(g => g.Key.Month)
+                .Select(g => new
+                {
+                    Label = $"{g.Key.Month:D2}/{g.Key.Year}",
+                    AverageMood = g.Average(x => (int)x.Mood)
+                })
+                .ToList();
+
+            var createdAts = monthlyData
+                .Select(x => x.Label)
+                .ToArray();
+
+            var moods = monthlyData
+        .Select(x => (MoodEnum)(int)Math.Round(x.AverageMood))
+        .ToArray();
+
+            MoodGraphViewModel mgwm = new MoodGraphViewModel(createdAts, moods, "Your average monthly mood");
+
+            return View("ShowMoodProgress", mgwm);
+        }
+
+        public IActionResult ShowMoodProgressDaily()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var dailyData = _context.Entries
+                .Where(e => e.Mood != null && e.UserId == userId)
+                .GroupBy(e => new
+                {
+                    e.CreatedAt.Year,
+                    e.CreatedAt.Month,
+                    e.CreatedAt.Day
+
+                })
+                .OrderBy(g => g.Key.Year)
+                .ThenBy(g => g.Key.Month)
+                .ThenBy(g => g.Key.Day)
+
+                .Select(g => new
+                {
+                    Label = $"{g.Key.Day:D2}/{g.Key.Month:D2}/{g.Key.Year}",
+                    AverageMood = g.Average(x => (int)x.Mood)
+                })
+                .ToList();
+
+            var createdAts = dailyData
+                .Select(x => x.Label)
+                .ToArray();
+
+            var moods = dailyData
+        .Select(x => (MoodEnum)(int)Math.Round(x.AverageMood))
+        .ToArray();
+
+            MoodGraphViewModel mgwm = new MoodGraphViewModel(createdAts, moods,"Your average daily mood");
+
+            return View("ShowMoodProgress", mgwm);
+        }
+
 
 
 
