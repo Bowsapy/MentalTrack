@@ -21,6 +21,7 @@ namespace MentalTrack.Controllers
         private readonly CosineSimilarityService _similarityService;
         private readonly WorkingWithDates _dateService;
 
+
         public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService)
         {
             _context = context;

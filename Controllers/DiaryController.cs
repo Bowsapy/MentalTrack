@@ -18,7 +18,9 @@ public class DiaryController : Controller
     private readonly EmbeddingConverter _embeddingConverter;
     private readonly ChunkJournalEntry _chunkJournalEntry;
     private readonly WorkingWithDates _workingWithDates;
-   
+    private readonly SentimentService _sentimentService;
+
+
     public DiaryController(AppDbContext context, WorkingWithDates workingWithDates, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService,EmbeddingConverter embeddingConverter,ChunkJournalEntry chunkJournalEntry)
     {
         _context = context;
@@ -35,7 +37,7 @@ public class DiaryController : Controller
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var entries = _context.Entries
-            //.Include(e => e.User) // pokud chceš načíst celý objekt User, jinak nepotřebuješ
+            
             .Where(e => e.UserId == userId)  // filtr podle aktuálního uživatele
             .OrderByDescending(e => e.CreatedAt) // nejnovější nahoře
             .ToList();
@@ -115,12 +117,23 @@ public class DiaryController : Controller
 
         entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
 
+
         entry.DayPhase = _workingWithDates.GetDayPhase(entry.CreatedAt);
 
         _context.Entries.Add(entry);
         _context.SaveChanges();
 
+
+
+
+
+
+
+
         await _chunkJournalEntry.ChunkEntry(entry);
+
+
+
 
 
         _context.SaveChanges();

@@ -28,6 +28,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpClient<EmbeddingService>();
+builder.Services.AddHttpClient<SentimentService>();
+
 builder.Services.AddScoped<ChunkJournalEntry>();
 builder.Services.AddSingleton<EmbeddingConverter>();
 builder.Services.AddSingleton<JsonConverter>();

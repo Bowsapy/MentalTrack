@@ -20,6 +20,7 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<EntryStateScore> EntryStates { get; set; }
     public DbSet<JournalEntryPart> EntryParts { get; set; }
 
+    public DbSet<Sentiment> Sentiments { get; set; }
  
     
 }
