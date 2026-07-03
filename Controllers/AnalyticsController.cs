@@ -66,7 +66,6 @@ namespace MentalTrack.Controllers
 
         public void FindEntryStateMatches()
         {
-            //ziska prihlaseneho usera
 
 
             //ziskej journal entry parts konkretniho usera jako list
@@ -118,7 +117,7 @@ namespace MentalTrack.Controllers
                             matches.Add(new EntryStateScore(part.JournalEntryId, match.Id, match.Score));                    }
 
 
-                        //pokud dosavadni entrystates neobsahuji tuhle shodu tak ji tam pridej
+                        //pokud dosavadni entrystates neobsahuji tuhle shodu tak ji tam pridej (kontrola starych shod ktery uz tam jsou pridany
 
                     }
                 }
@@ -128,18 +127,25 @@ namespace MentalTrack.Controllers
         }
 
 
-        public Dictionary<MoodEnum, Dictionary<UserStateEnum,int>> GetMoodStatesMatches()
+        public Dictionary<MoodEnum, Dictionary<UserStateEnum, int>> GetMoodStatesMatches()
         {
             FindEntryStateMatches();
+            //zjisti shody a vytvori EntryStates v db (je to hruza, chtelo by to cele prepsat)
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-
-            var result = _context.EntryStates.Where(x => x.JournalEntry.UserId == GetCurrentUser())
-                .GroupBy(es => new
+            var result = _context.EntryStates
+                .Where(x => x.JournalEntry.UserId == GetCurrentUser())
+                .Select(x => new
                 {
-                    Mood = es.JournalEntry.Mood,
-                    UserState = es.UserStatesEmb.UserState
+                    x.JournalEntryId,
+                    x.UserStatesEmbId,
+                    Mood = x.JournalEntry.Mood,
+                    UserState = x.UserStatesEmb.UserState
+                })
+                .Distinct()
+                .GroupBy(x => new
+                {
+                    x.Mood,
+                    x.UserState
                 })
                 .Select(g => new
                 {
@@ -147,17 +153,15 @@ namespace MentalTrack.Controllers
                     g.Key.UserState,
                     Count = g.Count()
                 })
-                //vytvori v podstate skupinu Mood:Userstate, 
                 .ToList()
                 .GroupBy(x => x.Mood)
                 .ToDictionary(
                     g => g.Key,
                     g => g.ToDictionary(x => x.UserState, x => x.Count)
                 );
+
             return result;
-            //vytvori Dictionary<Mood, Dictionary<UserStateEnum,count( userstates) - umoznuje zjistit váhu shody>
         }
-        
 
         public Dictionary<string,int> ViewMoodOnWeekDays()
         {
