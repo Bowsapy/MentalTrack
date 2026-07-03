@@ -5,6 +5,7 @@ using MentalTrack.Models;
 using MentalTrack.Services;
 using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
 
@@ -51,19 +52,27 @@ namespace MentalTrack.Controllers
    
         public IActionResult Features()
         {
+      
+
+
             return View();
+        }
+        public string GetCurrentUser()
+        {
+            
+         var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return userId;
         }
 
         public void FindEntryStateMatches()
         {
             //ziska prihlaseneho usera
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 
             //ziskej journal entry parts konkretniho usera jako list
             var entryParts = _context.EntryParts
                 .Where(e => e.Embedding != null
-                    && e.JournalEntry.UserId == userId)
+                    && e.JournalEntry.UserId == GetCurrentUser())
                 .ToList();
 
 
@@ -73,13 +82,13 @@ namespace MentalTrack.Controllers
                 .ToList();
 
             var existingMatches = _context.EntryStates
-      .Where(x => x.JournalEntryPart.JournalEntry.UserId == userId)
-      .Select(x => new { x.JournalEntryPartId, x.UserStatesEmbId })
+      .Where(x => x.JournalEntry.UserId == GetCurrentUser())
+      .Select(x => new { x.JournalEntryId, x.UserStatesEmbId })
       .AsEnumerable()
-      .Select(x => (x.JournalEntryPartId, x.UserStatesEmbId))
+      .Select(x => (x.JournalEntryId, x.UserStatesEmbId))
       .ToHashSet();
 
-    //vytvorim hash set pro zjisteni duplicit, protoze list by sezral moc pameti
+    //vytvorim hash set pro zjisteni poctu, protoze list by sezral moc pameti
 
             var matches = new List<EntryStateScore>();
 
@@ -97,17 +106,20 @@ namespace MentalTrack.Controllers
                     })
                     .OrderByDescending(x => x.Score)
                     .Take(5); 
+                //vytvori anonym. strkturu kde je userstate id, skore s entries
+
 
                 foreach (var match in bestMatches)
                 {
                     if (match.Score > AppConstants.MinScore)
                     {
-                        if (!existingMatches.Contains((part.Id, match.Id))){ 
+                        if (!existingMatches.Contains((part.JournalEntryId, match.Id))){ 
                         
-                            matches.Add(new EntryStateScore(part.Id, match.Id, match.Score));
+                            matches.Add(new EntryStateScore(part.JournalEntryId, match.Id, match.Score));                    }
 
 
-                        }
+                        //pokud dosavadni entrystates neobsahuji tuhle shodu tak ji tam pridej
+
                     }
                 }
             }
@@ -119,10 +131,14 @@ namespace MentalTrack.Controllers
         public Dictionary<MoodEnum, Dictionary<UserStateEnum,int>> GetMoodStatesMatches()
         {
             FindEntryStateMatches();
-            var result = _context.EntryStates
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            var result = _context.EntryStates.Where(x => x.JournalEntry.UserId == GetCurrentUser())
                 .GroupBy(es => new
                 {
-                    Mood = es.JournalEntryPart.JournalEntry.Mood,
+                    Mood = es.JournalEntry.Mood,
                     UserState = es.UserStatesEmb.UserState
                 })
                 .Select(g => new
@@ -131,6 +147,7 @@ namespace MentalTrack.Controllers
                     g.Key.UserState,
                     Count = g.Count()
                 })
+                //vytvori v podstate skupinu Mood:Userstate, 
                 .ToList()
                 .GroupBy(x => x.Mood)
                 .ToDictionary(
@@ -140,11 +157,11 @@ namespace MentalTrack.Controllers
             return result;
             //vytvori Dictionary<Mood, Dictionary<UserStateEnum,count( userstates) - umoznuje zjistit váhu shody>
         }
- 
+        
 
         public Dictionary<string,int> ViewMoodOnWeekDays()
         {
-            var data = _context.Entries
+            var data = _context.Entries.Where(x => x.UserId == GetCurrentUser())
        .AsEnumerable()
        .GroupBy(e => e.CreatedAt.DayOfWeek)
        .ToDictionary(
@@ -155,7 +172,7 @@ namespace MentalTrack.Controllers
         }
         public Dictionary<string,int> ViewMoodOnDayPhases()
         {
-            var data = _context.Entries
+            var data = _context.Entries.Where(x => x.UserId == GetCurrentUser())
        .AsEnumerable()
        .GroupBy(e => e.DayPhase)
        .ToDictionary(
@@ -181,7 +198,7 @@ namespace MentalTrack.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var entries = _context.Entries
-                .Where(e => e.Mood != null && e.CreatedAt != null && e.UserId == userId)
+                .Where(e => e.Mood != null && e.CreatedAt != null && e.UserId == GetCurrentUser())
                 .OrderBy(e => e.CreatedAt)
                 .ToList(); // ToList() vyhodnotí query a pošle jen validní data
 
@@ -200,10 +217,9 @@ namespace MentalTrack.Controllers
 
         public IActionResult ShowMoodProgressMonthly()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var monthlyData = _context.Entries
-                .Where(e => e.Mood != null && e.UserId == userId)
+                .Where(e => e.Mood != null && e.UserId == GetCurrentUser())
                 .GroupBy(e => new
                 {
                     e.CreatedAt.Year,
@@ -233,10 +249,9 @@ namespace MentalTrack.Controllers
 
         public IActionResult ShowMoodProgressDaily()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var dailyData = _context.Entries
-                .Where(e => e.Mood != null && e.UserId == userId)
+                .Where(e => e.Mood != null && e.UserId == GetCurrentUser())
                 .GroupBy(e => new
                 {
                     e.CreatedAt.Year,

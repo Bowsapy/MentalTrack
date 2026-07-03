@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MentalTrack.Migrations
 {
     /// <inheritdoc />
-    public partial class Restart : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +58,8 @@ namespace MentalTrack.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserState = table.Column<int>(type: "int", nullable: false),
-                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -182,7 +183,9 @@ namespace MentalTrack.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Mood = table.Column<int>(type: "int", nullable: false),
-                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserStates = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DayPhase = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -191,6 +194,77 @@ namespace MentalTrack.Migrations
                         name: "FK_Entries_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntryParts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JournalEntryId = table.Column<int>(type: "int", nullable: false),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryParts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EntryParts_Entries_JournalEntryId",
+                        column: x => x.JournalEntryId,
+                        principalTable: "Entries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntryStates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JournalEntryId = table.Column<int>(type: "int", nullable: false),
+                    UserStatesEmbId = table.Column<int>(type: "int", nullable: false),
+                    SimScore = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryStates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EntryStates_Entries_JournalEntryId",
+                        column: x => x.JournalEntryId,
+                        principalTable: "Entries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EntryStates_UserStates_UserStatesEmbId",
+                        column: x => x.UserStatesEmbId,
+                        principalTable: "UserStates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sentiments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JournalEntryPartId = table.Column<int>(type: "int", nullable: false),
+                    MainPolarity = table.Column<int>(type: "int", nullable: false),
+                    Positive = table.Column<double>(type: "float", nullable: false),
+                    Neutral = table.Column<double>(type: "float", nullable: false),
+                    Negative = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sentiments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sentiments_EntryParts_JournalEntryPartId",
+                        column: x => x.JournalEntryPartId,
+                        principalTable: "EntryParts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -238,6 +312,26 @@ namespace MentalTrack.Migrations
                 name: "IX_Entries_UserId",
                 table: "Entries",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryParts_JournalEntryId",
+                table: "EntryParts",
+                column: "JournalEntryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryStates_JournalEntryId",
+                table: "EntryStates",
+                column: "JournalEntryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryStates_UserStatesEmbId",
+                table: "EntryStates",
+                column: "UserStatesEmbId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sentiments_JournalEntryPartId",
+                table: "Sentiments",
+                column: "JournalEntryPartId");
         }
 
         /// <inheritdoc />
@@ -259,13 +353,22 @@ namespace MentalTrack.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Entries");
+                name: "EntryStates");
+
+            migrationBuilder.DropTable(
+                name: "Sentiments");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "UserStates");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "EntryParts");
+
+            migrationBuilder.DropTable(
+                name: "Entries");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

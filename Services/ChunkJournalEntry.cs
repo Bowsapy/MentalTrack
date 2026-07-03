@@ -28,13 +28,14 @@ namespace MentalTrack.Services
             {
                 JournalEntryPart part = new JournalEntryPart(chunks[i],entry.Id);
                 part.Embedding = await _embeddingService.GetEmbedding(part.Content);
-                Sentiment sentiment = await _sentimentService.AnalyzeAsync(part);
-                _logger.LogWarning((sentiment.MainPolarity).ToString() + "-------------------------------"); 
-               
+                Sentiment data_for_sentiment = await _sentimentService.AnalyzeAsync(part);
+                Sentiment sentiment = new Sentiment(part,data_for_sentiment.MainPolarity,data_for_sentiment.Positive,data_for_sentiment.Neutral,data_for_sentiment.Negative);
 
 
                 _context.EntryParts.Add(part);
-                
+                _context.Sentiments.Add(sentiment);
+
+
 
             }
             _context.SaveChanges();

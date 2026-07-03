@@ -14,6 +14,15 @@ namespace MentalTrack.Models
         public double Neutral { get; set; }
         public double Negative { get; set; }
 
-        public Sentiment() { } 
+        public Sentiment() { }
+
+        public Sentiment( JournalEntryPart journalEntryPart, TextPolarityEnum mainPolarity, double positive, double neutral, double negative)
+        {
+            JournalEntryPart = journalEntryPart;
+            MainPolarity = mainPolarity;
+            Positive = positive;
+            Neutral = neutral;
+            Negative = negative;
+        }
     }
 }

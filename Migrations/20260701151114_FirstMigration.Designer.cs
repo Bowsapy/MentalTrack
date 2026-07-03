@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalTrack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260412173310_AddingEntryStatetable")]
-    partial class AddingEntryStatetable
+    [Migration("20260701151114_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,32 @@ namespace MentalTrack.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MentalTrack.Models.EntryStateScore", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("JournalEntryId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SimScore")
+                        .HasColumnType("float");
+
+                    b.Property<int>("UserStatesEmbId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JournalEntryId");
+
+                    b.HasIndex("UserStatesEmbId");
+
+                    b.ToTable("EntryStates");
+                });
 
             modelBuilder.Entity("MentalTrack.Models.JournalEntry", b =>
                 {
@@ -39,6 +65,9 @@ namespace MentalTrack.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DayPhase")
+                        .HasColumnType("int");
 
                     b.Property<string>("Embedding")
                         .HasColumnType("nvarchar(max)");
@@ -62,6 +91,61 @@ namespace MentalTrack.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Entries");
+                });
+
+            modelBuilder.Entity("MentalTrack.Models.JournalEntryPart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Embedding")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JournalEntryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JournalEntryId");
+
+                    b.ToTable("EntryParts");
+                });
+
+            modelBuilder.Entity("MentalTrack.Models.Sentiment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("JournalEntryPartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MainPolarity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Negative")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Neutral")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Positive")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JournalEntryPartId");
+
+                    b.ToTable("Sentiments");
                 });
 
             modelBuilder.Entity("MentalTrack.Models.User", b =>
@@ -289,6 +373,25 @@ namespace MentalTrack.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MentalTrack.Models.EntryStateScore", b =>
+                {
+                    b.HasOne("MentalTrack.Models.JournalEntry", "JournalEntry")
+                        .WithMany()
+                        .HasForeignKey("JournalEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MentalTrack.Models.UserStatesEmb", "UserStatesEmb")
+                        .WithMany()
+                        .HasForeignKey("UserStatesEmbId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JournalEntry");
+
+                    b.Navigation("UserStatesEmb");
+                });
+
             modelBuilder.Entity("MentalTrack.Models.JournalEntry", b =>
                 {
                     b.HasOne("MentalTrack.Models.User", "User")
@@ -298,6 +401,28 @@ namespace MentalTrack.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MentalTrack.Models.JournalEntryPart", b =>
+                {
+                    b.HasOne("MentalTrack.Models.JournalEntry", "JournalEntry")
+                        .WithMany()
+                        .HasForeignKey("JournalEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JournalEntry");
+                });
+
+            modelBuilder.Entity("MentalTrack.Models.Sentiment", b =>
+                {
+                    b.HasOne("MentalTrack.Models.JournalEntryPart", "JournalEntryPart")
+                        .WithMany()
+                        .HasForeignKey("JournalEntryPartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JournalEntryPart");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

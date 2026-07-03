@@ -30,7 +30,7 @@ namespace MentalTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("JournalEntryPartId")
+                    b.Property<int>("JournalEntryId")
                         .HasColumnType("int");
 
                     b.Property<double>("SimScore")
@@ -41,7 +41,7 @@ namespace MentalTrack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JournalEntryPartId");
+                    b.HasIndex("JournalEntryId");
 
                     b.HasIndex("UserStatesEmbId");
 
@@ -372,9 +372,9 @@ namespace MentalTrack.Migrations
 
             modelBuilder.Entity("MentalTrack.Models.EntryStateScore", b =>
                 {
-                    b.HasOne("MentalTrack.Models.JournalEntryPart", "JournalEntryPart")
+                    b.HasOne("MentalTrack.Models.JournalEntry", "JournalEntry")
                         .WithMany()
-                        .HasForeignKey("JournalEntryPartId")
+                        .HasForeignKey("JournalEntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -384,7 +384,7 @@ namespace MentalTrack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JournalEntryPart");
+                    b.Navigation("JournalEntry");
 
                     b.Navigation("UserStatesEmb");
                 });
