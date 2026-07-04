@@ -6,10 +6,13 @@
         public string Content { get; set; }
         public int JournalEntryId { get; set; }
         public string[]? Embedding { get; set; }
-
+      
         public JournalEntry JournalEntry { get; set; }
 
+
+        public Sentiment? Sentiment { get; set; }
         public JournalEntryPart(string content, int journalEntryId)
+       
         {
             Content = content;
             JournalEntryId = journalEntryId;

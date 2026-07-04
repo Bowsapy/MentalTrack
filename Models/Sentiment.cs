@@ -5,8 +5,11 @@ namespace MentalTrack.Models
     {
         public int Id { get; set; }
 
-        public int JournalEntryPartId { get; set; }
-        public JournalEntryPart JournalEntryPart { get; set; }
+       public int? UserStatesEmbId { get; set; }
+        public UserStatesEmb? UserStatesEmb { get; set; }
+
+        public int? JournalEntryPartId { get; set; }
+        public JournalEntryPart? JournalEntryPart { get; set; }
 
         public TextPolarityEnum MainPolarity { get; set; }
 
@@ -24,5 +27,15 @@ namespace MentalTrack.Models
             Neutral = neutral;
             Negative = negative;
         }
+
+        public Sentiment(UserStatesEmb userStatesEmb, TextPolarityEnum mainPolarity, double positive, double neutral, double negative)
+        {
+            UserStatesEmb = userStatesEmb;
+            MainPolarity = mainPolarity;
+            Positive = positive;
+            Neutral = neutral;
+            Negative = negative;
+        }
+
     }
 }

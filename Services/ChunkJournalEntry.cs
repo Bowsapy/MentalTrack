@@ -4,6 +4,7 @@ using MentalTrack.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
+//zpetne si rikam, ze tahle sluzba by byla lepsi jako metoda v DiaryControlleru
 namespace MentalTrack.Services
 {
     public class ChunkJournalEntry
@@ -30,12 +31,12 @@ namespace MentalTrack.Services
                 part.Embedding = await _embeddingService.GetEmbedding(part.Content);
                 Sentiment data_for_sentiment = await _sentimentService.AnalyzeAsync(part);
                 Sentiment sentiment = new Sentiment(part,data_for_sentiment.MainPolarity,data_for_sentiment.Positive,data_for_sentiment.Neutral,data_for_sentiment.Negative);
-
+                part.Sentiment = sentiment;
 
                 _context.EntryParts.Add(part);
                 _context.Sentiments.Add(sentiment);
 
-
+               
 
             }
             _context.SaveChanges();

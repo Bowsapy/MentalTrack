@@ -39,6 +39,31 @@ namespace MentalTrack.Services
                 MainPolarity = mainPolarity
             };
         }
+        public async Task<Sentiment> AnalyzeAsync(UserStatesEmb userstateEmb)
+        {
+            var text = userstateEmb.Content;
+
+            var result = await CallOpenAiSentiment(text);
+
+            var mainPolarity = GetMainPolarity(
+                result.Positive,
+                result.Neutral,
+                result.Negative
+            );
+
+            return new Sentiment
+            {
+                UserStatesEmbId = userstateEmb.Id,
+                UserStatesEmb = userstateEmb,
+                Positive = result.Positive,
+                Neutral = result.Neutral,
+                Negative = result.Negative,
+                MainPolarity = mainPolarity
+            };
+        }
+
+
+
 
         private async Task<SentimentDto> CallOpenAiSentiment(string text)
         {

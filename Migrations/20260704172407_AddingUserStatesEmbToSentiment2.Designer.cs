@@ -4,6 +4,7 @@ using MentalTrack.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalTrack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260704172407_AddingUserStatesEmbToSentiment2")]
+    partial class AddingUserStatesEmbToSentiment2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,13 +146,9 @@ namespace MentalTrack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JournalEntryPartId")
-                        .IsUnique()
-                        .HasFilter("[JournalEntryPartId] IS NOT NULL");
+                    b.HasIndex("JournalEntryPartId");
 
-                    b.HasIndex("UserStatesEmbId")
-                        .IsUnique()
-                        .HasFilter("[UserStatesEmbId] IS NOT NULL");
+                    b.HasIndex("UserStatesEmbId");
 
                     b.ToTable("Sentiments");
                 });
@@ -423,12 +422,12 @@ namespace MentalTrack.Migrations
             modelBuilder.Entity("MentalTrack.Models.Sentiment", b =>
                 {
                     b.HasOne("MentalTrack.Models.JournalEntryPart", "JournalEntryPart")
-                        .WithOne("Sentiment")
-                        .HasForeignKey("MentalTrack.Models.Sentiment", "JournalEntryPartId");
+                        .WithMany()
+                        .HasForeignKey("JournalEntryPartId");
 
                     b.HasOne("MentalTrack.Models.UserStatesEmb", "UserStatesEmb")
-                        .WithOne("Sentiment")
-                        .HasForeignKey("MentalTrack.Models.Sentiment", "UserStatesEmbId");
+                        .WithMany()
+                        .HasForeignKey("UserStatesEmbId");
 
                     b.Navigation("JournalEntryPart");
 
@@ -484,16 +483,6 @@ namespace MentalTrack.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MentalTrack.Models.JournalEntryPart", b =>
-                {
-                    b.Navigation("Sentiment");
-                });
-
-            modelBuilder.Entity("MentalTrack.Models.UserStatesEmb", b =>
-                {
-                    b.Navigation("Sentiment");
                 });
 #pragma warning restore 612, 618
         }

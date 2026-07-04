@@ -21,13 +21,15 @@ namespace MentalTrack.Controllers
         private readonly EmbeddingConverter _embeddingConverter;
         private readonly CosineSimilarityService _similarityService;
         private readonly WorkingWithDates _dateService;
+        private readonly SentimentService _sentimentService;
 
 
-        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService)
+        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService)
         {
             _context = context;
             _embeddingService = embeddingService;
             _embeddingConverter = embeddingConverter;
+            _sentimentService = sentimentService;
             _similarityService = similarityService;
             _logger = logger;
             _dateService = dateService;
@@ -44,7 +46,16 @@ namespace MentalTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNewUserState(string content, UserStateEnum state)
         {
-            _context.UserStates.Add(new UserStatesEmb(state, content, await _embeddingService.GetEmbedding(content)));
+
+            UserStatesEmb NewUserStateEmb = new UserStatesEmb(state, content, await _embeddingService.GetEmbedding(content));
+            Sentiment NewSentiment =await _sentimentService.AnalyzeAsync(NewUserStateEmb);
+            NewUserStateEmb.Sentiment = NewSentiment; 
+
+
+            _context.UserStates.Add(NewUserStateEmb);
+            _context.Sentiments.Add(NewSentiment);
+
+
             _context.SaveChanges();
             return RedirectToAction("AddNewUserState");
 

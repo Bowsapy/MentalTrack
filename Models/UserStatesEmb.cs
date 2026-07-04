@@ -16,7 +16,8 @@ namespace MentalTrack.Models
 
         public string Content { get; set; } = string.Empty;
 
-        
+        public Sentiment? Sentiment { get; set; }
+
 
     }
 }
