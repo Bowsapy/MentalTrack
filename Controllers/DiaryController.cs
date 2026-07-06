@@ -88,7 +88,7 @@ public class DiaryController : Controller
         _context.Entries.Remove(entry);
         _context.SaveChanges();          
 
-        return RedirectToAction("ShowEntries"); // 
+        return RedirectToAction("ShowEntries"); // Vyresit smazani parts + embedingu
     }
 
     

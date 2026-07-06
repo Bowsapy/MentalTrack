@@ -24,6 +24,8 @@ namespace MentalTrack.Services
         }
         public async Task ChunkEntry(JournalEntry entry)
         {
+
+            //rozseká entry na parts podle teček a přidělí jim embedding a sentimetn
             string[] chunks = entry.Content.Split('.', StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < chunks.Length; i++)
             {

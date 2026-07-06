@@ -20,7 +20,6 @@ namespace MentalTrack.Models
         public User? User { get; set; }
         public MoodEnum Mood { get; set; }
         public string[]? Embedding { get; set; }
-        public string[]? UserStates { get; set; }
 
         public DayPhasesEnum DayPhase { get; set; }
 

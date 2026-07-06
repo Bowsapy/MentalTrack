@@ -82,13 +82,13 @@ namespace MentalTrack.Controllers
             //ziskej journal entry parts konkretniho usera jako list
             var entryParts = _context.EntryParts
                 .Where(e => e.Embedding != null
-                    && e.JournalEntry.UserId == GetCurrentUser())
+                    && e.JournalEntry.UserId == GetCurrentUser()).Include(x => x.Sentiment)
                 .ToList();
 
 
             //ziskej userstates jako list
             var allUserStates = _context.UserStates
-                .Where(s => s.Embedding != null)
+                .Where(s => s.Embedding != null).Include(x => x.Sentiment)
                 .ToList();
 
             var existingMatches = _context.EntryStates
@@ -106,7 +106,8 @@ namespace MentalTrack.Controllers
             {
                 var entryVector = _embeddingConverter.ConvertToFloatList(part.Embedding);
 
-                var bestMatches = allUserStates
+                Sentiment Part_sentiment = part.Sentiment;
+                var bestMatches = allUserStates.Where(x => x.Sentiment.MainPolarity == Part_sentiment.MainPolarity)
                     .Select(state => new
                     {
                         state.Id,
@@ -148,7 +149,6 @@ namespace MentalTrack.Controllers
                 .Select(x => new
                 {
                     x.JournalEntryId,
-                    x.UserStatesEmbId,
                     Mood = x.JournalEntry.Mood,
                     UserState = x.UserStatesEmb.UserState
                 })
