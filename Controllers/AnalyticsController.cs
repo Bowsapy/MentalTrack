@@ -197,6 +197,7 @@ namespace MentalTrack.Controllers
             return data;
         }
 
+
         public IActionResult MoodSummary()
         {
             Dictionary<MoodEnum,Dictionary<UserStateEnum,int>> USMatches = GetMoodStatesMatches();
@@ -204,7 +205,7 @@ namespace MentalTrack.Controllers
             Dictionary<string, int> DPMatches = ViewMoodOnDayPhases();
 
 
-            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(USMatches, WDMatches, DPMatches);
+            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(USMatches, WDMatches, DPMatches,GetMoodPercentages(),GetAverageMoodForAllEntries(),GetEntriesCount());
 
             return View(moodsumVM);
         }
@@ -296,6 +297,25 @@ namespace MentalTrack.Controllers
             MoodGraphViewModel mgwm = new MoodGraphViewModel(createdAts, moods,"Your average daily mood");
 
             return View("ShowMoodProgress", mgwm);
+        }
+        public int GetAverageMoodForAllEntries()
+        {
+           int avg = (int)_context.Entries.Average(x =>((int)(x.Mood)));
+            return avg;
+        }
+        public Dictionary<MoodEnum,double> GetMoodPercentages()
+        {
+
+            return _context.Entries.GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / GetEntriesCount()) * 100));
+
+
+        }
+        public int GetEntriesCount()
+        {
+
+            int totalCount = _context.Entries.Count();
+            return totalCount;
+
         }
 
 

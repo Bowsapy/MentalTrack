@@ -12,13 +12,13 @@
 
             <div class="mb-3">
                 <label asp-for="Content" class="form-label fw-semibold">Content</label>
-                <textarea asp-for="Content" class="form-control" rows="10" placeholder="Write your thoughts here..."></textarea>
+                <textarea asp-for="Content" class="form-control" rows="20" placeholder="Describe what you did during the day...(Make sure to separate sentences with periods)"></textarea>
             </div>
 
             <div class="mb-4">
                 <label asp-for="Mood" class="form-label fw-semibold">Mood</label>
                 <select asp-for="Mood" class="form-select" asp-items="Html.GetEnumSelectList<MoodEnum>()">
-                    <option value="">Choose your mood</option>
+                    <option value="">How did you feel for most of the day?</option>
                 </select>
             </div>
 
