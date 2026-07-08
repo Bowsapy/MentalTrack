@@ -13,11 +13,17 @@ Done features:
 5. Basic mood insights using AI embedding comparisons with common mood causes 
 
 ![MT1](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/MT1.png)
+
 ![MT2](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt2.png)
+
 ![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt3.png)
+
 ![MT5](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt5.png)
+
 ![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt7.png)
+
 ![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt8.png)
+
 ![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt9.png)
 
 
