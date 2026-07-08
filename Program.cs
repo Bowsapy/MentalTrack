@@ -20,9 +20,12 @@ builder.WebHost.ConfigureKestrel(options =>
     }
 });
 
+
+builder.Services.AddScoped<StatisticsService>();
 // Services
 builder.Services.AddScoped<CosineSimilarityService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

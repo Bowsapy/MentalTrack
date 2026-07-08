@@ -22,9 +22,10 @@ namespace MentalTrack.Controllers
         private readonly CosineSimilarityService _similarityService;
         private readonly WorkingWithDates _dateService;
         private readonly SentimentService _sentimentService;
+        private readonly StatisticsService _statisticsService;
 
 
-        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService)
+        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService, StatisticsService statistics)
         {
             _context = context;
             _embeddingService = embeddingService;
@@ -33,6 +34,7 @@ namespace MentalTrack.Controllers
             _similarityService = similarityService;
             _logger = logger;
             _dateService = dateService;
+            _statisticsService = statistics;
         }
         public IActionResult Index()
         {
@@ -205,7 +207,7 @@ namespace MentalTrack.Controllers
             Dictionary<string, int> DPMatches = ViewMoodOnDayPhases();
 
 
-            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(USMatches, WDMatches, DPMatches,GetMoodPercentages(),GetAverageMoodForAllEntries(),GetEntriesCount());
+            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(USMatches, WDMatches, DPMatches,GetMoodPercentages(),GetAverageModeForAllEntries(),GetEntriesCount());
 
             return View(moodsumVM);
         }
@@ -298,10 +300,9 @@ namespace MentalTrack.Controllers
 
             return View("ShowMoodProgress", mgwm);
         }
-        public int GetAverageMoodForAllEntries()
+        public int GetAverageModeForAllEntries()
         {
-           int avg = (int)_context.Entries.Average(x =>((int)(x.Mood)));
-            return avg;
+            return _statisticsService.GetEntriesMode();
         }
         public Dictionary<MoodEnum,double> GetMoodPercentages()
         {

@@ -90,6 +90,72 @@
         color: #666;
         font-size: 13px;
     }
+
+    .average-mood-card {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    }
+
+        .average-mood-card h2 {
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+    .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        font-size: 1.2rem;
+    }
+
+    .stat strong {
+        font-size: 1.4rem;
+        color: #5b5bd6;
+    }
+
+    .average-mood-card hr {
+        margin: 25px 0;
+        border: none;
+        height: 1px;
+        background: #ddd;
+    }
+
+    .average-mood-card h3 {
+        margin-bottom: 20px;
+    }
+
+    .mood-row {
+        margin-bottom: 20px;
+    }
+
+    .mood-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .progress {
+        width: 100%;
+        height: 16px;
+        background: #ececec;
+        border-radius: 100px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg,#7F7FD5,#86A8E7,#91EAE4);
+        border-radius: 100px;
+        transition: .5s;
+    }
+
 </style>
 
 <div class="wholePage">
@@ -174,23 +240,36 @@
     </div>
     
 
+        <div class="average-mood-card">
+            <h2>Your Statistics</h2>
 
+            <div class="stat">
+                <span>Total entries</span>
+                <strong>@Model.EntriesCount</strong>
+            </div>
 
-    <div class="AverageMood">
-            <h1> You wrote @Model.EntriesCount entries</h1>
-            <h1> Your average mood:  @((MoodEnum)Model.AverageMood)</h1>
+            <div class="stat">
+                <span>Most common mood</span>
+                <strong>@(((MoodEnum)Model.ModeMood).GetDisplayName())</strong>
+            </div>
 
-        @foreach (var item in Model.MoodPercentages)
-        {
-            <p>@item.Key.GetDisplayName() <span>-</span> @item.Value  <span>%</span> </p>
+            <hr />
 
-            
-            
-        }
+            <h3>Mood distribution</h3>
 
+            @foreach (var item in Model.MoodPercentages)
+            {
+                <div class="mood-row">
+                    <div class="mood-header">
+                        <span>@item.Key.GetDisplayName()</span>
+                        <span>@item.Value%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-fill" style="width:@item.Value%"></div>
+                    </div>
+                </div>
+            }
         </div>
-
-
-</div>
 
 </div>

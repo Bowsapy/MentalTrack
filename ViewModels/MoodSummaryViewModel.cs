@@ -9,7 +9,7 @@ public class MoodSummaryViewModel
         Dictionary<string, int> daysInTheWeekMatches,
         Dictionary<string, int> dayPhasesMatches,
         Dictionary<MoodEnum, double> moodPercentages,
-        int avg,
+        int mode,
         int total
 
 
@@ -19,7 +19,7 @@ public class MoodSummaryViewModel
         DaysInTheWeekMatches = daysInTheWeekMatches;
         DayPhasesMatches = dayPhasesMatches;
         MoodPercentages = moodPercentages;
-        AverageMood = avg;
+        ModeMood = mode;
         EntriesCount = total;
     }
 
@@ -28,7 +28,7 @@ public class MoodSummaryViewModel
     public Dictionary<string, int> DaysInTheWeekMatches { get; set; }
 
     public Dictionary<string, int> DayPhasesMatches { get; set; }
-    public int AverageMood { get; set; }
+    public int ModeMood { get; set; }
     public int EntriesCount {  get; set; }
 
     public Dictionary<MoodEnum, double> MoodPercentages { get; set; }
