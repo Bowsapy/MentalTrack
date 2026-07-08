@@ -1,0 +1,62 @@
+[33m34fc125[m[33m ([m[1;36mHEAD[m[33m)[m Oprava mood prumeru na mod (nejcastejsi hodnota) + pridani statistics service
+[33ma966d15[m Uprava MoodSummary viewu: Design, pridani prumerne nalady a celkoveho poctu entries + poctu konkretni nalady
+[33mcb73471[m Dodělání sentimentu pro vytváření entrystates + úprava modelu JOunralEntry (odstraneni userstatesemb)
+[33mb7e766f[m Práce na Sentimentu: Uprava sentiment modelu, aby fungoval jak pro EntryPart, tak i pro UserStateEmb + pridani zpetne navigace do modelů JournalEntryPart a UserStateEmb
+[33m6dc63d7[m Oprava bugu pro zjisteni poctu shod v entrystate (pridani distinct pred select v GetMoodStatesMatches
+[33m45c47b9[m Opravil jsem bug ( v mood analysis se zobrazovali data vsech uzivatelu -> chybela validace usera + zmena v modelu Entry state ( zmenil jsem ddatovy typ EntryPartId na jen ID, kvůli bugu při počítání počtu shod)
+[33m38bb412[m Pridani Sentiment modelu + vytvoreni Sluzby pro ziskani sentimentu z journalPart a pak vytvoreni instance Sentimentu
+[33mcbeb342[m Pridany denni, mesicni grafy pro zobrazeni prumerne nalady a pridan predvyplneny text v title u vytvareni entry
+[33mff6bc4c[m Vytvořil jsem mood summary, kde jsou jak userstates, daysintheweek, tak i dayphases. Pak jsem pretvoril graf: pridal jsem metodu a jeho view do Analytics controlleru a udělal jsem jeho vytvareni pomoci viewmodelu, kde se predavaji hodnoty na ose x a y.
+[33m7896b0b[m Pridani Mood Summaries s userem, opravene
+[33mdca1001[m Přidání modelu MoodSummaries + přidání metotdy v appdb context pro převod polí enumů na pole stringů
+[33m658da32[m Oprava < u WorkingWithDates u dennich fazi
+[33mb41918e[m Pridana analyza nalady podle denni faze (rano, odpoledne,...) v analytics controleru
+[33m4710a59[m Přidána funkcionalita, kde si user muze zobrazit průměrnou náladu v den v týdnu, v analytics controller v ViewMoodOnWeekDays
+[33mcb72a86[m Merge branch 'main' of https://github.com/Bowsapy/MentalTrack
+[33mb8cadac[m Uprava metody GetMoodStatesMatches v Analytics kontroleru (vytvoreni Dictionary<Mood, Dictionary<UserStateEnum,count( userstates)> a pak zobrazeni countu ve ViewMatches.cshtml
+[33m4913b2e[m Update README.md
+[33m35a23c9[m Merge branch 'main' of https://github.com/Bowsapy/MentalTrack
+[33mbdb20fd[m novy obrazek
+[33m6784974[m Update README.md
+[33m81c1d46[m Uprava displaystate UserState enumu ve ViewMatches.cshtml
+[33ma951611[m Pridani Extension metody pro zobrazeni nazvu u enum + oprava českých názvů na anglické + zavedení konstanty pro minimalni skore emb v AppConstants,
+[33m7b6cd91[m Práce na analytics controller+ viewmatches.cshtml, uzivatel si muze zobrazit naladu a pod ni user states, metody v analytics chteji jeste doladit
+[33m1793c9b[m Merge branch 'main' of https://github.com/Bowsapy/MentalTrack
+[33m3112dfc[m Pridani srovnani embedingu EntryParts a UserStates + vyreseni pridavani duplicit (hash set) a ukladani do table EntryStates
+[33m84e54a2[m Update README.md
+[33mf22571b[m Update README.md
+[33mdb19dae[m Update README.md
+[33m9696494[m Pridani noveho modelu EntryState a skore
+[33m4ac7033[m Práce na similar user states, metoda skoro hotova + předání slovníku do view
+[33mcc0b0aa[m Dodelani UserStates: Formular na webu + propsani do databaze
+[33mf27c1c5[m Práce na UserState, pridani Analytics Controller
+[33m8f10960[m Spravení registeru
+[33md99b669[m Oprava bugu s gmailem
+[33m6e3ba56[m Pridan obrazek + lepsi design similar entries
+[33mfb8de3d[m Merge branch 'fix-mood-chart'
+[33m2fe2cdb[m[33m ([m[1;32mfix-mood-chart[m[33m)[m Opraven bug s rozdilnymi verzemi
+[33mf1ed782[m Oprava .gitignore
+[33mf79de7c[m Update README.md
+[33m598b55e[m Opraven bug s grafem. Oprava na value -1
+[33m11651a6[m Update README.md
+[33mf6960ef[m Update README.md
+[33m193ddcd[m Update README.md
+[33m02d2bdf[m Update README.md
+[33m47e42fa[m Update README.md
+[33mfd4c2e4[m Update README.md
+[33me6adff3[m Update README.md
+[33mcd70a06[m Update README.md
+[33m705d859[m Update README.md
+[33m131d1c8[m Update README.md
+[33ma5ad7ff[m Update README.md
+[33md445e05[m Update README.md
+[33m734db57[m Update README.md
+[33m67c90d0[m Pridani Embeddingu + zjsteni a serazeni podle cos podobnosti
+[33me441084[m Opraava erroru se sloučením změn
+[33m27d401e[m Opraava erroru se sloučením změn
+[33m92bbe17[m Pridany obrazky pro github
+[33m70837fd[m Pridany obrazky pro github
+[33m5b2ea9e[m Create README.md
+[33m6c734ce[m Create README.md
+[33m2fd5ac1[m Přidejte soubory projektu.
+[33m17f6f06[m Přidat .gitattributes a .gitignore
