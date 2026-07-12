@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using System.Globalization;
 
 namespace MentalTrack.Services
 {
@@ -9,9 +10,9 @@ namespace MentalTrack.Services
             List<float> floatList = new List<float>();
             for (int i = 0; i < stringArray.Length; i++)
             {
-                floatList.Add(float.Parse(stringArray[i]));
+                floatList.Add(float.Parse(stringArray[i], CultureInfo.InvariantCulture));
 
-                
+
             }
             return floatList;
         }

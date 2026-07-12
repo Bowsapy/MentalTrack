@@ -155,8 +155,8 @@ namespace MentalTrack.Controllers
             // pošleme email
             await _emailSender.SendEmailAsync(
                 model.Email,
-                "Reset hesla",
-                $"Resetuj heslo kliknutím zde: <a href='{callbackUrl}'>link</a>");
+                "MentalTrack: Reset your password",
+                $"Reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
 
             return RedirectToAction("ForgotPasswordConfirmation");
         }
