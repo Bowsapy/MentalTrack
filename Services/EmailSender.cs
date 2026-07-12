@@ -7,10 +7,7 @@ public class EmailSender : IEmailSender
 {
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        Console.WriteLine("EMAIL:");
-        Console.WriteLine(email);
-        Console.WriteLine(subject);
-        Console.WriteLine(htmlMessage);
+
         var smtp = new SmtpClient("smtp.gmail.com", 587)
         {
             Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("GMAIL"), Environment.GetEnvironmentVariable("GMAIL_KEY")),

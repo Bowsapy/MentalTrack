@@ -47,8 +47,9 @@ namespace MentalTrack.Services
         }
         public Dictionary<MoodEnum, double> GetMoodPercentages()
         {
+            int count = GetEntriesCount();
 
-            return _context.Entries.GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / GetEntriesCount()) * 100));
+            return _context.Entries.GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / count) * 100));
 
 
         }

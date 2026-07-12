@@ -31,6 +31,12 @@ public class EmbeddingService
 
     public async Task<string[]> GetEmbedding(string text)
     {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+        _logger.LogInformation(
+    $"OPENAI KEY EXISTS: {apiKey != null}, LENGTH: {apiKey?.Length}"
+);
+
         var body = new
         {
             model = "text-embedding-3-small",

@@ -8,7 +8,24 @@ using Microsoft.EntityFrameworkCore;
 
 Env.Load();
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+Console.WriteLine(builder.Environment.EnvironmentName);
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+DotNetEnv.Env.Load();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+
+
+
+
 
 // 🔥 Render / production port fix (Kestrel)
 builder.WebHost.ConfigureKestrel(options =>
@@ -26,9 +43,6 @@ builder.Services.AddScoped<StatisticsService>();
 builder.Services.AddScoped<CosineSimilarityService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpClient<EmbeddingService>();
 builder.Services.AddHttpClient<SentimentService>();

@@ -18,9 +18,6 @@ namespace MentalTrack.Controllers
         private readonly ILogger<AnalyticsController> _logger;
         private readonly AppDbContext _context;
         private readonly EmbeddingService _embeddingService;
-        private readonly EmbeddingConverter _embeddingConverter;
-        private readonly CosineSimilarityService _similarityService;
-        private readonly WorkingWithDates _dateService;
         private readonly SentimentService _sentimentService;
         private readonly StatisticsService _statisticsService;
 
@@ -29,11 +26,8 @@ namespace MentalTrack.Controllers
         {
             _context = context;
             _embeddingService = embeddingService;
-            _embeddingConverter = embeddingConverter;
             _sentimentService = sentimentService;
-            _similarityService = similarityService;
             _logger = logger;
-            _dateService = dateService;
             _statisticsService = statistics;
         }
         public IActionResult Index()

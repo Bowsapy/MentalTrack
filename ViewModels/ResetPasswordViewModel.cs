@@ -10,12 +10,12 @@ namespace MentalTrack.ViewModels
 
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(6, ErrorMessage = "Heslo musí mít alespoň 6 znaků.")]
+        [MinLength(6, ErrorMessage = "Password must have at least 6 characters.")]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Hesla se neshodují.")]
+        [Compare("Password", ErrorMessage = "Password do not match")]
         public string ConfirmPassword { get; set; }
 
         // token přijde z linku v emailu

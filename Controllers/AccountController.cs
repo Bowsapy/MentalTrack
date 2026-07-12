@@ -42,6 +42,7 @@ namespace MentalTrack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -73,8 +74,7 @@ namespace MentalTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            _logger.LogInformation("RESULT SE TVORII USPESNE 111.................................");
-            _logger.LogInformation("Počet chyb v modelu: {Count}", ModelState.ErrorCount);
+           
             foreach (var kv in ModelState)
             {
                 foreach (var err in kv.Value.Errors)
