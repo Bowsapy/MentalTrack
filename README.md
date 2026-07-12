@@ -1,5 +1,7 @@
 ## MentalTrack (STILL WORKING ON)
 
+currently runs on: https://mentaltrack20260712000140-atbqdhgpb3bsfubd.polandcentral-01.azurewebsites.net/
+
 MentalTrack is a web application built with **ASP.NET MVC**.
 
 The main goal of the project is to combine journaling with data analysis to provide deeper insights into a user's mental state.
