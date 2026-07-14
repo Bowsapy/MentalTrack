@@ -2,55 +2,305 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="d-flex justify-content-center align-items-center min-vh-100"
-     style="    background: linear-gradient(135deg, #34d399, #10b981);
-    ;">
-    <div class="card shadow-lg p-5 rounded-4" style="max-width: 720px; width: 100%; transition: transform 0.3s;">
-        <div class="text-center mb-4">
-            <h1 class="display-4 fw-bold text-primary">Welcome to Mental Track</h1>
+
+<div class="d-flex justify-content-center align-items-center min-vh-100 grass-background">
+
+    <div class="book">
+
+        <!-- STRÁNKA 1 -->
+        <div class="page active" id="page1">
+
+            <div class="card shadow-lg p-5 rounded-4">
+
+                <div class="text-center mb-4">
+                    <h1 class="display-4 fw-bold" style="color:green">
+                        Welcome to Mental Track
+                    </h1>
+                </div>
+
+
+                <p class="lead text-secondary">
+                    Understand yourself better through your own thoughts and experiences.
+                </p>
+
+
+                <p class="text-muted">
+                    <span class="fw-bold">Mental Track</span> is a personal journaling app
+                    designed to help you reflect on your daily life, track emotions,
+                    and discover connections between your habits and mood.
+                </p>
+
+
+                <p class="text-muted">
+                    Write about your day, your thoughts, or anything that is on your mind.
+                    Over time, Mental Track analyzes your entries and helps you recognize
+                    patterns that influence how you feel.
+                </p>
+
+
+                <p class="text-muted fst-italic">
+                    Your thoughts are personal. Mental Track is here to help you reflect,
+                    learn, and grow.
+                </p>
+
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary btn-lg"
+                            onclick="flip()">
+                        Next →
+                    </button>
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="mb-4">
-            <p class="lead text-secondary">
-                Understand yourself better through your own thoughts and experiences.
-            </p>
 
-            <p class="text-muted mb-2">
-                <span class="fw-bold">Mental Track</span> is a personal journaling app designed to help you reflect on your daily life,
-                track your emotions, and discover connections between your habits, experiences, and mood.
-            </p>
 
-            <p class="text-muted mb-2">
-                Write about your day, your thoughts, or anything that is on your mind.
-                Over time, Mental Track analyzes your entries and helps you recognize patterns
-                that may influence how you feel.
-            </p>
+        <!-- STRÁNKA 2 -->
+        <div class="page" id="page2">
 
-            <p class="text-muted mb-2">
-                By looking back at your experiences, you can gain a better understanding of yourself,
-                identify what improves your mood, and become more aware of your personal growth.
-            </p>
+            <div class="card shadow-lg p-5 rounded-4">
 
-            <p class="text-muted fst-italic mb-0">
-                Your thoughts are personal. Mental Track is here to help you reflect, learn, and grow.
-            </p>
+
+                <div class="text-center mb-4">
+
+                    <h1 class="display-4 fw-bold"
+                        style="color:green">
+                        Discover yourself
+                    </h1>
+
+                </div>
+
+
+                <p class="lead text-secondary">
+                    Turn your daily thoughts into valuable insights.
+                </p>
+
+
+                <p class="text-muted">
+                    Mental Track helps you understand relationships between
+                    your activities, emotions and experiences.
+                </p>
+
+
+                <p class="text-muted">
+                    By writing regularly you can discover what improves your
+                    mood and what affects your everyday life.
+                </p>
+
+
+
+                <div class="text-center mt-4">
+
+                    <button class="btn btn-success btn-lg" onclick="flip()">
+                        Start Journey 🚀
+                    </button>
+
+                </div>
+
+
+            </div>
+
         </div>
 
-        <div class="text-center mt-4">
-            <a href="/Diary/Create" class="btn btn-primary btn-lg shadow-sm"
-               style="transition: transform 0.2s;">
-                <i class="bi bi-journal-text me-2"></i> Start Your First Entry
-            </a>
+        <!-- STRÁNKA 2 -->
+        <div class="page" id="page3">
+
+            <div class="card shadow-lg p-5 rounded-4">
+
+
+                <div class="text-center mb-4">
+
+                    <h1 class="display-4 fw-bold"
+                        style="color:green">
+                        Discover yourself
+                    </h1>
+
+                </div>
+
+
+                <p class="lead text-secondary">
+                    Turn your sfsf thoughts into valuable insights.
+                </p>
+
+
+                <p class="text-muted">
+                    Mental Track helps you understand relationships between
+                    your activities, emotions and experiences.
+                </p>
+
+
+                <p class="text-muted">
+                    By writing regularly you can discover what improves your
+                    mood and what affects your everyday life.
+                </p>
+                <br />
+                <p>3</p>
+
+
+
+                <div class="text-center mt-4">
+
+                    <button class="btn btn-success btn-lg" onclick="flip()">
+                        Start sfsa 🚀
+                    </button>
+
+                </div>
+
+
+            </div>
+
         </div>
+
+
     </div>
+
 </div>
 
+
+
+
+
 <style>
-    .card:hover {
-        transform: translateY(-5px);
+
+
+    .grass-background {
+        background-image: url('/images/grass2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 
-    a.btn:hover {
-        transform: scale(1.05);
+
+
+
+
+    .book {
+        width: 720px;
+        height: 600px;
+        position: relative;
+        perspective: 2000px;
     }
+
+
+
+
+
+    .page {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform-origin: left center;
+        transition: transform .8s ;
+        backface-visibility: visible;
+    }
+
+
+
+
+
+        .page:not(.active) {
+            display: none
+         ;
+        }
+
+
+
+
+
+    .card {
+        height: 100%;
+        background: url("/images/paper2.jpg") !important;
+    }
+
+
+
+
+
+    .flip {
+        transform: rotateY(-180deg);
+    }
+
+
+
+
+
+    button:hover {
+        transform: scale(1.05);
+        transition: .2s;
+    }
+
 </style>
+
+
+
+
+
+<script>
+
+    //v podstate se p stisku tlacitka priradi page1 trida flip a po 400 s se z page1 odstrani trida active a page2 se priradi
+     function flip(){
+
+        let page1 = document.getElementById("page1");
+        let page2 = document.getElementById("page2");
+        let page3 = document.getElementById("page3");
+
+
+        let activePage = document.querySelector(".page.active");
+
+
+        if(activePage === page1){
+
+            page1.classList.add("flip");
+
+        }
+        else if(activePage === page2){
+
+            page2.classList.add("flip");
+
+        }
+        else{
+
+            page3.classList.add("flip");
+
+        }
+
+
+
+        setTimeout(function(){
+
+
+            if(activePage === page1){
+
+                page1.classList.remove("active");
+                page2.classList.add("active");
+
+            }
+
+            else if(activePage === page2){
+
+                page2.classList.remove("active");
+                page3.classList.add("active");
+
+            }
+
+            else{
+
+                page3.classList.remove("active");
+
+                page1.classList.remove("flip");
+                page2.classList.remove("flip");
+                page3.classList.remove("flip");
+
+                page1.classList.add("active");
+
+            }
+
+
+        },800);
+
+    }
+
+
+</script>
