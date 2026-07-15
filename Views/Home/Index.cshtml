@@ -1,7 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<head>
 
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+</head>
 
 <div class="d-flex justify-content-center align-items-center min-vh-100 grass-background">
 
@@ -10,7 +14,7 @@
         <!-- STRÁNKA 1 -->
         <div class="page active" id="page1">
 
-            <div class="card shadow-lg p-5 rounded-4">
+            <div class="card shadow-lg p-5 rounded-4 paper-background">
 
                 <div class="text-center mb-4">
                     <h1 class="display-4 fw-bold" style="color:green">
@@ -164,13 +168,6 @@
 
 <style>
 
-
-    .grass-background {
-        background-image: url('/images/grass2.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
 
 
 

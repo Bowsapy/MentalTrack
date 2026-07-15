@@ -45,7 +45,49 @@
     }
 
 }
+.loginReg-page {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-right: 250px;
+    margin-left: 250px;
+    border-radius: 10px;
+    color:whitesmoke
+}
 
+@media(max-width:1000px) {
+    .loginReg-page {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
+}
+.grass-background {
+    background-image: url('/images/grass2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.tree-background {
+    background-image: url('/images/grass2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.paper-background {
+    background-image: url('/images/paper2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.bordered {
+    border: 2px solid #000000; 
+    border-radius: 10px;
+    ;
+}
 
 
 }

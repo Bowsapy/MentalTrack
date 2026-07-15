@@ -1,54 +1,201 @@
 ﻿@model IEnumerable<MentalTrack.Models.JournalEntry>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-primary">Your Entries</h2>
-    <a asp-action="Create" class="btn btn-success shadow-sm">New Entry</a>
+@{
+    ViewData["Title"] = "Your Journal";
+}
 
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-</div>
+<div class="container py-5">
 
-<div style="background: linear-gradient(135deg, #a8edea, #fed6e3); height:2000px; padding:10px">
+    <div class="text-center mb-5">
+        <h1 class="journal-title text-white">Your Journal entries</h1>
+        <p class="journal-subtitle">
+            @Model.Count() entries written
+        </p>
+    </div>
 
+    <div class="row g-4">
 
+        @foreach (var entry in Model)
+        {
+            <div class="col-lg-6">
 
-<div class="row g-3">
-    @foreach (var entry in Model)
-    {
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a asp-action="ShowDiaryContent" asp-route-id="@entry.Id" class="text-decoration-none text-dark">
-                            @entry.Title
-                        </a>
-                    </h5>
-                    <p class="card-text text-muted mb-1">
-                        @entry.CreatedAt.ToString("dd MMM yyyy, HH:mm")
-                    </p>
-                    <span class="badge @GetMoodBadge(entry.Mood)">
-                        @entry.Mood.GetDisplayName()
-                    </span>
-                </div>
+                <a asp-action="ShowDiaryContent"
+                   asp-route-id="@entry.Id"
+                   class="entry-card">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <h4 class="entry-title">
+                                📖 @entry.Title
+                            </h4>
+
+                            <span class="entry-date">
+                                @entry.CreatedAt.ToString("dd MMM yyyy, HH:mm")
+                            </span>
+
+                        </div>
+
+                        <span class="badge mood @GetMoodBadge(entry.Mood)">
+                            @entry.Mood.GetDisplayName()
+                        </span>
+
+                    </div>
+
+                    <div class="entry-preview mt-3">
+
+                        @{
+                            var preview = entry.Content ?? "";
+
+                            if (preview.Length > 140)
+                            {
+                                preview = preview.Substring(0, 140) + "...";
+                            }
+                        }
+
+                        @preview
+
+                    </div>
+
+                </a>
+
             </div>
-        </div>
+        }
+
+    </div>
+
+</div>
+
+<style>
+
+    body {
+        background: linear-gradient(135deg, #34d399, #10b981);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
     }
-</div>
 
-</div>
+    .journal-title {
+        color: #2f6d3d;
+        font-size: 52px;
+        font-weight: 700;
+        text-shadow: 0 4px 12px rgba(0,0,0,.4);
+    }
 
+    .journal-subtitle {
+        color: white;
+        font-size: 18px;
+        opacity: .9;
+    }
+
+    .entry-card {
+        display: block;
+        background: linear-gradient(180deg,#fffdf8,#f7f1e4);
+        border-radius: 20px;
+        padding: 28px;
+        color: #3b3228;
+        text-decoration: none;
+        transition: .25s ease;
+        border: 1px solid #d8cdb7;
+        box-shadow: 0 12px 30px rgba(0,0,0,.18);
+        height: 100%;
+        animation: fadeIn .35s ease;
+    }
+
+        .entry-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(0,0,0,.25);
+            filter: brightness(1.03);
+            color: inherit;
+            text-decoration: none;
+        }
+
+    .entry-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #2d5c35;
+    }
+
+    .entry-date {
+        color: #8d7f6b;
+        font-size: 14px;
+    }
+
+    .entry-preview {
+        color: #5b5246;
+        font-size: 16px;
+        line-height: 1.7;
+        min-height: 70px;
+    }
+
+    .mood {
+        font-size: 14px;
+        padding: 8px 16px;
+        border-radius: 30px;
+    }
+
+    .bg-success {
+        background: #5d8f63 !important;
+    }
+
+    .bg-primary {
+        background: #5d7fa8 !important;
+    }
+
+    .bg-warning {
+        background: #d7b56d !important;
+        color: #443 !important;
+    }
+
+    .bg-danger {
+        background: #b56767 !important;
+    }
+
+    @@keyframes fadeIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @@media(max-width:768px) {
+
+        .journal-title {
+            font-size: 38px;
+        }
+
+        .entry-title {
+            font-size: 20px;
+        }
+    }
+
+</style>
 
 @functions {
+
     private string GetMoodBadge(MentalTrack.Models.MoodEnum mood)
     {
         return mood switch
         {
             MentalTrack.Models.MoodEnum.VeryGood => "bg-success",
             MentalTrack.Models.MoodEnum.Good => "bg-primary",
-            MentalTrack.Models.MoodEnum.Neutral => "bg-warning text-dark",
+            MentalTrack.Models.MoodEnum.Neutral => "bg-warning",
             MentalTrack.Models.MoodEnum.Bad => "bg-danger",
             MentalTrack.Models.MoodEnum.VeryBad => "bg-danger",
-
             _ => "bg-secondary"
         };
     }
+
 }
+```
