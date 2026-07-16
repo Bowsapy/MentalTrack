@@ -259,7 +259,7 @@ namespace MentalTrack.Services
                 .Select(e => e.Mood)
                 .ToArray();
 
-            MoodGraphViewModel mgwm = new MoodGraphViewModel(createdAts, moods);
+            MoodGraphViewModel mgwm = new MoodGraphViewModel(createdAts, moods, "All entries");
             return mgwm;
 
         }

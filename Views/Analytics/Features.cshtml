@@ -1,14 +1,104 @@
 ﻿
+<body class="tree-background">
+<div class="analytics-actions">
 
-<form asp-controller="Analytics" asp-action="MoodSummary" class="d-inline">
-    <button type="submit" class="btn btn-success m-1">
-        View analysis
-    </button>
-</form>
+   
+
+    <form asp-controller="Analytics" asp-action="MoodSummary">
+        <button class="analytics-card analysis-btn">
+            <div class="icon"> <img src="~/images/ai.png" width="50px" height="50px"/></div>
+            <div>
+                <h5>AI Analysis</h5>
+                <p>Discover habits affecting your mood.</p>
+            </div>
+        </button>
+    </form>
+
+    <form asp-controller="Analytics" asp-action="ShowMoodProgress">
+        <button class="analytics-card graph-btn">
+                <div class="icon"> <img src="~/images/graph.png" width="50px" height="50px" /></div>
+                <div>
+                <h5>Mood Progress</h5>
+                <p>Track how your mood has changed over time.</p>
+            </div>
+        </button>
+    </form>
+
+</div>
+    </body>
 
 
-<form asp-controller="Analytics" asp-action="ShowMoodProgress" class="d-inline">
-    <button type="submit" class="btn btn-outline-dark m-1">
-       Show mood graph
-    </button>
-</form>
+<style>
+
+.analytics-actions{
+display:flex;
+gap:25px;
+flex-wrap:wrap;
+justify-content:center;
+margin:40px 0;
+}
+
+.analytics-actions form{
+flex:1;
+min-width:300px;
+max-width:420px;
+}
+
+.analytics-card{
+width:100%;
+display:flex;
+align-items:center;
+gap:20px;
+padding:25px;
+border:none;
+border-radius:20px;
+background:white;
+box-shadow:0 10px 30px rgba(0,0,0,.12);
+transition:.3s;
+cursor:pointer;
+text-align:left;
+}
+
+.analytics-card:hover{
+transform:translateY(-8px);
+box-shadow:0 20px 40px rgba(0,0,0,.18);
+}
+
+.analytics-card .icon{
+width:70px;
+height:70px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:34px;
+border-radius:18px;
+color:white;
+flex-shrink:0;
+}
+
+.analysis-btn .icon{
+background:linear-gradient(135deg,#43a047,#66bb6a);
+}
+
+.graph-btn .icon{
+background:linear-gradient(135deg,#1565c0,#42a5f5);
+}
+
+.analytics-card h5{
+margin:0;
+font-size:1.3rem;
+font-weight:700;
+color:#222;
+}
+
+.analytics-card p{
+margin:6px 0 0;
+color:#666;
+font-size:.95rem;
+}
+
+.analytics-card:active{
+transform:scale(.98);
+}
+
+</style>

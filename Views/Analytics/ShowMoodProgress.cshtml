@@ -4,23 +4,36 @@
     ViewData["Title"] = "Mood Chart";
 }
 
-<a asp-action="ShowMoodProgress" class="btn btn-primary">
-    All entries
-</a>
-<a asp-action="ShowMoodProgressMonthly" class="btn btn-primary">
-    Monthly
-</a>
-<a asp-action="ShowMoodProgressDaily" class="btn btn-primary">
-    Daily
-</a>
+<body class="tree-background">
+
+    <div class="bg-white graph-container"> 
+        <div class="view-switch">
+            <a asp-action="ShowMoodProgress"
+               class="@(Model.description == "All entries" ? "active-graph" : "")">
+                All
+            </a>
+
+            <a asp-action="ShowMoodProgressMonthly"
+               class="@(Model.description == "Your average monthly mood" ? "active-graph" : "")">
+                Monthly
+            </a>
+
+            <a asp-action="ShowMoodProgressDaily"
+               class="@(Model.description == "Your average daily mood" ? "active-graph" : "")">
+                Daily
+            </a>
+        </div>
+
 
 <div class="container mt-5">
-    <h2 class="text-center text-primary mb-4"> @Model.description</h2>
+    <h2 class="text-center text-primary mb-4 green-text"> @Model.description</h2>
 
     <div style="height:400px;">
         <canvas id="moodChart"></canvas>
     </div>
 </div>
+    </div>
+</body>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -44,12 +57,12 @@
     label: 'Mood',
     data: moodValues,
     backgroundColor: 'rgba(54, 162, 235, 0.2)',
-    borderColor: 'rgba(54, 162, 235, 1)',
+    borderColor: 'rgb(46, 125, 50)',
     borderWidth: 2,
     fill: true,
     tension: 0.3,
     pointRadius: 5,
-    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+    pointBackgroundColor: 'rgba(46, 125, 50)'
     }]
     },
     options: {
@@ -58,7 +71,12 @@
     min: 1,
     max: 5,
     ticks: {
+    font: {
+    size: 12,
+    weight: 'bold'
+    },
     stepSize: 1,
+   
     callback: function(value) {
     return moods[value-1] || value;
     }
@@ -82,3 +100,45 @@
     }
     });
 </script>
+
+<style>
+.graph-container{
+    padding:10px;
+}
+
+
+.view-switch{
+    display:flex;
+    justify-content:center;
+    margin:25px 0;
+    background:#f3f4f6;
+    border-radius:16px;
+    padding:6px;
+    width:fit-content;
+    margin-left:auto;
+    margin-right:auto;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.view-switch a{
+    text-decoration:none;
+    color:#4b5563;
+    font-weight:600;
+    padding:10px 28px;
+    border-radius:12px;
+    transition:.25s;
+}
+
+.view-switch a:hover{
+    background:#e5e7eb;
+    color:#1f2937;
+}
+
+    .view-switch a.active-graph {
+    background:#2e7d32;
+    color:white;
+    box-shadow:0 3px 10px rgba(46,125,50,.35);
+}
+
+
+</style>
