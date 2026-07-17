@@ -98,5 +98,8 @@
 .padded-container{
     padding:10px;
 }
+.max-width100px{
+    max-width: 500px;
+}
 
 }

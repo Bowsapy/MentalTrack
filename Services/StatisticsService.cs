@@ -279,7 +279,8 @@ namespace MentalTrack.Services
             e.Content
              .Split(' ', StringSplitOptions.RemoveEmptyEntries)
              .Select(w => w.ToLower())
-             .Distinct())          // (vem jeden entry content ten rozsekej na slova a vyrad duplictni slova) pro kazdou entry v jednom moodu?
+             .Where(w => !NonTrackedWords.English.Contains(w))
+             .Distinct())          // (vem jeden entry content ten rozsekej na slova a vyrad duplictni slova) pro kazdou entry v jednom mood
         .GroupBy(w => w)
         .ToDictionary(
             x => x.Key,

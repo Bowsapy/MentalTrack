@@ -22,8 +22,10 @@
 
         @foreach (var mood in Model.WordsCountForMood.OrderByDescending(x => x.Key))
         {
-            var maxCount = mood.Value.Max(x => x.Value);
-
+            var maxCount = mood.Value
+                .Select(x => x.Value)
+                .DefaultIfEmpty(0)
+                .Max();
             <div class="mood-card shadow-lg mb-5">
 
                 <div class="mood-header">
@@ -67,13 +69,22 @@
 
                         <div class="word-item">
 
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between ">
                                 <span class="word-name">
-                                    @word.Key
+                                        @if((word.Key.Length) > 50)
+                                        {
+                                        <a> @word.Key.Substring(0, 50) </a>
+
+                                        }
+                                        else
+                                        {
+                                        @word.Key
+
+                                        }
                                 </span>
 
                                 <span class="word-count">
-                                    mentioned in @word.Value entry/entries
+                                    in @word.Value entry/entries
                                 </span>
                             </div>
 
