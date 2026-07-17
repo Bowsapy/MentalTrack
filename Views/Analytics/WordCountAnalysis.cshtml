@@ -1,0 +1,174 @@
+﻿@model MentalTrack.ViewModels.WordCountAnalysisViewModel
+
+@{
+    ViewData["Title"] = "Word Analysis";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<body class="tree-background">
+
+    <div class="container py-5 ">
+
+        <div class="text-center mb-5 bg-white padded-container">
+            <h1 class="analysis-title">
+                 Word Analysis
+            </h1>
+            <p class="analysis-subtitle">
+                Discover which words appear most often in your moods
+            </p>
+        </div>
+
+
+        @foreach (var mood in Model.WordsCountForMood.OrderByDescending(x => x.Key))
+        {
+            var maxCount = mood.Value.Max(x => x.Value);
+
+            <div class="mood-card shadow-lg mb-5">
+
+                <div class="mood-header">
+                    <h2>
+                        @switch (mood.Key)
+                        {
+                            case MoodEnum.VeryGood:
+                                <text>@MoodEnum.VeryGood.GetDisplayName()</text>
+                                break;
+
+                            case MoodEnum.Good:
+                                <text>@MoodEnum.Good.GetDisplayName()</text>
+                                break;
+
+                            case MoodEnum.Neutral:
+                                <text>@MoodEnum.Neutral.GetDisplayName()</text>
+                                break;
+                            case MoodEnum.Bad:
+                                <text>@MoodEnum.Bad.GetDisplayName()</text>
+                                break;
+                            case MoodEnum.VeryBad:
+                                <text> @MoodEnum.VeryBad.GetDisplayName()</text>
+                                break;
+
+                            default:
+                                <text>@mood.Key</text>
+                                break;
+                        }
+                    </h2>
+                </div>
+
+
+                <div class="words-container">
+
+                    @foreach (var word in mood.Value
+                        .OrderByDescending(x => x.Value)
+                        .Take(10))
+                    {
+
+                        var percentage = (word.Value * 100) / maxCount;
+
+                        <div class="word-item">
+
+                            <div class="d-flex justify-content-between">
+                                <span class="word-name">
+                                    @word.Key
+                                </span>
+
+                                <span class="word-count">
+                                    mentioned in @word.Value entry/entries
+                                </span>
+                            </div>
+
+
+                            <div class="progress">
+                                <div class="progress-bar"
+                                     style="width:@percentage%">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</body>
+
+<style>
+
+
+.analysis-title {
+font-size: 42px;
+font-weight: 700;
+color: #2e7d32;
+}
+
+.analysis-subtitle {
+color: #666;
+font-size: 18px;
+}
+
+
+.mood-card {
+background: rgba(255,255,255,0.9);
+border-radius: 25px;
+padding: 30px;
+backdrop-filter: blur(10px);
+}
+
+
+.mood-header {
+border-bottom: 2px solid #eee;
+margin-bottom: 25px;
+}
+
+.mood-header h2 {
+font-size: 30px;
+color: #333;
+}
+
+
+.words-container {
+display: flex;
+flex-direction: column;
+gap: 18px;
+}
+
+
+.word-item {
+background: #fafafa;
+padding: 15px 20px;
+border-radius: 15px;
+}
+
+
+.word-name {
+font-size: 20px;
+font-weight: 600;
+color: #333;
+}
+
+
+.word-count {
+color: #777;
+}
+
+
+.progress {
+height: 12px;
+background: #e8e8e8;
+border-radius: 20px;
+overflow: hidden;
+margin-top: 10px;
+}
+
+
+.progress-bar {
+height: 100%;
+background: linear-gradient(90deg,#66bb6a,#2e7d32);
+border-radius: 20px;
+}
+</style>

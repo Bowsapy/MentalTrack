@@ -263,5 +263,34 @@ namespace MentalTrack.Services
             return mgwm;
 
         }
+
+        public WordCountAnalysisViewModel GetWordCountAnalysis(string CurrentUserId)
+        {
+            Dictionary<MoodEnum, Dictionary<string, int>> result =
+             _context.Entries.Where(x => x.UserId == CurrentUserId)
+           .AsEnumerable()
+           //v podstate vezmu 
+
+           .GroupBy(e => e.Mood)
+            .ToDictionary(
+            g => g.Key,
+            g => g
+        .SelectMany(e =>
+            e.Content
+             .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+             .Select(w => w.ToLower())
+             .Distinct())          // (vem jeden entry content ten rozsekej na slova a vyrad duplictni slova) pro kazdou entry v jednom moodu?
+        .GroupBy(w => w)
+        .ToDictionary(
+            x => x.Key,
+            x => x.Count()
+        ));
+
+
+            WordCountAnalysisViewModel WCAVM = new WordCountAnalysisViewModel(result);
+            return WCAVM;
+        }
+
+
     }
 }

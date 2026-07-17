@@ -70,7 +70,6 @@ namespace MentalTrack.Controllers
          var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
         return userId;
         }
-
        
    
 
@@ -106,6 +105,10 @@ namespace MentalTrack.Controllers
 
 
             return View("ShowMoodProgress", _statisticsService.GetDailyDataForGraph(GetCurrentUser()));
+        }
+        public IActionResult WordCountAnalysis()
+        {
+            return View(_statisticsService.GetWordCountAnalysis(GetCurrentUser()));
         }
  
 

@@ -95,4 +95,8 @@
     font-weight:bold;
 }
 
+.padded-container{
+    padding:10px;
+}
+
 }

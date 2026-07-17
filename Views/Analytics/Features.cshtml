@@ -1,4 +1,5 @@
 ﻿
+
 <body class="tree-background">
 <div class="analytics-actions">
 
@@ -23,6 +24,16 @@
             </div>
         </button>
     </form>
+        <form asp-controller="Analytics" asp-action="WordCountAnalysis">
+            <button class="analytics-card graph-btn">
+                <div class="icon"> <img src="~/images/word.png" width="50px" height="50px" /></div>
+                <div>
+                    <h5>Word count analysis</h5>
+                    <p>Discover which words are most commonly associated with your moods.</p>
+                </div>
+            </button>
+        </form>
+
 
 </div>
     </body>
