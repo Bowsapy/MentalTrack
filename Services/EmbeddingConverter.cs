@@ -21,8 +21,7 @@ namespace MentalTrack.Services
             string[] stringArray = new string[floatArray.Length];
             for (int i = 0; i < floatArray.Length; i++)
             {
-                stringArray[i] = (floatArray[i]).ToString();
-
+                stringArray[i] = (floatArray[i]).ToString(CultureInfo.InvariantCulture);
 
             }
             return stringArray;

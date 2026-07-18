@@ -1,5 +1,14 @@
 ﻿
 @model MoodSummaryViewModel;
+
+<head>
+
+    <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+</head>
+<body class="grass-background">
+
 <div class="average-mood-card">
     <h2>Your Statistics</h2>
 
@@ -33,3 +42,125 @@
 </div>
 
 </div>
+</body>
+
+<style>
+    /* Background */
+    body {
+        background: linear-gradient(135deg, #f3f8ff, #eef8f0);
+        min-height: 100vh;
+    }
+
+    /* Main card */
+    .average-mood-card {
+        max-width: 800px;
+        margin: 60px auto;
+        padding: 40px;
+        background: rgba(255,255,255,.95);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.12);
+        backdrop-filter: blur(10px);
+    }
+
+        /* Headings */
+        .average-mood-card h2 {
+            text-align: center;
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 35px;
+            color: #1d3557;
+        }
+
+        .average-mood-card h3 {
+            margin-top: 35px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+    /* Statistics cards */
+    .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 22px;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #00c853, #43a047);
+        color: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(79,172,254,.35);
+        transition: .25s;
+    }
+
+        .stat:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat span {
+            font-size: 1.05rem;
+        }
+
+        .stat strong {
+            font-size: 1.6rem;
+        }
+
+    /* Divider */
+    .average-mood-card hr {
+        margin: 35px 0;
+        border: none;
+        border-top: 1px solid #e8e8e8;
+    }
+
+    /* Mood rows */
+    .mood-row {
+        margin-bottom: 22px;
+    }
+
+    .mood-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    /* Progress bar */
+    .progress {
+        width: 100%;
+        height: 18px;
+        background: #e8edf4;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg,#43e97b,#38f9d7);
+        transition: width .7s ease;
+    }
+
+    /* Responsive */
+    @@media (max-width:768px) {
+
+        .average-mood-card {
+            margin: 25px;
+            padding: 25px;
+        }
+
+            .average-mood-card h2 {
+                font-size: 1.9rem;
+            }
+
+        .stat {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+            .stat strong {
+                font-size: 2rem;
+            }
+    }
+
+</style>

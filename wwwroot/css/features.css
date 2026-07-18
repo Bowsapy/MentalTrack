@@ -1,0 +1,31 @@
+﻿.AverageMood {
+    border-radius: 2%;
+    padding: 10px;
+    margin-bottom: 50px;
+    background: linear-gradient(135deg, #a8edea, #fed6e3)
+}
+
+
+
+
+.day {
+    border-radius: 2%;
+    padding: 10px;
+    margin: 10px;
+    background: linear-gradient(135deg, #9AD6AD, #fed6e3)
+}
+
+.week {
+    border-radius: 2%;
+    padding: 10px;
+    margin: 10px;
+    background: linear-gradient(135deg, #a8edea, #fed6e3)
+}
+
+.page {
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+

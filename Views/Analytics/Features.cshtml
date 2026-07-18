@@ -18,7 +18,7 @@
         </form>
 
         <form asp-controller="Analytics" asp-action="WordCountAnalysis">
-            <button class="analytics-card graph-btn">
+            <button class="analytics-card analysis-btn">
                 <div class="icon"> <img src="~/images/word.png" width="50px" height="50px" /></div>
                 <div>
                     <h5>Word count analysis</h5>
@@ -40,7 +40,7 @@
 
 
         <form asp-controller="Analytics" asp-action="ShowMoodProgress">
-            <button class="analytics-card graph-btn">
+            <button class="analytics-card analysis-btn">
                 <div class="icon"> <img src="~/images/graph.png" width="50px" height="50px" /></div>
                 <div>
                     <h5>Mood Progress</h5>
@@ -128,7 +128,9 @@ flex-shrink:0;
 }
 
 .analysis-btn .icon{
-background:linear-gradient(135deg,#43a047,#66bb6a);
+        background: linear-gradient(135deg,#43a047,#66bb6a);
+        border:1px solid black;
+    
 }
 
 .graph-btn .icon{
