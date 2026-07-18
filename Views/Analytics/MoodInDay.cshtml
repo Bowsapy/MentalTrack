@@ -1,0 +1,34 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@model Dictionary<string, int>
+
+
+<div class="day">
+
+
+    <h1>
+        <img src="~/images/clock.png" />
+        Average mood in day phases, when you write the entries
+    </h1>
+    <p>
+        Mental Track analyzes when you write your journal entries and shows your average mood during different parts of the day.
+
+    </p>
+
+    <div class="grid">
+        @foreach (var item in Model)
+        {
+            var mood = (MoodEnum)item.Value;
+
+            var display = mood.GetType()
+                .GetField(mood.ToString())
+                ?.GetCustomAttribute<DisplayAttribute>()
+                ?.Name ?? mood.ToString();
+
+            <div class="card">
+                <b>@item.Key</b>
+                <div class="small">@display</div>
+            </div>
+        }
+    </div>
+</div>

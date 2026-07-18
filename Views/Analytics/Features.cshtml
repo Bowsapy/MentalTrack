@@ -5,25 +5,18 @@
 
    
 
-    <form asp-controller="Analytics" asp-action="MoodSummary">
-        <button class="analytics-card analysis-btn">
-            <div class="icon"> <img src="~/images/ai.png" width="50px" height="50px"/></div>
-            <div>
-                <h5>AI Analysis</h5>
-                <p>Discover habits affecting your mood.</p>
-            </div>
-        </button>
-    </form>
 
-    <form asp-controller="Analytics" asp-action="ShowMoodProgress">
-        <button class="analytics-card graph-btn">
-                <div class="icon"> <img src="~/images/graph.png" width="50px" height="50px" /></div>
+
+        <form asp-controller="Analytics" asp-action="AIAnalysis">
+            <button class="analytics-card analysis-btn">
+                <div class="icon"> <img src="~/images/ai.png" width="50px" height="50px" /></div>
                 <div>
-                <h5>Mood Progress</h5>
-                <p>Track how your mood has changed over time.</p>
-            </div>
-        </button>
-    </form>
+                    <h5>AI Analysis</h5>
+                    <p>Discover habits affecting your mood.</p>
+                </div>
+            </button>
+        </form>
+
         <form asp-controller="Analytics" asp-action="WordCountAnalysis">
             <button class="analytics-card graph-btn">
                 <div class="icon"> <img src="~/images/word.png" width="50px" height="50px" /></div>
@@ -33,6 +26,53 @@
                 </div>
             </button>
         </form>
+
+        
+        <form asp-controller="Analytics" asp-action="MoodSummary">
+            <button class="analytics-card analysis-btn">
+                <div class="icon"> <img src="~/images/pie-chart.png" width="50px" height="50px" /></div>
+                <div>
+                    <h5>Your general stats</h5>
+                    <p>Discover habits affecting your mood.</p>
+                </div>
+            </button>
+        </form>
+
+
+        <form asp-controller="Analytics" asp-action="ShowMoodProgress">
+            <button class="analytics-card graph-btn">
+                <div class="icon"> <img src="~/images/graph.png" width="50px" height="50px" /></div>
+                <div>
+                    <h5>Mood Progress</h5>
+                    <p>Track how your mood has changed over time.</p>
+                </div>
+            </button>
+        </form>
+
+
+        <form asp-controller="Analytics" asp-action="MoodInWeek">
+            <button class="analytics-card analysis-btn">
+                <div class="icon"> <img src="~/images/next-week.png" width="50px" height="50px" /></div>
+                <div>
+                    <h5>Week Mood Analysis</h5>
+                    <p>Discover habits affecting your mood.</p>
+                </div>
+            </button>
+        </form>
+
+        <form asp-controller="Analytics" asp-action="MoodInDay">
+            <button class="analytics-card analysis-btn">
+                <div class="icon"> <img src="~/images/clock.png" width="50px" height="50px" /></div>
+                <div>
+                    <h5>Day Mood Analysis</h5>
+                    <p>Discover habits affecting your mood.</p>
+                </div>
+            </button>
+        </form>
+
+   
+    
+
 
 
 </div>
@@ -111,5 +151,9 @@ font-size:.95rem;
 .analytics-card:active{
 transform:scale(.98);
 }
+
+    .analytics-actions form {
+        flex: 0 0 calc(50% - 13px);
+    }
 
 </style>

@@ -1,0 +1,30 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using MentalTrack.Enums;
+
+@model Dictionary<MoodEnum, Dictionary<UserStateEnum, int>>;
+<div class="activities">
+    <h1><img src="~/images/active-user.png" />  Activities and your mood</h1>
+    <p> Mental Track looks for connections between what you write about and your mood. </p>
+    @foreach (var item in Model)
+    {
+        if (item.Value.Count > 0)
+        {
+            <div class="card">
+                <h3>
+                    You tend to be in <b>@item.Key.GetDisplayName()</b> mood when you write about:
+                </h3>
+
+                <ul>
+                    @foreach (var state in item.Value)
+                    {
+                        <li>
+                            <b>@state.Key.GetDisplayName()</b>
+                            <span class="tag">@state.Value entry/entries</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+</div>

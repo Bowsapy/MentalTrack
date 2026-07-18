@@ -76,12 +76,13 @@ namespace MentalTrack.Controllers
 
         public IActionResult MoodSummary()
         {
-            Dictionary<MoodEnum,Dictionary<UserStateEnum,int>> USMatches = _statisticsService.GetMoodStatesMatches(GetCurrentUser());
-            Dictionary<string, int> WDMatches = _statisticsService.ViewMoodOnWeekDays(GetCurrentUser());
-            Dictionary<string, int> DPMatches = _statisticsService.ViewMoodOnDayPhases(GetCurrentUser());
+            string user_id = GetCurrentUser();
+            Dictionary<MoodEnum,Dictionary<UserStateEnum,int>> USMatches = _statisticsService.GetMoodStatesMatches(user_id);
+            Dictionary<string, int> WDMatches = _statisticsService.ViewMoodOnWeekDays(user_id);
+            Dictionary<string, int> DPMatches = _statisticsService.ViewMoodOnDayPhases(user_id);
 
 
-            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(USMatches, WDMatches, DPMatches,_statisticsService.GetMoodPercentages(),_statisticsService.GetEntriesMode(),_statisticsService.GetEntriesCount());
+            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(_statisticsService.GetMoodPercentages(GetCurrentUser()),_statisticsService.GetEntriesMode(user_id),_statisticsService.GetEntriesCount(user_id));
 
             return View(moodsumVM);
         }
@@ -110,9 +111,20 @@ namespace MentalTrack.Controllers
         {
             return View(_statisticsService.GetWordCountAnalysis(GetCurrentUser()));
         }
- 
+        public IActionResult AIAnalysis()
+        {
+            return View(_statisticsService.GetMoodStatesMatches(GetCurrentUser()));
+        }
+        public IActionResult MoodInWeek()
+        {
+            return View(_statisticsService.ViewMoodOnWeekDays(GetCurrentUser()));
+        }
+        public IActionResult MoodInDay()
+        {
+            return View(_statisticsService.ViewMoodOnDayPhases(GetCurrentUser()));
+        }
 
- 
+
 
 
 

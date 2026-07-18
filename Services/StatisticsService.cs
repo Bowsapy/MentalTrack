@@ -32,24 +32,24 @@ namespace MentalTrack.Services
 
 
 
-        public int GetEntriesMode()
+        public int GetEntriesMode(string CurrentUserId)
         {
-            int mode = _context.Entries.GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).Select(x => (int)x.Key).FirstOrDefault();
+            int mode = _context.Entries.Where(x=> x.UserId == CurrentUserId).GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).Select(x => (int)x.Key).FirstOrDefault();
             return mode;
 
         }
-        public int GetEntriesCount()
+        public int GetEntriesCount( string CurrentUserId)
         {
 
-            int totalCount = _context.Entries.Count();
+            int totalCount = _context.Entries.Where(x=> x.UserId == CurrentUserId).Count();
             return totalCount;
 
         }
-        public Dictionary<MoodEnum, double> GetMoodPercentages()
+        public Dictionary<MoodEnum, double> GetMoodPercentages(string CurrentUserId)
         {
-            int count = GetEntriesCount();
+            int count = GetEntriesCount(CurrentUserId);
 
-            return _context.Entries.GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / count) * 100));
+            return _context.Entries.Where(x=> x.UserId == CurrentUserId).GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / count) * 100));
 
 
         }
