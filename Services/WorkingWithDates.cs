@@ -23,6 +23,8 @@ public class WorkingWithDates
     {
         int hour = date.Hour;
         DayPhasesEnum phase = DayPhasesEnum.Morning;
+
+
         if (hour >= 0 & hour < 6)
         {
             phase = DayPhasesEnum.Night;
@@ -32,17 +34,20 @@ public class WorkingWithDates
             phase = DayPhasesEnum.Morning;
 
         }
-        else if (hour >= 12 & hour <= 18)
+        else if (hour >= 12 & hour < 18)
         {
             phase = DayPhasesEnum.Afternoon;
 
         }
-        else if (hour >= 18 & hour <= 24)
+        else if (hour >= 18 & hour < 24)
         {
             phase = DayPhasesEnum.Evening;
 
         }
         return phase;
 
+
+
     }
+
 }

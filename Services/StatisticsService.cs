@@ -58,21 +58,25 @@ namespace MentalTrack.Services
             var data = _context.Entries.Where(x => x.UserId == CurrentUserId)
        .AsEnumerable()
        .GroupBy(e => e.CreatedAt.DayOfWeek)
+        .OrderBy(g => (int)Enum.Parse<DayInWeekEnum>(g.Key.ToString()))
        .ToDictionary(
            g => g.Key.ToString(),
            g => (int)g.Average(x => (int)x.Mood)
        );
+            
             return data;
         }
-        public Dictionary<string, int> ViewMoodOnDayPhases(string CurrentUserId)
+        public Dictionary<DayPhasesEnum, int> ViewMoodOnDayPhases(string CurrentUserId)
         {
             var data = _context.Entries.Where(x => x.UserId == CurrentUserId)
        .AsEnumerable()
        .GroupBy(e => e.DayPhase)
+       .OrderBy(g => (int)Enum.Parse<DayPhasesEnum>(g.Key.ToString()))
        .ToDictionary(
-           g => g.Key.ToString(),
+           g => g.Key,
            g => (int)g.Average(x => (int)x.Mood)
        );
+            
             return data;
         }
 

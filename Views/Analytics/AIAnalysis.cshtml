@@ -7,6 +7,8 @@
 <head>
 
     <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
 
 </head>
 
@@ -19,14 +21,14 @@
         {
             <div class="card">
                 <h3>
-                    You tend to be in <b>@item.Key.GetDisplayName()</b> mood when you write about:
+                    You tend to be in <b class="@MoodHelper.GetMoodBadgeTextColor(item.Key)">@item.Key.GetDisplayName()</b> mood when you write about:
                 </h3>
 
                 <ul>
                     @foreach (var state in item.Value)
                     {
                         <li>
-                            <b>@state.Key.GetDisplayName()</b>
+                            <b class=>@state.Key.GetDisplayName()</b>
                             <span class="tag">@state.Value entry/entries</span>
                         </li>
                     }

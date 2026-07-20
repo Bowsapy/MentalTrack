@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
 
 </head>
+<body class="tree-background">
 
 <div class="week">
     <h1><img src="~/images/next-week.png" />  Average mood in a week (based on days you wrote the entries)</h1>
@@ -15,6 +16,7 @@
     </p>
 
     <div class="grid ">
+      
         @foreach (var item in Model)
         {
             var mood = (MoodEnum)item.Value;
@@ -24,11 +26,123 @@
 				?.GetCustomAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>()
 				?.Name ?? mood.ToString();
 
-            <div class="card">
-                <b>@item.Key</b>
-                <div class="small">@display</div>
+                <div class="card">
+                <b class=>@item.Key</b>
+                    <div class="small text-white @MoodHelper.GetMoodBadgeBG(mood)">@display</div>
             </div>
         }
     </div>
 
 </div>
+</body>
+<style>
+.week {
+max-width: 1100px;
+margin: 50px auto;
+padding: 40px;
+background: rgba(255,255,255,0.9);
+border-radius: 30px;
+box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+backdrop-filter: blur(10px);
+}
+
+
+.week h1 {
+display: flex;
+align-items: center;
+gap: 15px;
+font-size: 32px;
+color: #2e7d32;
+font-weight: 800;
+margin-bottom: 15px;
+}
+
+
+.week h1 img {
+width: 55px;
+height: 55px;
+}
+
+
+.week p {
+color: #555;
+font-size: 17px;
+line-height: 1.6;
+margin-bottom: 35px;
+}
+
+
+/* GRID */
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+gap: 25px;
+}
+
+
+/* CARD */
+.card {
+background: linear-gradient(
+145deg,
+#ffffff,
+#f5f9f5
+);
+
+border-radius: 22px;
+padding: 30px 20px;
+
+text-align: center;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,0.08);
+
+transition: all .25s ease;
+
+border: 1px solid rgba(46,125,50,0.1);
+}
+
+
+.card:hover {
+transform: translateY(-8px);
+
+box-shadow:
+0 15px 35px rgba(0,0,0,0.15);
+}
+
+
+/* DAY */
+.card b {
+display:block;
+font-size:22px;
+color:#333;
+margin-bottom:15px;
+}
+
+
+/* MOOD TEXT */
+.small {
+font-size:18px;
+font-weight:700;
+}
+
+
+/* RESPONSIVE */
+@@media(max - width:600px){
+
+.week {
+margin:20px;
+padding:25px;
+}
+
+
+.week h1 {
+font-size:24px;
+}
+
+
+.grid {
+grid-template-columns:1fr;
+}
+}
+
+</style>

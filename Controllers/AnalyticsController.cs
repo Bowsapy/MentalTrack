@@ -77,10 +77,7 @@ namespace MentalTrack.Controllers
         public IActionResult MoodSummary()
         {
             string user_id = GetCurrentUser();
-            Dictionary<MoodEnum,Dictionary<UserStateEnum,int>> USMatches = _statisticsService.GetMoodStatesMatches(user_id);
-            Dictionary<string, int> WDMatches = _statisticsService.ViewMoodOnWeekDays(user_id);
-            Dictionary<string, int> DPMatches = _statisticsService.ViewMoodOnDayPhases(user_id);
-
+     
 
             MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(_statisticsService.GetMoodPercentages(GetCurrentUser()),_statisticsService.GetEntriesMode(user_id),_statisticsService.GetEntriesCount(user_id));
 

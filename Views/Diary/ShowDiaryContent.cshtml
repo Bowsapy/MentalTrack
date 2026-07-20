@@ -1,13 +1,108 @@
-﻿@model MentalTrack.Models.JournalEntry;
-<h1> @Model.Title</h1>
-<h2> @Model.CreatedAt</h2>
-<p style="word-wrap:break-word; white-space:pre-wrap"> @Model.Content</p>
-<p> @Model.Mood</p>
+﻿@model MentalTrack.Models.JournalEntry
 
-<form asp-action="DeleteDiaryEntry" method="post">
-    <input type="hidden" name="id" value="@Model.Id" />
-    <button type="submit" class="btn btn-danger">Delete entry</button>
-    <a asp-action="SimilarEntries" asp-route-id="@Model.Id" class="btn btn-success shadow-sm">
-        Show Similar Entries
-    </a>
-</form><a asp-action="ShowEntries" class="btn btn-primary">Back</a>
+<head>
+
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body class="tree-background">
+
+    <div class="container py-5">
+
+        <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width:900px;">
+
+            <div class="card-body p-5">
+
+                <div class="d-flex justify-content-between align-items-start flex-wrap mb-4">
+
+                    <div>
+                        <h1 class="fw-bold mb-2">@Model.Title</h1>
+
+                        <div class="text-muted">
+                            <i class="bi bi-calendar3"></i>
+                            @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    </div>
+
+                    <span class=" fs-6 px-3 py-2 rounded-pill badge mood @MoodHelper.GetMoodBadgeBG(Model.Mood)">
+                        @Model.Mood.GetDisplayName()
+                    </span>
+
+                </div>
+
+                <hr />
+
+                <div class="entry-content mt-4">
+                    @Model.Content
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex flex-wrap gap-2 justify-content-between">
+
+                    <div class="d-flex gap-2">
+
+                        <a asp-action="ShowEntries"
+                           class="btn btn-outline-primary rounded-pill px-4">
+                            ← Back
+                        </a>
+
+                        <a asp-action="SimilarEntries"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-success rounded-pill px-4">
+                            🔍 Similar Entries
+                        </a>
+
+                    </div>
+
+                    <form asp-action="DeleteDiaryEntry" method="post"
+                          onsubmit="return confirm('Do you really want to delete this entry?');">
+
+                        <input type="hidden" name="id" value="@Model.Id" />
+
+                        <button type="submit"
+                                class="btn btn-danger rounded-pill px-4">
+                            🗑 Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+<style>
+
+.entry-content{
+
+}
+
+.card{
+backdrop-filter: blur(6px);
+background: rgba(255,255,255,.96);
+}
+
+.card h1{
+color:#2c3e50;
+}
+
+.badge{
+font-weight:600;
+letter-spacing:.5px;
+}
+
+.btn{
+transition:.25s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 .5rem 1rem rgba(0,0,0,.15);
+}
+</style>

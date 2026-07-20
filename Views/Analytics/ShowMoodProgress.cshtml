@@ -77,8 +77,21 @@
     size: 12,
     weight: 'bold'
     },
+    color: function(context) {
+
+    const colors = [
+    '#7f1d1d', // Very Bad
+    '#dc2626', // Bad
+    '#0066ff', // Neutral
+    '#81C784', // Good
+    '#16a34a'  // Very Good
+    ];
+
+    return colors[context.tick.value - 1];
+    },
+
     stepSize: 1,
-   
+
     callback: function(value) {
     return moods[value-1] || value;
     }
@@ -134,7 +147,7 @@
 .view-switch a:hover{
     background:#e5e7eb;
     color:#1f2937;
-}
+	}
 
     .view-switch a.active-graph {
     background:#2e7d32;

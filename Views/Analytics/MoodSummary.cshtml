@@ -30,7 +30,7 @@
     {
         <div class="mood-row">
             <div class="mood-header">
-                <span>@item.Key.GetDisplayName()</span>
+                    <span class=" @MoodHelper.GetMoodBadgeTextColor(@item.Key)"> @item.Key.GetDisplayName()</span>
                 <span>@item.Value%</span>
             </div>
 

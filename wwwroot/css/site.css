@@ -1,3 +1,14 @@
+:root {
+    --mood-very-bad: #7B1E1E; /* tmavě červená */
+    --mood-bad: #ff0000; /* jemná červená */
+    --mood-neutral: #0066ff; /* žlutá */
+    --mood-good: #00cc00; /* světle zelená */
+    --mood-very-good: #2E7D32; /* tmavě zelená */
+}
+
+
+
+
 .navbar-round-button {
     width: 200px;
     height: 60px;
@@ -102,4 +113,42 @@
     max-width: 500px;
 }
 
+.good-mood-bg {
+    background-color: var(--mood-good) !important
+}
+.very-good-mood-bg {
+    background-color: var(--mood-very-good) !important
+}
+.bad-mood-bg {
+    background-color: var(--mood-bad) !important
+}
+
+
+.neutral-mood-bg {
+    background-color: var(--mood-neutral) !important
+}
+.very-bad-mood-bg {
+    background-color: var(--mood-very-bad) !important
+}
+
+.good-mood-fg {
+    color: var(--mood-good) !important
+}
+
+.very-good-mood-fg {
+    color: var(--mood-very-good) !important
+}
+
+.bad-mood-fg {
+    color: var(--mood-bad) !important
+
+}
+
+
+.neutral-mood-fg {
+    color: var(--mood-neutral) !important
+}
+
+.very-bad-mood-fg {
+    color: var(--mood-very-bad) !important
 }

@@ -39,7 +39,7 @@
 
                         </div>
 
-                        <span class="badge mood @GetMoodBadge(entry.Mood)">
+                        <span class="badge mood @MoodHelper.GetMoodBadgeBG(entry.Mood)">
                             @entry.Mood.GetDisplayName()
                         </span>
 
@@ -183,20 +183,5 @@
 
 </style>
 
-@functions {
 
-    private string GetMoodBadge(MentalTrack.Models.MoodEnum mood)
-    {
-        return mood switch
-        {
-            MentalTrack.Models.MoodEnum.VeryGood => "bg-success",
-            MentalTrack.Models.MoodEnum.Good => "bg-primary",
-            MentalTrack.Models.MoodEnum.Neutral => "bg-warning",
-            MentalTrack.Models.MoodEnum.Bad => "bg-danger",
-            MentalTrack.Models.MoodEnum.VeryBad => "bg-danger",
-            _ => "bg-secondary"
-        };
-    }
-
-}
 ```

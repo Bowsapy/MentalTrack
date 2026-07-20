@@ -29,31 +29,8 @@
             <div class="mood-card shadow-lg mb-5">
 
                 <div class="mood-header">
-                    <h2>
-                        @switch (mood.Key)
-                        {
-                            case MoodEnum.VeryGood:
-                                <text>@MoodEnum.VeryGood.GetDisplayName()</text>
-                                break;
-
-                            case MoodEnum.Good:
-                                <text>@MoodEnum.Good.GetDisplayName()</text>
-                                break;
-
-                            case MoodEnum.Neutral:
-                                <text>@MoodEnum.Neutral.GetDisplayName()</text>
-                                break;
-                            case MoodEnum.Bad:
-                                <text>@MoodEnum.Bad.GetDisplayName()</text>
-                                break;
-                            case MoodEnum.VeryBad:
-                                <text> @MoodEnum.VeryBad.GetDisplayName()</text>
-                                break;
-
-                            default:
-                                <text>@mood.Key</text>
-                                break;
-                        }
+                    <h2 class="@MoodHelper.GetMoodBadgeTextColor(mood.Key)">
+                        @(mood.Key.GetDisplayName())
                     </h2>
                 </div>
 

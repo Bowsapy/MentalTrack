@@ -1,39 +1,133 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Reflection
-@model Dictionary<string, int>
+@model Dictionary<DayPhasesEnum, int>
 
 <head>
-
     <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
-
 </head>
 
-<div class="day">
+<body class="tree-background">
 
+    <div class="feature-container">
 
-    <h1>
-        <img src="~/images/clock.png" />
-        Average mood in day phases, when you write the entries
-    </h1>
-    <p>
-        Mental Track analyzes when you write your journal entries and shows your average mood during different parts of the day.
+        <div class="feature-header">
+            <img src="~/images/clock.png" />
 
-    </p>
+            <div>
+                <h1>
+                    Average mood in day phases
+                </h1>
 
-    <div class="grid">
-        @foreach (var item in Model)
-        {
-            var mood = (MoodEnum)item.Value;
-
-            var display = mood.GetType()
-                .GetField(mood.ToString())
-                ?.GetCustomAttribute<DisplayAttribute>()
-                ?.Name ?? mood.ToString();
-
-            <div class="card">
-                <b>@item.Key</b>
-                <div class="small">@display</div>
+                <p>
+                    Mental Track analyzes when you write your journal entries
+                    and shows your average mood during different parts of the day.
+                </p>
             </div>
-        }
+        </div>
+
+
+        <div class="grid">
+
+            @foreach (var item in Model)
+            {
+                var mood = (MoodEnum)item.Value;
+
+                var display = mood.GetType()
+                    .GetField(mood.ToString())
+                    ?.GetCustomAttribute<DisplayAttribute>()
+                    ?.Name ?? mood.ToString();
+
+
+                <div class="card mood-card">
+
+                    <div class="time">
+                        @item.Key.GetDisplayName()
+                    </div>
+
+                    <div class="mood text-white @MoodHelper.GetMoodBadgeBG(mood)">
+                        @display
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
     </div>
-</div>
+
+</body>
+
+<style>
+
+    .feature-container {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 30px;
+    }
+
+
+    .feature-header {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        background: rgba(255,255,255,0.85);
+        padding: 30px;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.15);
+        margin-bottom: 40px;
+    }
+
+
+        .feature-header img {
+            width: 80px;
+            height: 80px;
+        }
+
+
+        .feature-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+
+        .feature-header p {
+            margin-top: 10px;
+            color: #555;
+        }
+
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+        gap: 25px;
+    }
+
+
+    .mood-card {
+        background: rgba(255,255,255,.9);
+        padding: 25px;
+        border-radius: 25px;
+        text-align: center;
+        transition: .3s;
+        box-shadow: 0 8px 25px rgba(0,0,0,.12);
+    }
+
+
+        .mood-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,.2);
+        }
+
+
+    .time {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+
+    .mood {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+</style>
