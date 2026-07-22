@@ -26,10 +26,13 @@
 
 
     </li>
+            <li class="nav-item">
+
         <form asp-controller="Account" asp-action="Logout" method="post">
             @Html.AntiForgeryToken()
             <button type="submit" class="btn btn-link nav-link navbar-round-button">LOGOUT</button>
         </form>
+        </li>
 }
 else 
 {
@@ -45,3 +48,17 @@ else
 
 }
 </ul>
+<style>
+
+        .navbar-nav {
+           
+        }
+        .nav-item {}
+    .navbar-round-button {
+        width: clamp(150px, 8vw, 100px) !important;
+        text-align:center !important;
+    }
+    }
+
+</style>
+
