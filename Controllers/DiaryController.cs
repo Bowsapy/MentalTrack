@@ -85,7 +85,23 @@ public class DiaryController : Controller
         if (entry == null)
             return NotFound();
 
+        List<Sentiment> allSentiments = _context.Sentiments
+            .Where(x => x.JournalEntryPart.JournalEntryId == id)
+            .ToList();
+
+        var entryParts = _context.EntryParts.Where(y => y.JournalEntry.Id == id);
+
+        var entryStates = _context.EntryStates.Where(l => l.JournalEntryId == id);
+
+        _context.Sentiments.RemoveRange(allSentiments);
+        _context.EntryParts.RemoveRange(entryParts);
+        _context.EntryStates.RemoveRange(entryStates);
+       
+
         _context.Entries.Remove(entry);
+
+
+   
         _context.SaveChanges();          
 
         return RedirectToAction("ShowEntries"); // Vyresit smazani parts + embedingu
