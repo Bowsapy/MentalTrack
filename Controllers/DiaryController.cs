@@ -115,7 +115,7 @@ public class DiaryController : Controller
         _logger.LogInformation("Create called");
 
         entry.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        entry.CreatedAt = DateTime.Now;
+        entry.CreatedAt = DateTime.UtcNow;
 
         ModelState.Remove("UserId");
         TryValidateModel(entry);

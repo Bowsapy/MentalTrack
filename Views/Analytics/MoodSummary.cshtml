@@ -19,7 +19,18 @@
 
     <div class="stat">
         <span>Most common mood</span>
-        <strong>@(((MoodEnum)Model.ModeMood).GetDisplayName())</strong>
+
+            @try
+            {
+                    <strong>
+                        @(((MoodEnum)Model.ModeMood).GetDisplayName())
+                    </strong>
+                }
+                catch
+                {
+                    
+                }
+
     </div>
 
     <hr />

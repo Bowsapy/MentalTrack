@@ -21,14 +21,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-<<<<<<< HEAD
-    options.UseSqlServer(connectionString));
-
-
-=======
     options.UseNpgsql(connectionString));
 ///fcc
->>>>>>> 9b8114e (Zmena databaze na postgress na rpi)
 
 
 
