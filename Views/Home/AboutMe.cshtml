@@ -18,44 +18,37 @@
 
                 <div class="text-center mb-4">
                     <h1 class="display-4 fw-bold" style="color:green">
-                        About 
+                        About Me
                     </h1>
                 </div>
 
-
                 <p class="lead text-secondary">
-                    Understand yourself better through your own thoughts and experiences.
+                    My name is Jan Bouza, and I am a junior developer.
                 </p>
-
 
                 <p class="text-muted">
-                    <span class="fw-bold">About me</span> is a personal journaling app
-                    designed to help you reflect on your daily life, track emotions,
-                    and discover connections between your habits and mood.
+                    MentalTrack was created out of a combination of my interest in mental health and my love of statistics.
                 </p>
-
 
                 <p class="text-muted">
-                    Write about your day, your thoughts, or anything that is on your mind.
-                    Over time, Mental Track analyzes your entries and helps you recognize
-                    patterns that influence how you feel.
+                    I love the idea of using technology to help people better understand themselves, identify patterns in their lives, and gradually improve their well-being.
                 </p>
 
-
-                <p class="text-muted fst-italic">
-                    Your thoughts are personal. Mental Track is here to help you reflect,
-                    learn, and grow.
+                <p class="text-muted">
+                    The app is currently free and ad-free, and I would love to keep it that way. However, to be honest, the costs of hosting and AI APIs have turned out to be higher than I initially expected. :D
                 </p>
-
 
                 <div class="text-center mt-4">
-                    <button class="btn btn-primary btn-lg"
-                            onclick="flip()">
-                        Next →
+
+                    <button class="btn btn-success btn-lg" onclick="flip()">
+                        Contact me
                     </button>
+
                 </div>
 
             </div>
+
+      
 
         </div>
 
@@ -71,26 +64,24 @@
 
                     <h1 class="display-4 fw-bold"
                         style="color:green">
-                        Discover yourself
+                        Contact me
                     </h1>
 
                 </div>
 
 
                 <p class="lead text-secondary">
-                    Turn your daily thoughts into valuable insights.
+                    <strong> Email:</strong> janbouza5@seznam.cz
                 </p>
 
 
-                <p class="text-muted">
-                    Mental Track helps you understand relationships between
-                    your activities, emotions and experiences.
+                <p class="lead text-secondary">
+                    <strong> Github: </strong> https://github.com/Bowsapy/MentalTrack
                 </p>
 
 
-                <p class="text-muted">
-                    By writing regularly you can discover what improves your
-                    mood and what affects your everyday life.
+                <p class="lead text-secondary">
+                    <strong> Linekdin: </strong>  https://www.linkedin.com/in/jan-bouza-449863397/
                 </p>
 
 
@@ -98,7 +89,7 @@
                 <div class="text-center mt-4">
 
                     <button class="btn btn-success btn-lg" onclick="flip()">
-                        Start Journey 🚀
+                        About me
                     </button>
 
                 </div>
@@ -108,54 +99,7 @@
 
         </div>
 
-        <!-- STRÁNKA 2 -->
-        <div class="page" id="page3">
-
-            <div class="card shadow-lg p-5 rounded-4">
-
-
-                <div class="text-center mb-4">
-
-                    <h1 class="display-4 fw-bold"
-                        style="color:green">
-                        Discover yourself
-                    </h1>
-
-                </div>
-
-
-                <p class="lead text-secondary">
-                    Turn your sfsf thoughts into valuable insights.
-                </p>
-
-
-                <p class="text-muted">
-                    Mental Track helps you understand relationships between
-                    your activities, emotions and experiences.
-                </p>
-
-
-                <p class="text-muted">
-                    By writing regularly you can discover what improves your
-                    mood and what affects your everyday life.
-                </p>
-                <br />
-                <p>3</p>
-
-
-
-                <div class="text-center mt-4">
-
-                    <button class="btn btn-success btn-lg" onclick="flip()">
-                        Start sfsa 🚀
-                    </button>
-
-                </div>
-
-
-            </div>
-
-        </div>
+       
 
 
     </div>
@@ -285,7 +229,9 @@
             else if(activePage === page2){
 
                 page2.classList.remove("active");
-                page3.classList.add("active");
+                page1.classList.add("active");
+                    page1.classList.remove("flip");
+                page2.classList.remove("flip");
 
             }
 

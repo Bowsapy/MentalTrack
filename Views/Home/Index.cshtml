@@ -77,77 +77,46 @@
 
 
                 <ul>
-                    <li> 
-                        Personal Journal
-                    </li>
                     <li>
-                        Mood tracking with overall stats like graph of your mood and average mood in certain week days or day phases
+                        A free personal journal with secure data storage
                     </li>
-                    <li> Mood analysis  Mt can find activies you perform when you are in certain Mood , plus can certain words that you tend to write about in certain moods </li>
 
+                    <li>
+                        Mood tracking with detailed statistics, including mood graphs
+                        and average mood on a particular day of the week and day phase.
+                    </li>
+
+                    <li>
+                        Mood analysis that identifies the activities and habits associated
+                        with different moods, as well as the words you tend to use when
+                        feeling a certain way
+                    </li>
                 </ul>
+                <p> 
+                    Just make an account and start your journey :)
+                </p>
 
                 <div class="text-center mt-4">
 
-                    <button class="btn btn-success btn-lg" onclick="flip()">
-                        Start Journey 🚀
-                    </button>
+                    <a asp-controller="Diary"
+                       asp-action="Create"
+                       class="btn btn-success btn-lg">
+                        Start your journey 🚀
+                    </a>
 
                 </div>
 
 
             </div>
+
+
+
+
 
         </div>
 
         <!-- STRÁNKA 2 -->
-        <div class="page" id="page3">
-
-            <div class="card shadow-lg p-5 rounded-4">
-
-
-                <div class="text-center mb-4">
-
-                    <h1 class="display-4 fw-bold"
-                        style="color:green">
-                        Discover yourself
-                    </h1>
-
-                </div>
-
-
-                <p class="lead text-secondary">
-                    Turn your sfsf thoughts into valuable insights.
-                </p>
-
-
-                <p class="text-muted">
-                    Mental Track helps you understand relationships between
-                    your activities, emotions and experiences.
-                </p>
-
-
-                <p class="text-muted">
-                    By writing regularly you can discover what improves your
-                    mood and what affects your everyday life.
-                </p>
-                <br />
-                <p>3</p>
-
-
-
-                <div class="text-center mt-4">
-
-                    <button class="btn btn-success btn-lg" onclick="flip()">
-                        Start sfsa 🚀
-                    </button>
-
-                </div>
-
-
-            </div>
-
-        </div>
+       
 
 
     </div>
@@ -246,11 +215,11 @@
 
         let page1 = document.getElementById("page1");
         let page2 = document.getElementById("page2");
-        let page3 = document.getElementById("page3");
+        //let page3 = document.getElementById("page3");
 
 
         let activePage = document.querySelector(".page.active");
-
+        
 
         if(activePage === page1){
 
@@ -268,14 +237,13 @@
 
         }
 
-
-
         setTimeout(function(){
 
 
             if(activePage === page1){
 
                 page1.classList.remove("active");
+
                 page2.classList.add("active");
 
             }
@@ -283,7 +251,11 @@
             else if(activePage === page2){
 
                 page2.classList.remove("active");
-                page3.classList.add("active");
+                page1.classList.add("active");
+                page2.classList.remove("flip");
+                page1.classList.remove("flip");
+
+
 
             }
 
