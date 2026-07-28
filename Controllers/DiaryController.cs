@@ -112,6 +112,7 @@ public class DiaryController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(JournalEntry entry)
     {
+        
         _logger.LogInformation("Create called");
 
         entry.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
