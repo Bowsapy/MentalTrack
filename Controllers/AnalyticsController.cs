@@ -120,6 +120,10 @@ namespace MentalTrack.Controllers
         {
             return View(_statisticsService.ViewMoodOnDayPhases(GetCurrentUser()));
         }
+        public IActionResult UsInDay()
+        {
+            return View(_statisticsService.GetUserStatesInDays(GetCurrentUser()));
+        }
 
 
 

@@ -1,4 +1,5 @@
 ﻿using AspNetCoreGeneratedDocument;
+using DotNetEnv;
 using Humanizer;
 using MentalTrack.Constants;
 using MentalTrack.Data;
@@ -7,7 +8,9 @@ using MentalTrack.Models;
 using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mono.TextTemplating;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MentalTrack.Services
 {
@@ -120,8 +123,7 @@ namespace MentalTrack.Services
                             entryVector,
                             _embeddingConverter.ConvertToFloatList(state.Embedding))
                     })
-                    .OrderByDescending(x => x.Score)
-                    .Take(5);
+                    .OrderByDescending(x => x.Score);
                 //vytvori anonym. strkturu kde je userstate id, skore s entries
 
 
@@ -295,7 +297,21 @@ namespace MentalTrack.Services
             WordCountAnalysisViewModel WCAVM = new WordCountAnalysisViewModel(result);
             return WCAVM;
         }
+        public List<UserstatesProgressViewModel> GetUserStatesInDays(string currentUserId)
+        {
+            FindEntryStateMatches(currentUserId);
+             var result = _context.EntryStates
+                .Where(x => x.JournalEntry.UserId == currentUserId)
+                .Select(x => new UserstatesProgressViewModel
+                {
+                    Date = DateOnly.FromDateTime(x.JournalEntry.CreatedAt),
+                    State = x.UserStatesEmb.UserState.GetDisplayName(),
+                    Value = 1
+                })
+                .ToList();
 
+            return result;
+        }
 
     }
 }
