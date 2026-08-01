@@ -17,20 +17,20 @@ Done features:
 7. Word count analysis (Because embedding wont catch names)
 8. Average mood in day phases and on week days 
 
-![MT1](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt1.png)
+![MT1](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt1.png)
 
-![MT2](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt2.png)
+![MT2](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt2.png)
 
-![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt3.png)
+![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt3.png)
 
-![MT4](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt5.png)
+![MT4](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt5.png)
 
-![MT5](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt7.png)
+![MT5](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt7.png)
 
-![MT6](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt8.png)
+![MT6](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt8.png)
 
-![MT7](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt9.png)
-![MT8](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt10.png)
-![MT9](https://raw.githubusercontent.com/Bowsapy/MentalTrack/main/images/mt11.png)
+![MT7](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt9.png)
+![MT8](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt10.png)
+![MT9](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt11.png)
 
 
