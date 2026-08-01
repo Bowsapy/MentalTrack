@@ -23,14 +23,15 @@ Done features:
 
 ![MT3](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt3.png)
 
-![MT4](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt5.png)
+![MT5](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt5.png)
 
-![MT5](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt7.png)
+![MT7](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt7.png)
+![MT6](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt6.png)
 
-![MT6](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt8.png)
+![MT8](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt8.png)
 
-![MT7](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt9.png)
-![MT8](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt10.png)
-![MT9](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt11.png)
+![MT9](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt9.png)
+![MT10](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt10.png)
+![MT11](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt11.png)
 
 
