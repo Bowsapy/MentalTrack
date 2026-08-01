@@ -1,4 +1,4 @@
-## MentalTrack (STILL WORKING ON)
+## MentalTrack
 
 currently runs on: mentaltrack.cz hosted on Hetzer VPS
 
@@ -17,7 +17,7 @@ Done features:
 7. Word count analysis (Because embedding wont catch names)
 8. Average mood in day phases and on week days 
 
-![MT1](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt1.png)
+![MT1](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/MT1.png)
 
 ![MT2](https://raw.githubusercontent.com/Bowsapy/MentalTrack/PostgressOnRasberryPi/images/mt2.png)
 
