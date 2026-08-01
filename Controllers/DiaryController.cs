@@ -132,23 +132,21 @@ public class DiaryController : Controller
             return View(entry);
         }
 
+        _logger.LogInformation("EMBEDDING STARTED");
+
         entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
 
+        _logger.LogInformation("DAYPHASE STARTED");
 
-        entry.DayPhase = _workingWithDates.GetDayPhase(entry.CreatedAt);
+        entry.DayPhase =  _workingWithDates.GetDayPhase(entry.CreatedAt);
+
+        _logger.LogInformation("SAVING TO DB STARTED");
 
         _context.Entries.Add(entry);
         _context.SaveChanges();
-
-
-
-
-
-
-
+        _logger.LogInformation("chunking entries started");
 
         await _chunkJournalEntry.ChunkEntry(entry);
-
 
 
 
