@@ -21,7 +21,7 @@ namespace MentalTrack.Enums
         [Display(Name = "Exercise / sport")]
         Sport = 5,
 
-        [Display(Name = "Being with your partner")]
+        [Display(Name = "Invalid")]
         Partner = 6,
 
         [Display(Name = "Drinking energy drinks")]
@@ -49,7 +49,7 @@ namespace MentalTrack.Enums
         [Display(Name = "Being outside")]
         BeingOutside = 14,
 
-        [Display(Name = "Being with your friend")]
+        [Display(Name = "Being with your friend/partner")]
         Friend = 15,
 
         [Display(Name = "Scrolling on a phone")]
