@@ -1,6 +1,4 @@
-﻿using Humanizer;
-
-namespace MentalTrack.Models
+﻿namespace MentalTrack.Models
 {
     public static class NonTrackedWords
     {

@@ -1,6 +1,5 @@
 ﻿using AspNetCoreGeneratedDocument;
 using DotNetEnv;
-using Humanizer;
 using MentalTrack.Constants;
 using MentalTrack.Data;
 using MentalTrack.Enums;
@@ -8,7 +7,6 @@ using MentalTrack.Models;
 using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mono.TextTemplating;
 using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
