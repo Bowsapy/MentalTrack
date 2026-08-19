@@ -96,20 +96,18 @@ namespace MentalTrack.Services
               .Select(x => (x.JournalEntryId, x.UserStatesEmbId))
               .ToHashSet();
 
-
             foreach (var part in entryParts)
             {
                 var validUserstates = allUserStates.Where(x => x.Sentiment.MainPolarity == part.Sentiment.MainPolarity);
-                foreach(var state in validUserstates)
+                var partEmbedding =_embeddingConverter.ConvertToFloatList(part.Embedding);
+                foreach (var state in validUserstates)
                 {
-                    double score =_similarityService.Calculate(_embeddingConverter.ConvertToFloatList(part.Embedding), _embeddingConverter.ConvertToFloatList(state.Embedding));
+                    double score =_similarityService.Calculate(partEmbedding, _embeddingConverter.ConvertToFloatList(state.Embedding));
                     if (score > AppConstants.MinScore && !existingMatches.Contains((part.JournalEntryId, state.Id)))
                     {
                         _context.EntryStates.Add(new EntryStateScore(part.JournalEntry.Id, state.Id, score));
-
                     }
                 }
-
             }
             _context.SaveChanges();
         }
