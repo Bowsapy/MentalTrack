@@ -1,14 +1,11 @@
-﻿using AspNetCoreGeneratedDocument;
-using DotNetEnv;
-using MentalTrack.Constants;
+﻿using MentalTrack.Constants;
 using MentalTrack.Data;
 using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.ViewModels;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.FileSystemGlobbing;
+using System.Text.RegularExpressions;
 
 namespace MentalTrack.Services
 {
@@ -35,14 +32,14 @@ namespace MentalTrack.Services
 
         public int GetEntriesMode(string CurrentUserId)
         {
-            int mode = _context.Entries.Where(x=> x.UserId == CurrentUserId).GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).Select(x => (int)x.Key).FirstOrDefault();
+            int mode = _context.Entries.Where(x => x.UserId == CurrentUserId).GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).Select(x => (int)x.Key).FirstOrDefault();
             return mode;
 
         }
-        public int GetEntriesCount( string CurrentUserId)
+        public int GetEntriesCount(string CurrentUserId)
         {
 
-            int totalCount = _context.Entries.Where(x=> x.UserId == CurrentUserId).Count();
+            int totalCount = _context.Entries.Where(x => x.UserId == CurrentUserId).Count();
             return totalCount;
 
         }
@@ -50,7 +47,7 @@ namespace MentalTrack.Services
         {
             int count = GetEntriesCount(CurrentUserId);
 
-            return _context.Entries.Where(x=> x.UserId == CurrentUserId).GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / count) * 100));
+            return _context.Entries.Where(x => x.UserId == CurrentUserId).GroupBy(x => x.Mood).ToDictionary(x => x.Key, x => Math.Round(((double)x.Count() / count) * 100));
 
 
         }
@@ -64,45 +61,79 @@ namespace MentalTrack.Services
            g => g.Key.ToString(),
            g => (int)g.Average(x => (int)x.Mood)
        );
-            
+
             return data;
         }
         public Dictionary<DayPhasesEnum, int> ViewMoodOnDayPhases(string CurrentUserId)
         {
             var data = _context.Entries.Where(x => x.UserId == CurrentUserId)
-       .AsEnumerable()
-       .GroupBy(e => e.DayPhase)
-       .OrderBy(g => (int)Enum.Parse<DayPhasesEnum>(g.Key.ToString()))
-       .ToDictionary(
+           .AsEnumerable()
+           .GroupBy(e => e.DayPhase)
+           .OrderBy(g => (int)Enum.Parse<DayPhasesEnum>(g.Key.ToString()))
+           .ToDictionary(
            g => g.Key,
            g => (int)g.Average(x => (int)x.Mood)
        );
-            
+
             return data;
         }
+        public void FindEntryStateMatches2(string CurrentUserId)
+        {
+            HashSet<JournalEntryPart> entryParts = _context.EntryParts
+              .Where(e => e.Embedding != null
+                  && e.JournalEntry.UserId == CurrentUserId).Include(x => x.Sentiment)
+              .ToHashSet();
+
+            //ziskej userstates jako list
+            HashSet<UserStatesEmb> allUserStates = _context.UserStates
+                .Where(s => s.Embedding != null).Include(x => x.Sentiment)
+                .ToHashSet();
+
+            var existingMatches = _context.EntryStates
+              .Where(x => x.JournalEntry.UserId == CurrentUserId)
+              .Select(x => new { x.JournalEntryId, x.UserStatesEmbId })
+              .AsEnumerable()
+              .Select(x => (x.JournalEntryId, x.UserStatesEmbId))
+              .ToHashSet();
+
+
+            foreach (var part in entryParts)
+            {
+                var validUserstates = allUserStates.Where(x => x.Sentiment.MainPolarity == part.Sentiment.MainPolarity);
+                foreach(var state in validUserstates)
+                {
+                    double score =_similarityService.Calculate(_embeddingConverter.ConvertToFloatList(part.Embedding), _embeddingConverter.ConvertToFloatList(state.Embedding));
+                    if (score > AppConstants.MinScore && !existingMatches.Contains((part.JournalEntryId, state.Id)))
+                    {
+                        _context.EntryStates.Add(new EntryStateScore(part.JournalEntry.Id, state.Id, score));
+
+                    }
+                }
+
+            }
+            _context.SaveChanges();
+        }
+
 
         public void FindEntryStateMatches(string CurrentUserId)
         {
-
-
             //ziskej journal entry parts konkretniho usera jako list
             var entryParts = _context.EntryParts
                 .Where(e => e.Embedding != null
                     && e.JournalEntry.UserId == CurrentUserId).Include(x => x.Sentiment)
-                .ToList();
-
+                .ToHashSet();
 
             //ziskej userstates jako list
             var allUserStates = _context.UserStates
                 .Where(s => s.Embedding != null).Include(x => x.Sentiment)
-                .ToList();
+                .ToHashSet();
 
             var existingMatches = _context.EntryStates
-      .Where(x => x.JournalEntry.UserId == CurrentUserId)
-      .Select(x => new { x.JournalEntryId, x.UserStatesEmbId })
-      .AsEnumerable()
-      .Select(x => (x.JournalEntryId, x.UserStatesEmbId))
-      .ToHashSet();
+              .Where(x => x.JournalEntry.UserId == CurrentUserId)
+              .Select(x => new { x.JournalEntryId, x.UserStatesEmbId })
+              .AsEnumerable()
+              .Select(x => (x.JournalEntryId, x.UserStatesEmbId))
+              .ToHashSet();
 
             //vytvorim hash set pro zjisteni poctu, protoze list by sezral moc pameti
 
@@ -124,20 +155,15 @@ namespace MentalTrack.Services
                     .OrderByDescending(x => x.Score);
                 //vytvori anonym. strkturu kde je userstate id, skore s entries
 
-
                 foreach (var match in bestMatches)
                 {
                     if (match.Score > AppConstants.MinScore)
                     {
                         if (!existingMatches.Contains((part.JournalEntryId, match.Id)))
                         {
-
                             matches.Add(new EntryStateScore(part.JournalEntryId, match.Id, match.Score));
                         }
-
-
                         //pokud dosavadni entrystates neobsahuji tuhle shodu tak ji tam pridej (kontrola starych shod ktery uz tam jsou pridany
-
                     }
                 }
             }
@@ -298,15 +324,15 @@ namespace MentalTrack.Services
         public List<UserstatesProgressViewModel> GetUserStatesInDays(string currentUserId)
         {
             FindEntryStateMatches(currentUserId);
-             var result = _context.EntryStates
-                .Where(x => x.JournalEntry.UserId == currentUserId)
-                .Select(x => new UserstatesProgressViewModel
-                {
-                    Date = DateOnly.FromDateTime(x.JournalEntry.CreatedAt),
-                    State = x.UserStatesEmb.UserState.GetDisplayName(),
-                    Value = 1
-                })
-                .ToList();
+            var result = _context.EntryStates
+               .Where(x => x.JournalEntry.UserId == currentUserId)
+               .Select(x => new UserstatesProgressViewModel
+               {
+                   Date = DateOnly.FromDateTime(x.JournalEntry.CreatedAt),
+                   State = x.UserStatesEmb.UserState.GetDisplayName(),
+                   Value = 1
+               })
+               .ToList();
 
             return result;
         }
