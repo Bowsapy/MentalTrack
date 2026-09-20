@@ -77,7 +77,7 @@ namespace MentalTrack.Services
 
             return data;
         }
-        public void FindEntryStateMatches2(string CurrentUserId)
+        public void FindEntryStateMatches(string CurrentUserId)
         {
             HashSet<JournalEntryPart> entryParts = _context.EntryParts
               .Where(e => e.Embedding != null
@@ -98,7 +98,9 @@ namespace MentalTrack.Services
 
             foreach (var part in entryParts)
             {
+                //vyfiltruju userstates se stejnou polarity
                 var validUserstates = allUserStates.Where(x => x.Sentiment.MainPolarity == part.Sentiment.MainPolarity);
+                //prevedu embediing na pole float abych s nim mohl pracovat
                 var partEmbedding =_embeddingConverter.ConvertToFloatList(part.Embedding);
                 foreach (var state in validUserstates)
                 {
@@ -113,7 +115,7 @@ namespace MentalTrack.Services
         }
 
 
-        public void FindEntryStateMatches(string CurrentUserId)
+        public void FindEntryStateMatches2(string CurrentUserId)
         {
             //ziskej journal entry parts konkretniho usera jako list
             var entryParts = _context.EntryParts
