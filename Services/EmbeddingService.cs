@@ -1,5 +1,6 @@
 ﻿using MentalTrack.Services;
 using System.Net.Http.Headers;
+using System.Numerics;
 using System.Text;
 using System.Text.Json;
 
@@ -29,30 +30,15 @@ public class EmbeddingService
             new AuthenticationHeaderValue("Bearer", apiKey);
     }
 
-    public async Task<string[]> GetEmbedding(string text)
+    public async Task<Pgvector.Vector> GetEmbedding(string text)
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-        _logger.LogInformation(
-    $"OPENAI KEY EXISTS: {apiKey != null}, LENGTH: {apiKey?.Length}"
-);
+        var body = new { model = "text-embedding-3-small", input = text};
 
-        var body = new
-        {
-            model = "text-embedding-3-small",
-            input = text
-        };
+        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8,"application/json");
 
-        var content = new StringContent(
-            JsonSerializer.Serialize(body),
-            Encoding.UTF8,
-            "application/json"
-        );
-
-        var response = await _http.PostAsync(
-            "https://api.openai.com/v1/embeddings",
-            content
-        );
+        var response = await _http.PostAsync("https://api.openai.com/v1/embeddings",content);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -64,13 +50,12 @@ public class EmbeddingService
 
         using var doc = JsonDocument.Parse(json);
 
-        float[] floatEMB =  doc.RootElement
+        float[] floatEMB = doc.RootElement
             .GetProperty("data")[0]
             .GetProperty("embedding")
             .EnumerateArray()
             .Select(x => x.GetSingle())
             .ToArray();
-
-        return (_embeddingConverter.ConvertToStringArray(floatEMB)); 
+        return new Pgvector.Vector(floatEMB);
     }
 }

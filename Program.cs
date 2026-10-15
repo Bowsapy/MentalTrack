@@ -12,31 +12,14 @@ Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-Console.WriteLine(builder.Environment.EnvironmentName);
-Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-DotNetEnv.Env.Load();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
-///fcc
-
-
-
-
-// 🔥 Render / production port fix (Kestrel)
-builder.WebHost.ConfigureKestrel(options =>
-{
-    var port = Environment.GetEnvironmentVariable("PORT");
-    if (!string.IsNullOrEmpty(port))
-    {
-        options.ListenAnyIP(int.Parse(port));
-    }
-});
-
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        o => o.UseVector()));
 
 builder.Services.AddScoped<StatisticsService>();
 // Services

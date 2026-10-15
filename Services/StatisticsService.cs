@@ -99,10 +99,10 @@ namespace MentalTrack.Services
             foreach (var part in entryParts)
             {
                 var validUserstates = allUserStates.Where(x => x.Sentiment.MainPolarity == part.Sentiment.MainPolarity);
-                var partEmbedding =_embeddingConverter.ConvertToFloatList(part.Embedding);
+                var partEmbedding =part.Embedding;
                 foreach (var state in validUserstates)
                 {
-                    double score =_similarityService.Calculate(partEmbedding, _embeddingConverter.ConvertToFloatList(state.Embedding));
+                    double score =_similarityService.Calculate(partEmbedding, state.Embedding);
                     if (score > AppConstants.MinScore && !existingMatches.Contains((part.JournalEntryId, state.Id)))
                     {
                         _context.EntryStates.Add(new EntryStateScore(part.JournalEntry.Id, state.Id, score));
@@ -139,7 +139,7 @@ namespace MentalTrack.Services
 
             foreach (var part in entryParts)
             {
-                var entryVector = _embeddingConverter.ConvertToFloatList(part.Embedding);
+                var entryVector = part.Embedding;
 
                 Sentiment Part_sentiment = part.Sentiment;
                 var bestMatches = allUserStates.Where(x => x.Sentiment.MainPolarity == Part_sentiment.MainPolarity)
@@ -148,7 +148,7 @@ namespace MentalTrack.Services
                         state.Id,
                         Score = _similarityService.Calculate(
                             entryVector,
-                            _embeddingConverter.ConvertToFloatList(state.Embedding))
+                            state.Embedding)
                     })
                     .OrderByDescending(x => x.Score);
                 //vytvori anonym. strkturu kde je userstate id, skore s entries

@@ -164,26 +164,21 @@ public class DiaryController : Controller
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var target = _context.Entries
-            .FirstOrDefault(e => e.Id == id && e.UserId == userId);
+        var target = _context.Entries.FirstOrDefault(e => e.Id == id && e.UserId == userId);
 
-        if (target == null)
-            return NotFound();
+        if (target == null) return NotFound();
 
-        var targetVector = _embeddingConverter.ConvertToFloatList(target.Embedding);
 
         var entries = _context.Entries
             .Where(e => e.UserId == userId && e.Embedding != null)
             .ToList();
-
 
         var sorted = entries
             .Select(e => new
             {
                 Entry = e,
                 Score = _similarityService.Calculate(
-                    targetVector,
-                   _embeddingConverter.ConvertToFloatList(e.Embedding)
+                    target.Embedding,(e.Embedding)
                 )
             })
             .OrderByDescending(x => x.Score)

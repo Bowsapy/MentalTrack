@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Pgvector;
 
 #nullable disable
 
@@ -17,7 +18,7 @@ namespace MentalTrack.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.22")
+                .HasAnnotation("ProductVersion", "8.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -66,8 +67,8 @@ namespace MentalTrack.Migrations
                     b.Property<int>("DayPhase")
                         .HasColumnType("integer");
 
-                    b.Property<string[]>("Embedding")
-                        .HasColumnType("text[]");
+                    b.Property<Vector>("Embedding")
+                        .HasColumnType("vector(1536)");
 
                     b.Property<int>("Mood")
                         .HasColumnType("integer");
@@ -99,8 +100,8 @@ namespace MentalTrack.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string[]>("Embedding")
-                        .HasColumnType("text[]");
+                    b.Property<Vector>("Embedding")
+                        .HasColumnType("vector");
 
                     b.Property<int>("JournalEntryId")
                         .HasColumnType("integer");
@@ -229,8 +230,8 @@ namespace MentalTrack.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string[]>("Embedding")
-                        .HasColumnType("text[]");
+                    b.Property<Vector>("Embedding")
+                        .HasColumnType("vector(1536)");
 
                     b.Property<int>("UserState")
                         .HasColumnType("integer");

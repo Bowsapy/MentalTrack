@@ -1,6 +1,8 @@
 ﻿using MentalTrack.Enums;
+using Pgvector;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MentalTrack.Models
 {
@@ -19,8 +21,9 @@ namespace MentalTrack.Models
         public string UserId { get; set; }
         public User? User { get; set; }
         public MoodEnum Mood { get; set; }
-        public string[]? Embedding { get; set; }
 
+        [Column(TypeName = "vector(1536)")]
+        public Vector? Embedding { get; set; }
         public DayPhasesEnum DayPhase { get; set; }
 
     }
