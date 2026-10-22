@@ -112,7 +112,6 @@ public class DiaryController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(JournalEntry entry)
     {
-        
         _logger.LogInformation("Create called");
 
         entry.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -132,30 +131,17 @@ public class DiaryController : Controller
             return View(entry);
         }
 
-        _logger.LogInformation("EMBEDDING STARTED");
-
         entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
-
-        _logger.LogInformation("DAYPHASE STARTED");
 
         entry.DayPhase =  _workingWithDates.GetDayPhase(entry.CreatedAt);
 
-        _logger.LogInformation("SAVING TO DB STARTED");
-
         _context.Entries.Add(entry);
         _context.SaveChanges();
-        _logger.LogInformation("chunking entries started");
 
         await _chunkJournalEntry.ChunkEntry(entry);
-
-
-
-
         _context.SaveChanges();
 
-
         return RedirectToAction("ShowEntries");
-
     }
  
 

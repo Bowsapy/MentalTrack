@@ -24,27 +24,57 @@ namespace MentalTrack.Services
         }
         public async Task ChunkEntry(JournalEntry entry)
         {
-
-            //rozseká entry na parts podle teček a přidělí jim embedding a sentimetn
             string[] chunks = entry.Content.Split('.', StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < chunks.Length; i++)
+
+            var parts = new JournalEntryPart[chunks.Length];
+            var sentiments = new Sentiment[chunks.Length];
+
+            using var semaphore = new SemaphoreSlim(4);
+
+            var tasks = chunks.Select(async (chunk, i) =>
             {
-                JournalEntryPart part = new JournalEntryPart(chunks[i],entry.Id);
-                part.Embedding = await _embeddingService.GetEmbedding(part.Content);
-                Sentiment data_for_sentiment = await _sentimentService.AnalyzeAsync(part);
-                Sentiment sentiment = new Sentiment(part,data_for_sentiment.MainPolarity,data_for_sentiment.Positive,data_for_sentiment.Neutral,data_for_sentiment.Negative);
-                part.Sentiment = sentiment;
+                await semaphore.WaitAsync();
 
-                _context.EntryParts.Add(part);
-                _context.Sentiments.Add(sentiment);
+                try
+                {
 
-               
+                    var part = new JournalEntryPart(chunk.Trim(), entry.Id);
+             
+                    var embeddingTask =_embeddingService.GetEmbedding(part.Content);
 
-            }
-            _context.SaveChanges();
+                    var sentimentTask =_sentimentService.AnalyzeAsync(part);
+
+                    await Task.WhenAll(embeddingTask, sentimentTask);
+
+                    part.Embedding = await embeddingTask;
+
+                    var data = await sentimentTask;
+
+                    var sentiment = new Sentiment(part,data.MainPolarity,data.Positive,data.Neutral,data.Negative);
+
+                    part.Sentiment = sentiment;
 
 
+                    parts[i] = part;
+                    sentiments[i] = sentiment;
+                }
+
+                finally
+                {
+                    semaphore.Release();
+                }
+            });
+
+            await Task.WhenAll(tasks);
+
+            _context.EntryParts.AddRange(parts);
+            _context.Sentiments.AddRange(sentiments);
+
+           // totalStopwatch.Stop();
+
+            //_logger.LogInformation(
+                //"ChunkEntry completed in {ElapsedMs} ms",
+                //totalStopwatch.ElapsedMilliseconds);
         }
-
     }
 }
