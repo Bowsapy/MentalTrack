@@ -1,6 +1,4 @@
-﻿using MentalTrack.Enums;
-
-namespace MentalTrack.Models;
+﻿namespace MentalTrack.Models;
 
 public class MoodSummaryViewModel
 {
@@ -12,14 +10,14 @@ public class MoodSummaryViewModel
 
         )
     {
- 
+
         MoodPercentages = moodPercentages;
         ModeMood = mode;
         EntriesCount = total;
     }
 
     public int ModeMood { get; set; }
-    public int EntriesCount {  get; set; }
+    public int EntriesCount { get; set; }
 
     public Dictionary<MoodEnum, double> MoodPercentages { get; set; }
 

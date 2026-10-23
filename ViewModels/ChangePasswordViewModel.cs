@@ -13,7 +13,7 @@ namespace MentalTrack.ViewModels
         public string Password { get; set; }
         [StringLength(40, MinimumLength = 8, ErrorMessage = "the {0} must be at {2} and at mas {1} character")]
         [DataType(DataType.Password)]
-        [Display(Name ="New Password")]
+        [Display(Name = "New Password")]
         [Compare("ConfirmNewPassword", ErrorMessage = "Password does not match")]
         public string NewPassword { get; set; }
 

@@ -2,7 +2,7 @@
 {
     public enum TextPolarityEnum
     {
-        Negative =-1,
+        Negative = -1,
         Neutral = 0,
         Positive = 1,
 

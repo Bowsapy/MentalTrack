@@ -1,13 +1,10 @@
-﻿using MentalTrack.Controllers;
-using MentalTrack.Data;
+﻿using MentalTrack.Data;
 using MentalTrack.Models;
 using MentalTrack.Services;
-using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Text.Json;
 [Authorize]
 public class DiaryController : Controller
 {
@@ -21,7 +18,7 @@ public class DiaryController : Controller
     private readonly SentimentService _sentimentService;
 
 
-    public DiaryController(AppDbContext context, WorkingWithDates workingWithDates, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService,EmbeddingConverter embeddingConverter,ChunkJournalEntry chunkJournalEntry)
+    public DiaryController(AppDbContext context, WorkingWithDates workingWithDates, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService, EmbeddingConverter embeddingConverter, ChunkJournalEntry chunkJournalEntry)
     {
         _context = context;
         _logger = logger;
@@ -37,7 +34,7 @@ public class DiaryController : Controller
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var entries = _context.Entries
-            
+
             .Where(e => e.UserId == userId)  // filtr podle aktuálního uživatele
             .OrderByDescending(e => e.CreatedAt) // nejnovější nahoře
             .ToList();
@@ -72,7 +69,7 @@ public class DiaryController : Controller
     {
 
         var entry = _context.Entries.FirstOrDefault(e => e.Id == id);
-        if (entry == null) return NotFound(); 
+        if (entry == null) return NotFound();
         return View(entry);
 
     }
@@ -96,18 +93,18 @@ public class DiaryController : Controller
         _context.Sentiments.RemoveRange(allSentiments);
         _context.EntryParts.RemoveRange(entryParts);
         _context.EntryStates.RemoveRange(entryStates);
-       
+
 
         _context.Entries.Remove(entry);
 
 
-   
-        _context.SaveChanges();          
+
+        _context.SaveChanges();
 
         return RedirectToAction("ShowEntries"); // Vyresit smazani parts + embedingu
     }
 
-    
+
 
     [HttpPost]
     public async Task<IActionResult> Create(JournalEntry entry)
@@ -133,7 +130,7 @@ public class DiaryController : Controller
 
         entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
 
-        entry.DayPhase =  _workingWithDates.GetDayPhase(entry.CreatedAt);
+        entry.DayPhase = _workingWithDates.GetDayPhase(entry.CreatedAt);
 
         _context.Entries.Add(entry);
         _context.SaveChanges();
@@ -143,7 +140,7 @@ public class DiaryController : Controller
 
         return RedirectToAction("ShowEntries");
     }
- 
+
 
 
     public IActionResult SimilarEntries(int id)
@@ -164,7 +161,7 @@ public class DiaryController : Controller
             {
                 Entry = e,
                 Score = _similarityService.Calculate(
-                    target.Embedding,(e.Embedding)
+                    target.Embedding, (e.Embedding)
                 )
             })
             .OrderByDescending(x => x.Score)

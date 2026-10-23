@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace MentalTrack.Models;
+
 public enum MoodEnum
 {
     [Display(Name = "Very Bad")]

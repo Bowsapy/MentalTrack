@@ -1,12 +1,8 @@
-﻿using MentalTrack.Constants;
-using MentalTrack.Data;
+﻿using MentalTrack.Data;
 using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.Services;
-using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
 
 
@@ -22,7 +18,7 @@ namespace MentalTrack.Controllers
         private readonly StatisticsService _statisticsService;
 
 
-        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger,WorkingWithDates dateService, StatisticsService statistics)
+        public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger, WorkingWithDates dateService, StatisticsService statistics)
         {
             _context = context;
             _embeddingService = embeddingService;
@@ -44,8 +40,8 @@ namespace MentalTrack.Controllers
         {
 
             UserStatesEmb NewUserStateEmb = new UserStatesEmb(state, content, await _embeddingService.GetEmbedding(content));
-            Sentiment NewSentiment =await _sentimentService.AnalyzeAsync(NewUserStateEmb);
-            NewUserStateEmb.Sentiment = NewSentiment; 
+            Sentiment NewSentiment = await _sentimentService.AnalyzeAsync(NewUserStateEmb);
+            NewUserStateEmb.Sentiment = NewSentiment;
 
 
             _context.UserStates.Add(NewUserStateEmb);
@@ -56,45 +52,35 @@ namespace MentalTrack.Controllers
             return RedirectToAction("AddNewUserState");
 
         }
-   
+
         public IActionResult Features()
         {
-      
-
-
             return View();
         }
         public string GetCurrentUser()
         {
-            
-         var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return userId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return userId;
         }
-       
-   
+
+
 
 
         public IActionResult MoodSummary()
         {
             string user_id = GetCurrentUser();
-     
 
-            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(_statisticsService.GetMoodPercentages(GetCurrentUser()),_statisticsService.GetEntriesMode(user_id),_statisticsService.GetEntriesCount(user_id));
+            MoodSummaryViewModel moodsumVM = new MoodSummaryViewModel(_statisticsService.GetMoodPercentages(GetCurrentUser()), _statisticsService.GetEntriesMode(user_id), _statisticsService.GetEntriesCount(user_id));
 
             return View(moodsumVM);
         }
         public IActionResult ShowMoodProgress()
         {
-
             return View("ShowMoodProgress", _statisticsService.GetDataForGraphForAllEntries(GetCurrentUser()));
-
         }
 
         public IActionResult ShowMoodProgressMonthly()
         {
-
-
-
             return View("ShowMoodProgress", _statisticsService.GetMonthlyDataForGraph(GetCurrentUser()));
         }
 
@@ -108,10 +94,13 @@ namespace MentalTrack.Controllers
         {
             return View(_statisticsService.GetWordCountAnalysis(GetCurrentUser()));
         }
-        public IActionResult AIAnalysis()
+        public async Task<IActionResult> AIAnalysis()
         {
-            return View(_statisticsService.GetMoodStatesMatches(GetCurrentUser()));
+            var result = await _statisticsService.GetMoodStatesMatches(GetCurrentUser());
+
+            return View(result);
         }
+
         public IActionResult MoodInWeek()
         {
             return View(_statisticsService.ViewMoodOnWeekDays(GetCurrentUser()));

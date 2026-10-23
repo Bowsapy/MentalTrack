@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using MentalTrack.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace MentalTrack.Controllers
 {

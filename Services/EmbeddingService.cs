@@ -1,6 +1,5 @@
 ﻿using MentalTrack.Services;
 using System.Net.Http.Headers;
-using System.Numerics;
 using System.Text;
 using System.Text.Json;
 
@@ -34,11 +33,11 @@ public class EmbeddingService
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-        var body = new { model = "text-embedding-3-small", input = text};
+        var body = new { model = "text-embedding-3-small", input = text };
 
-        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8,"application/json");
+        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
 
-        var response = await _http.PostAsync("https://api.openai.com/v1/embeddings",content);
+        var response = await _http.PostAsync("https://api.openai.com/v1/embeddings", content);
 
         if (!response.IsSuccessStatusCode)
         {

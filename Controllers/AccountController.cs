@@ -4,7 +4,6 @@ using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace MentalTrack.Controllers
 {
@@ -74,7 +73,7 @@ namespace MentalTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-           
+
             foreach (var kv in ModelState)
             {
                 foreach (var err in kv.Value.Errors)
@@ -139,7 +138,7 @@ namespace MentalTrack.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user == null )
+            if (user == null)
             {
                 return RedirectToAction("ForgotPasswordConfirmation");
             }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Identity.Client;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace MentalTrack.Services
 {

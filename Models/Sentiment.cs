@@ -5,7 +5,7 @@ namespace MentalTrack.Models
     {
         public int Id { get; set; }
 
-       public int? UserStatesEmbId { get; set; }
+        public int? UserStatesEmbId { get; set; }
         public UserStatesEmb? UserStatesEmb { get; set; }
 
         public int? JournalEntryPartId { get; set; }
@@ -19,7 +19,7 @@ namespace MentalTrack.Models
 
         public Sentiment() { }
 
-        public Sentiment( JournalEntryPart journalEntryPart, TextPolarityEnum mainPolarity, double positive, double neutral, double negative)
+        public Sentiment(JournalEntryPart journalEntryPart, TextPolarityEnum mainPolarity, double positive, double neutral, double negative)
         {
             JournalEntryPart = journalEntryPart;
             MainPolarity = mainPolarity;

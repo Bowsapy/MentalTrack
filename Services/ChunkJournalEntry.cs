@@ -1,8 +1,5 @@
-﻿using MentalTrack.Controllers;
-using MentalTrack.Data;
+﻿using MentalTrack.Data;
 using MentalTrack.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 //zpetne si rikam, ze tahle sluzba by byla lepsi jako metoda v DiaryControlleru
 namespace MentalTrack.Services
@@ -39,10 +36,10 @@ namespace MentalTrack.Services
                 {
 
                     var part = new JournalEntryPart(chunk.Trim(), entry.Id);
-             
-                    var embeddingTask =_embeddingService.GetEmbedding(part.Content);
 
-                    var sentimentTask =_sentimentService.AnalyzeAsync(part);
+                    var embeddingTask = _embeddingService.GetEmbedding(part.Content);
+
+                    var sentimentTask = _sentimentService.AnalyzeAsync(part);
 
                     await Task.WhenAll(embeddingTask, sentimentTask);
 
@@ -50,7 +47,7 @@ namespace MentalTrack.Services
 
                     var data = await sentimentTask;
 
-                    var sentiment = new Sentiment(part,data.MainPolarity,data.Positive,data.Neutral,data.Negative);
+                    var sentiment = new Sentiment(part, data.MainPolarity, data.Positive, data.Neutral, data.Negative);
 
                     part.Sentiment = sentiment;
 
@@ -70,11 +67,11 @@ namespace MentalTrack.Services
             _context.EntryParts.AddRange(parts);
             _context.Sentiments.AddRange(sentiments);
 
-           // totalStopwatch.Stop();
+            // totalStopwatch.Stop();
 
             //_logger.LogInformation(
-                //"ChunkEntry completed in {ElapsedMs} ms",
-                //totalStopwatch.ElapsedMilliseconds);
+            //"ChunkEntry completed in {ElapsedMs} ms",
+            //totalStopwatch.ElapsedMilliseconds);
         }
     }
 }

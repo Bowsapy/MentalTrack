@@ -4,7 +4,7 @@ namespace MentalTrack.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required(ErrorMessage ="Name is required")]
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Email is required")]
 
@@ -12,7 +12,7 @@ namespace MentalTrack.ViewModels
         [Required(ErrorMessage = "Password is required")]
 
         public string Password { get; set; }
-   
+
         [Required(ErrorMessage = "PhoneNum is required")]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }

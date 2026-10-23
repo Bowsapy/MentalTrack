@@ -1,8 +1,8 @@
-﻿using System.Net.Http.Headers;
+﻿using MentalTrack.Enums;
+using MentalTrack.Models;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using MentalTrack.Models;
-using MentalTrack.Enums;
 
 namespace MentalTrack.Services
 {

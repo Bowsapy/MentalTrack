@@ -4,7 +4,7 @@ namespace MentalTrack.Enums
 {
     public enum UserStateEnum
     {
-        [Display (Name = "Being anxious")]
+        [Display(Name = "Being anxious")]
         Anxious = 0,
         [Display(Name = "Being depressed")]
 
@@ -69,7 +69,7 @@ namespace MentalTrack.Enums
         [Display(Name = "Going for a walk")]
         Walk = 20,
         [Display(Name = "Watching movies")]
-         Movies= 21,
+        Movies = 21,
         [Display(Name = "Self reflection")]
         SelfReflection = 22,
         [Display(Name = "Playing PC/Console games")]
@@ -82,7 +82,7 @@ namespace MentalTrack.Enums
         Cigarettes = 26,
         [Display(Name = "Smoking weed")]
         Weed = 27,
-        [Display(Name = "Avoiding responsibilities (Procrastinating)")] 
+        [Display(Name = "Avoiding responsibilities (Procrastinating)")]
         Procrastination = 28,
         [Display(Name = "Arguing with someone")]
         Arguing = 29,

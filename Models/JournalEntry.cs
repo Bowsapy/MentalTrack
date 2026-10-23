@@ -1,6 +1,4 @@
-﻿using MentalTrack.Enums;
-using Pgvector;
-using System;
+﻿using Pgvector;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

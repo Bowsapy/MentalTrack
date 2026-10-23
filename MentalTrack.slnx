@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../MentalTrack.Test/MentalTrack.Test.csproj" Id="377cc848-7738-4da0-b36b-603c01035015" />
   <Project Path="MentalTrack.csproj" />
 </Solution>
