@@ -63,9 +63,6 @@ namespace MentalTrack.Controllers
             return userId;
         }
 
-
-
-
         public IActionResult MoodSummary()
         {
             string user_id = GetCurrentUser();
@@ -86,8 +83,6 @@ namespace MentalTrack.Controllers
 
         public IActionResult ShowMoodProgressDaily()
         {
-
-
             return View("ShowMoodProgress", _statisticsService.GetDailyDataForGraph(GetCurrentUser()));
         }
         public IActionResult WordCountAnalysis()
@@ -109,9 +104,11 @@ namespace MentalTrack.Controllers
         {
             return View(_statisticsService.ViewMoodOnDayPhases(GetCurrentUser()));
         }
-        public IActionResult UsInDay()
+        public async Task<IActionResult> UsInDay()
         {
-            return View(_statisticsService.GetUserStatesInDays(GetCurrentUser()));
+            var result = await _statisticsService.GetUserStatesInDays(GetCurrentUser());
+
+            return View(result);
         }
 
 

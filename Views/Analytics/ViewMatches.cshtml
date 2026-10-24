@@ -1,6 +1,7 @@
 ﻿@using MentalTrack.Enums
 @model Dictionary<MoodEnum, Dictionary<UserStateEnum, int>>
 
+
 @foreach (var item in Model)
 {
     if (item.Value.Count > 0)

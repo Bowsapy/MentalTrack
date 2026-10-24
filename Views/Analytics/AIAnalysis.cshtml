@@ -11,10 +11,10 @@
 
 
 </head>
-
-<div class="activities">
+<body class="grass-background">
+<div class="activities bg-white paper-background">
     <h1><img src="~/images/active-user.png" />  Activities and your mood</h1>
-    <p> Mental Track looks for connections between what you write about and your mood. </p>
+    <p class=" bold-text"> Mental Track looks for connections between what you write about and your mood. </p>
     @foreach (var item in Model)
     {
         if (item.Value.Count > 0)
@@ -37,7 +37,7 @@
         }
     }
 </div>
-
+</body>
 <style>
 
     .activities {
