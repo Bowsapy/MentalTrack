@@ -13,9 +13,6 @@ namespace MentalTrack.ViewModels
 
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "PhoneNum is required")]
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Confirm Password is required")]
         [DataType(DataType.Password)]
 

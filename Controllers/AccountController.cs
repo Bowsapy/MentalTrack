@@ -88,7 +88,6 @@ namespace MentalTrack.Controllers
                 UserName = model.Email,
                 Email = model.Email,
                 FullName = model.Name,
-                PhoneNumber = model.PhoneNumber
             };
 
 
