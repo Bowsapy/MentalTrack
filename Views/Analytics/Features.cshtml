@@ -4,7 +4,7 @@
 
         <form asp-controller="Analytics" asp-action="AIAnalysis">
             <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/ai.png" width="50px" height="50px" /></div>
+                <div class="icon"> <img src="~/images/ai2-removebg-preview.png" width="70px" /></div>
                 <div>
                     <h5>Mood x activities</h5>
                     <p>Discover habits affecting your mood.</p>
@@ -13,7 +13,7 @@
         </form>
         <form asp-controller="Analytics" asp-action="USinDay">
             <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/activities.png" width="50px" height="50px" /></div>
+                <div class="icon"> <img src="~/images/activit.png" width="70px" height="70px" /></div>
                 <div>
                     <h5>Activities summary</h5>
                     <p> Summary of your activities, habits and emotions.</p>
@@ -23,7 +23,7 @@
 
         <form asp-controller="Analytics" asp-action="WordCountAnalysis">
             <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/word.png" width="50px" height="50px" /></div>
+                <div class="icon"> <img src="~/images/words.png" width="70px" height="70px" /></div>
                 <div>
                     <h5>Word count analysis</h5>
                     <p>Discover which words are most commonly associated with your moods.</p>
@@ -34,7 +34,7 @@
         
         <form asp-controller="Analytics" asp-action="MoodSummary">
             <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/pie-chart.png" width="50px" height="50px" /></div>
+                <div class="icon"> <img src="~/images/summ.png" width="70px" height="70px" /></div>
                 <div>
                     <h5>Your general stats</h5>
                     <p>Get an overview of your journal entries, mood...</p>
@@ -45,7 +45,7 @@
 
         <form asp-controller="Analytics" asp-action="ShowMoodProgress">
             <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/graph.png" width="50px" height="50px" /></div>
+                <div class="icon"> <img src="~/images/graph (2).png" width="70px" height="70px" /></div>
                 <div>
                     <h5>Mood Progress</h5>
                     <p>See how your mood has changed over time.</p>
@@ -54,27 +54,17 @@
         </form>
 
 
-        <form asp-controller="Analytics" asp-action="MoodInWeek">
+        <form asp-controller="Analytics" asp-action="DatetimeAnalysis">
             <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/next-week.png" width="50px" height="50px" /></div>
+                <div class="icon"> <img src="~/images/cal.png" width="70px" height="70px" /></div>
                 <div>
-                    <h5>Week Mood Analysis</h5>
-                    <p>Discover your average mood in weekdays.</p>
+                    <h5>Datetime Mood Analysis</h5>
+                    <p>Discover your average mood in weekdays and during day.</p>
                 </div>
             </button>
         </form>
 
-        <form asp-controller="Analytics" asp-action="MoodInDay">
-            <button class="analytics-card analysis-btn">
-                <div class="icon"> <img src="~/images/clock.png" width="50px" height="50px" /></div>
-                <div>
-                    <h5>Day Mood Analysis</h5>
-                    <p>Discover your average mood in day times.</p>
-                </div>
-            </button>
-        </form>
-
-  
+       
     
 
 
@@ -112,7 +102,7 @@ gap:20px;
 padding:25px;
 border:none;
 border-radius:20px;
-background:white;
+background: #E0F5EB;
 box-shadow:0 10px 30px rgba(0,0,0,.12);
 transition:.3s;
 cursor:pointer;
@@ -125,21 +115,19 @@ box-shadow:0 20px 40px rgba(0,0,0,.18);
 }
 
 .analytics-card .icon{
-width:70px;
-height:70px;
+
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:34px;
-border-radius:18px;
-color:white;
+font-size:45px;
+color: #65716B;
 flex-shrink:0;
 }
 
-.analysis-btn .icon{
-        border:1px solid black;
-    
-}
+.analysis-btn .icon
+{
+    width: 50px;
+    }
 
 .graph-btn .icon{
 background:linear-gradient(135deg,#1565c0,#42a5f5);
@@ -149,12 +137,12 @@ background:linear-gradient(135deg,#1565c0,#42a5f5);
 margin:0;
 font-size:1.3rem;
 font-weight:700;
-color:#222;
+color: #202A25;
 }
 
 .analytics-card p{
 margin:6px 0 0;
-color:#666;
+color: #65716B;
 font-size:.95rem;
 }
 

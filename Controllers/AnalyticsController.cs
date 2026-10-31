@@ -2,6 +2,7 @@
 using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.Services;
+using MentalTrack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -96,9 +97,10 @@ namespace MentalTrack.Controllers
             return View(result);
         }
 
-        public IActionResult MoodInWeek()
+        public IActionResult DatetimeAnalysis()
         {
-            return View(_statisticsService.ViewMoodOnWeekDays(GetCurrentUser()));
+            var dateTimeAnalysisViewModel = new DatetimeAnalysisViewModel(_statisticsService.ViewMoodOnDayPhases(GetCurrentUser()), _statisticsService.ViewMoodOnWeekDays(GetCurrentUser()));
+            return View(dateTimeAnalysisViewModel);
         }
         public IActionResult MoodInDay()
         {
