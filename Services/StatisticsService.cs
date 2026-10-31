@@ -339,12 +339,12 @@ namespace MentalTrack.Services
             WordCountAnalysisViewModel WCAVM = new WordCountAnalysisViewModel(result);
             return WCAVM;
         }
-        public async Task<List<UserstatesProgressViewModel>> GetUserStatesInDays(string currentUserId)
+        public async Task<List<UserstateInDay>> GetUserStatesInDays(string currentUserId)
         {
             await FindEntryStateMatches(currentUserId);
             var result = _context.EntryStates
                .Where(x => x.JournalEntry.UserId == currentUserId)
-               .Select(x => new UserstatesProgressViewModel
+               .Select(x => new UserstateInDay
                {
                    Date = DateOnly.FromDateTime(x.JournalEntry.CreatedAt),
                    State = x.UserStatesEmb.UserState.GetDisplayName(),

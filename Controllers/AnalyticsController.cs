@@ -90,11 +90,15 @@ namespace MentalTrack.Controllers
         {
             return View(_statisticsService.GetWordCountAnalysis(GetCurrentUser()));
         }
-        public async Task<IActionResult> AIAnalysis()
+        public async Task<IActionResult> Activities()
         {
             var result = await _statisticsService.GetMoodStatesMatches(GetCurrentUser());
+            var result2 = await _statisticsService.GetUserStatesInDays(GetCurrentUser());
 
-            return View(result);
+            var ActivitiesViewModel = new ActivitesViewModel(result,result2);
+
+
+            return View(ActivitiesViewModel);
         }
 
         public IActionResult DatetimeAnalysis()
