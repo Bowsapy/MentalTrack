@@ -7,205 +7,199 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MentalTrack.Controllers
 {
-    public class AccountController : Controller
-    {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<AccountController> _logger;
-        private readonly AppDbContext _context;
-        private readonly IEmailSender _emailSender;
+	public class AccountController : Controller
+	{
+		private readonly UserManager<User> _userManager;
+		private readonly SignInManager<User> _signInManager;
+		private readonly ILogger<AccountController> _logger;
+		private readonly AppDbContext _context;
+		private readonly IEmailSender _emailSender;
 
+		public AccountController(
+			UserManager<User> userManager,
+			SignInManager<User> signInManager, ILogger<AccountController> logger, IEmailSender emailSender, AppDbContext context)
+		{
+			_userManager = userManager;
+			_signInManager = signInManager;
+			_logger = logger;
+			_emailSender = emailSender;
+			_context = context;
+		}
 
-        public AccountController(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager, ILogger<AccountController> logger, IEmailSender emailSender, AppDbContext context)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _emailSender = emailSender;
-            _context = context;
-        }
+		public IActionResult Register()
+		{
+			return View();
+		}
 
-        public IActionResult Register()
-        {
+		public IActionResult Login()
+		{
+			return View();
+		}
 
-            return View();
-        }
-        public IActionResult Login()
-        {
-            return View();
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login(LoginViewModel model)
+		{
+			if (!ModelState.IsValid)
+				return View(model);
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
+			// najdeme uživatele podle emailu
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user == null)
+			{
+				ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+				return View(model);
+			}
 
-            if (!ModelState.IsValid)
-                return View(model);
+			// ověření hesla
+			var result = await _signInManager.PasswordSignInAsync(
+				user.UserName,
+				model.Password,
+				model.RememberMe,
+				lockoutOnFailure: false
+			);
 
-            // najdeme uživatele podle emailu
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(model);
-            }
+			if (result.Succeeded)
+			{
+				return RedirectToAction("Index", "Home");
+			}
 
-            // ověření hesla
-            var result = await _signInManager.PasswordSignInAsync(
-                user.UserName,
-                model.Password,
-                model.RememberMe,
-                lockoutOnFailure: false
-            );
+			ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+			return View(model);
+		}
 
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+		[HttpPost]
+		public async Task<IActionResult> Register(RegisterViewModel model)
+		{
+			foreach (var kv in ModelState)
+			{
+				foreach (var err in kv.Value.Errors)
+					_logger.LogInformation("Chyba v {Field}: {Error}", kv.Key, err.ErrorMessage);
+			}
+			if (!ModelState.IsValid)
+				return View(model);
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            return View(model);
-        }
+			var user = new User
+			{
+				UserName = model.Email,
+				Email = model.Email,
+				FullName = model.Name,
+			};
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
+			var result = await _userManager.CreateAsync(user, model.Password);
 
-            foreach (var kv in ModelState)
-            {
-                foreach (var err in kv.Value.Errors)
-                    _logger.LogInformation("Chyba v {Field}: {Error}", kv.Key, err.ErrorMessage);
-            }
-            if (!ModelState.IsValid)
-                return View(model);
+			if (result.Succeeded)
+			{
+				await _signInManager.SignInAsync(user, false);
+				return RedirectToAction("Index", "Home");
+			}
+			else
 
-            var user = new User
-            {
+			{
+				_logger.LogInformation("POST metoda neeeee zavolána");
+			}
 
-                UserName = model.Email,
-                Email = model.Email,
-                FullName = model.Name,
-            };
+			foreach (var error in result.Errors)
+				ModelState.AddModelError("", error.Description);
 
+			return View(model);
+		}
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Logout()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction("Index", "Home");
+		}
 
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, false);
-                return RedirectToAction("Index", "Home");
+		[HttpGet]
+		public IActionResult ForgotPassword()
+		{
+			return View();
+		}
 
-            }
-            else
+		public IActionResult PasswordChanged()
+		{
+			return View();
+		}
 
-            {
-                _logger.LogInformation("POST metoda neeeee zavolána");
-            }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+		{
+			if (!ModelState.IsValid)
+				return View(model);
 
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+			var user = await _userManager.FindByEmailAsync(model.Email);
 
-            return View(model);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-        [HttpGet]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-        public IActionResult PasswordChanged()
-        {
-            return View();
-        }
+			if (user == null)
+			{
+				return RedirectToAction("ForgotPasswordConfirmation");
+			}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
+			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            if (!ModelState.IsValid)
-                return View(model);
+			var callbackUrl = Url.Action(
+				"ResetPassword",
+				"Account",
+				new { token, email = model.Email },
+				Request.Scheme);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+			// pošleme email
+			await _emailSender.SendEmailAsync(
+				model.Email,
+				"MentalTrack: Reset your password",
+				$"Reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
 
-            if (user == null)
-            {
-                return RedirectToAction("ForgotPasswordConfirmation");
-            }
+			return RedirectToAction("ForgotPasswordConfirmation");
+		}
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+		[HttpGet]
+		public IActionResult ResetPassword(string token, string email)
+		{
+			if (token == null || email == null)
+			{
+				return RedirectToAction("Index", "Home");
+			}
 
-            var callbackUrl = Url.Action(
-                "ResetPassword",
-                "Account",
-                new { token, email = model.Email },
-                Request.Scheme);
+			var model = new ResetPasswordViewModel
+			{
+				Token = token,
+				Email = email
+			};
 
-            // pošleme email
-            await _emailSender.SendEmailAsync(
-                model.Email,
-                "MentalTrack: Reset your password",
-                $"Reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+			return View(model);
+		}
 
-            return RedirectToAction("ForgotPasswordConfirmation");
-        }
-        [HttpGet]
-        public IActionResult ResetPassword(string token, string email)
-        {
-            if (token == null || email == null)
-            {
-                return RedirectToAction("Index", "Home");
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+		{
+			if (!ModelState.IsValid)
+				return View(model);
 
-            }
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user == null)
+				return RedirectToAction("ForgotPasswordConfirmation");
 
-            var model = new ResetPasswordViewModel
-            {
-                Token = token,
-                Email = email
-            };
+			var result = await _userManager.ResetPasswordAsync(
+				user,
+				model.Token,
+				model.Password);
 
-            return View(model);
-        }
+			if (result.Succeeded)
+				return RedirectToAction("Login");
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
+			foreach (var error in result.Errors)
+				ModelState.AddModelError("", error.Description);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return RedirectToAction("ForgotPasswordConfirmation");
+			return View(model);
+		}
 
-            var result = await _userManager.ResetPasswordAsync(
-                user,
-                model.Token,
-                model.Password);
-
-            if (result.Succeeded)
-                return RedirectToAction("Login");
-
-
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
-            return View(model);
-        }
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-
-    }
+		public IActionResult ForgotPasswordConfirmation()
+		{
+			return View();
+		}
+	}
 }

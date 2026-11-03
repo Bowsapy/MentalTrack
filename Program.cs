@@ -8,24 +8,19 @@ using Microsoft.EntityFrameworkCore;
 
 Env.Load();
 
-
-
 var builder = WebApplication.CreateBuilder(args);
-
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        o => o.UseVector()));
+	options.UseNpgsql(
+		builder.Configuration.GetConnectionString("DefaultConnection"),
+		o => o.UseVector()));
 
 builder.Services.AddScoped<StatisticsService>();
 // Services
 builder.Services.AddScoped<CosineSimilarityService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-
 
 builder.Services.AddHttpClient<EmbeddingService>();
 builder.Services.AddHttpClient<SentimentService>();
@@ -38,11 +33,11 @@ builder.Services.AddScoped<WorkingWithDates>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    options.Password.RequiredLength = 8;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
-    options.SignIn.RequireConfirmedEmail = false;
+	options.Password.RequiredLength = 8;
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequireUppercase = false;
+	options.Password.RequireLowercase = false;
+	options.SignIn.RequireConfirmedEmail = false;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
@@ -55,15 +50,14 @@ var app = builder.Build();
 // Pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+	app.UseMigrationsEndPoint();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    // HSTS radši vypnout na Renderu
-    // app.UseHsts();
+	app.UseExceptionHandler("/Home/Error");
+	// HSTS radši vypnout na Renderu
+	// app.UseHsts();
 }
-
 
 app.UseStaticFiles();
 
@@ -73,8 +67,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 

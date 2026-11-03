@@ -2,24 +2,25 @@
 
 namespace MentalTrack.Models
 {
-    public class JournalEntryPart
-    {
-        public int Id { get; set; }
-        public string Content { get; set; }
-        public int JournalEntryId { get; set; }
-        public Vector? Embedding { get; set; }
+	public class JournalEntryPart
+	{
+		public int Id { get; set; }
+		public string Content { get; set; }
+		public int JournalEntryId { get; set; }
+		public Vector? Embedding { get; set; }
 
-        public JournalEntry JournalEntry { get; set; }
+		public JournalEntry JournalEntry { get; set; }
 
+		public Sentiment? Sentiment { get; set; }
 
-        public Sentiment? Sentiment { get; set; }
-        public JournalEntryPart(string content, int journalEntryId)
+		public JournalEntryPart(string content, int journalEntryId)
 
-        {
-            Content = content;
-            JournalEntryId = journalEntryId;
-        }
-        public JournalEntryPart() { }
-    }
+		{
+			Content = content;
+			JournalEntryId = journalEntryId;
+		}
 
+		public JournalEntryPart()
+		{ }
+	}
 }

@@ -5,56 +5,54 @@ using System.Text.Json;
 
 public class EmbeddingService
 {
-    private readonly HttpClient _http;
-    private readonly ILogger<EmbeddingService> _logger;
-    private readonly EmbeddingConverter _embeddingConverter;
+	private readonly HttpClient _http;
+	private readonly ILogger<EmbeddingService> _logger;
+	private readonly EmbeddingConverter _embeddingConverter;
 
+	public EmbeddingService(HttpClient http, ILogger<EmbeddingService> logger, EmbeddingConverter embeddingConverter)
+	{
+		_http = http;
+		_logger = logger;
+		_embeddingConverter = embeddingConverter;
 
-    public EmbeddingService(HttpClient http, ILogger<EmbeddingService> logger, EmbeddingConverter embeddingConverter)
-    {
-        _http = http;
-        _logger = logger;
-        _embeddingConverter = embeddingConverter;
+		var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+		_logger.LogInformation($"KEY: '{apiKey}'");
+		if (string.IsNullOrEmpty(apiKey))
+		{
+			throw new Exception("OPENAI_API_KEY není nastavený!");
+		}
 
-        _logger.LogInformation($"KEY: '{apiKey}'");
-        if (string.IsNullOrEmpty(apiKey))
-        {
-            throw new Exception("OPENAI_API_KEY není nastavený!");
-        }
+		_http.DefaultRequestHeaders.Authorization =
+			new AuthenticationHeaderValue("Bearer", apiKey);
+	}
 
+	public async Task<Pgvector.Vector> GetEmbedding(string text)
+	{
+		var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-        _http.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", apiKey);
-    }
+		var body = new { model = "text-embedding-3-small", input = text };
 
-    public async Task<Pgvector.Vector> GetEmbedding(string text)
-    {
-        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+		var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
 
-        var body = new { model = "text-embedding-3-small", input = text };
+		var response = await _http.PostAsync("https://api.openai.com/v1/embeddings", content);
 
-        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+		if (!response.IsSuccessStatusCode)
+		{
+			var error = await response.Content.ReadAsStringAsync();
+			throw new Exception($"API error: {error}");
+		}
 
-        var response = await _http.PostAsync("https://api.openai.com/v1/embeddings", content);
+		var json = await response.Content.ReadAsStringAsync();
 
-        if (!response.IsSuccessStatusCode)
-        {
-            var error = await response.Content.ReadAsStringAsync();
-            throw new Exception($"API error: {error}");
-        }
+		using var doc = JsonDocument.Parse(json);
 
-        var json = await response.Content.ReadAsStringAsync();
-
-        using var doc = JsonDocument.Parse(json);
-
-        float[] floatEMB = doc.RootElement
-            .GetProperty("data")[0]
-            .GetProperty("embedding")
-            .EnumerateArray()
-            .Select(x => x.GetSingle())
-            .ToArray();
-        return new Pgvector.Vector(floatEMB);
-    }
+		float[] floatEMB = doc.RootElement
+			.GetProperty("data")[0]
+			.GetProperty("embedding")
+			.EnumerateArray()
+			.Select(x => x.GetSingle())
+			.ToArray();
+		return new Pgvector.Vector(floatEMB);
+	}
 }

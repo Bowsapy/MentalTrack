@@ -2,28 +2,26 @@
 using System.Net;
 using System.Net.Mail;
 
-
 public class EmailSender : IEmailSender
 {
-    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
-    {
+	public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+	{
+		var smtp = new SmtpClient("smtp.gmail.com", 587)
+		{
+			Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("GMAIL"), Environment.GetEnvironmentVariable("GMAIL_KEY")),
+			EnableSsl = true
+		};
 
-        var smtp = new SmtpClient("smtp.gmail.com", 587)
-        {
-            Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("GMAIL"), Environment.GetEnvironmentVariable("GMAIL_KEY")),
-            EnableSsl = true
-        };
+		var message = new MailMessage
+		{
+			From = new MailAddress("janbouza5@gmail.com"),
+			Subject = subject,
+			Body = htmlMessage,
+			IsBodyHtml = true
+		};
 
-        var message = new MailMessage
-        {
-            From = new MailAddress("janbouza5@gmail.com"),
-            Subject = subject,
-            Body = htmlMessage,
-            IsBodyHtml = true
-        };
+		message.To.Add(email);
 
-        message.To.Add(email);
-
-        await smtp.SendMailAsync(message);
-    }
+		await smtp.SendMailAsync(message);
+	}
 }
