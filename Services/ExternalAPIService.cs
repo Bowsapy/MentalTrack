@@ -3,22 +3,52 @@ using MentalTrack.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace MentalTrack.Services
 {
-	public class SentimentService
+	public class ExternalAPIService
 	{
 		private readonly HttpClient _httpClient;
 		private readonly string _apiKey;
 
-		public SentimentService(HttpClient httpClient, IConfiguration config)
+		public ExternalAPIService(HttpClient httpClient)
 		{
 			_httpClient = httpClient;
 			_apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
 				?? throw new InvalidOperationException("OPENAI_API_KEY není nastavena.");
 		}
+		public async Task<Pgvector.Vector> GetEmbedding(string text)
+		{
+			var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-		public async Task<Sentiment> AnalyzeAsync(JournalEntryPart part)
+			var body = new { model = "text-embedding-3-small", input = text };
+
+			var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+			var response = await _httpClient.PostAsync("https://api.openai.com/v1/embeddings", content);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				var error = await response.Content.ReadAsStringAsync();
+				throw new Exception($"API error: {error}");
+			}
+
+			var json = await response.Content.ReadAsStringAsync();
+
+			using var doc = JsonDocument.Parse(json);
+
+			float[] floatEMB = doc.RootElement
+				.GetProperty("data")[0]
+				.GetProperty("embedding")
+				.EnumerateArray()
+				.Select(x => x.GetSingle())
+				.ToArray();
+			return new Pgvector.Vector(floatEMB);
+		}
+
+
+		public async Task<Sentiment> GetSentiment(JournalEntryPart part)
 		{
 			var text = part.Content;
 
@@ -41,7 +71,7 @@ namespace MentalTrack.Services
 			};
 		}
 
-		public async Task<Sentiment> AnalyzeAsync(UserStatesEmb userstateEmb)
+		public async Task<Sentiment> GetSentiment(UserStatesEmb userstateEmb)
 		{
 			var text = userstateEmb.Content;
 

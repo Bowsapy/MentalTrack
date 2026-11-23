@@ -14,7 +14,7 @@ public class EmailSender : IEmailSender
 
 		var message = new MailMessage
 		{
-			From = new MailAddress("janbouza5@gmail.com"),
+			From = new MailAddress(Environment.GetEnvironmentVariable("GMAIL")),
 			Subject = subject,
 			Body = htmlMessage,
 			IsBodyHtml = true

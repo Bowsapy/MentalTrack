@@ -12,15 +12,13 @@ namespace MentalTrack.Controllers
 	{
 		private readonly ILogger<AnalyticsController> _logger;
 		private readonly AppDbContext _context;
-		private readonly EmbeddingService _embeddingService;
-		private readonly SentimentService _sentimentService;
+		private readonly ExternalAPIService _externalAPIService;
 		private readonly StatisticsService _statisticsService;
 
-		public AnalyticsController(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, EmbeddingConverter embeddingConverter, CosineSimilarityService similarityService, ILogger<AnalyticsController> logger, WorkingWithDates dateService, StatisticsService statistics)
+		public AnalyticsController(AppDbContext context, ExternalAPIService externalAPIService, ILogger<AnalyticsController> logger, WorkingWithDates dateService, StatisticsService statistics)
 		{
 			_context = context;
-			_embeddingService = embeddingService;
-			_sentimentService = sentimentService;
+			_externalAPIService = externalAPIService;
 			_logger = logger;
 			_statisticsService = statistics;
 		}
@@ -38,8 +36,8 @@ namespace MentalTrack.Controllers
 		[HttpPost]
 		public async Task<IActionResult> CreateNewUserState(string content, UserStateEnum state)
 		{
-			UserStatesEmb NewUserStateEmb = new UserStatesEmb(state, content, await _embeddingService.GetEmbedding(content));
-			Sentiment NewSentiment = await _sentimentService.AnalyzeAsync(NewUserStateEmb);
+			UserStatesEmb NewUserStateEmb = new UserStatesEmb(state, content, await _externalAPIService.GetEmbedding(content));
+			Sentiment NewSentiment = await _externalAPIService.GetSentiment(NewUserStateEmb);
 			NewUserStateEmb.Sentiment = NewSentiment;
 
 			_context.UserStates.Add(NewUserStateEmb);

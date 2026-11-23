@@ -7,15 +7,13 @@ namespace MentalTrack.Services
 	public class ChunkJournalEntry
 	{
 		private readonly AppDbContext _context;
-		private readonly EmbeddingService _embeddingService;
-		private readonly SentimentService _sentimentService;
-		private readonly ILogger<SentimentService> _logger;
+		private readonly ExternalAPIService _externalAPIService;
+		private readonly ILogger<ExternalAPIService> _logger;
 
-		public ChunkJournalEntry(AppDbContext context, EmbeddingService embeddingService, SentimentService sentimentService, ILogger<SentimentService> logger)
+		public ChunkJournalEntry(AppDbContext context, ExternalAPIService externalAPIService, ILogger<ExternalAPIService> logger)
 		{
 			_context = context;
-			_embeddingService = embeddingService;
-			_sentimentService = sentimentService;
+			_externalAPIService = externalAPIService;
 			_logger = logger;
 		}
 
@@ -36,9 +34,9 @@ namespace MentalTrack.Services
 				{
 					var part = new JournalEntryPart(chunk.Trim(), entry.Id);
 
-					var embeddingTask = _embeddingService.GetEmbedding(part.Content);
+					var embeddingTask = _externalAPIService.GetEmbedding(part.Content);
 
-					var sentimentTask = _sentimentService.AnalyzeAsync(part);
+					var sentimentTask = _externalAPIService.GetSentiment(part);
 
 					await Task.WhenAll(embeddingTask, sentimentTask);
 

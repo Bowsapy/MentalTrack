@@ -19,16 +19,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<StatisticsService>();
 // Services
-builder.Services.AddScoped<CosineSimilarityService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-builder.Services.AddHttpClient<EmbeddingService>();
-builder.Services.AddHttpClient<SentimentService>();
+builder.Services.AddHttpClient<ExternalAPIService>();
 
 builder.Services.AddScoped<ChunkJournalEntry>();
-builder.Services.AddSingleton<EmbeddingConverter>();
-builder.Services.AddSingleton<JsonConverter>();
-
 builder.Services.AddScoped<WorkingWithDates>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>

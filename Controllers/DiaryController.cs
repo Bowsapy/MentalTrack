@@ -4,6 +4,7 @@ using MentalTrack.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pgvector.EntityFrameworkCore;
 using System.Security.Claims;
 
 [Authorize]
@@ -11,22 +12,19 @@ public class DiaryController : Controller
 {
 	private readonly AppDbContext _context;
 	private readonly ILogger<DiaryController> _logger;
-	private readonly EmbeddingService _embeddingService;
-	private readonly CosineSimilarityService _similarityService;
-	private readonly EmbeddingConverter _embeddingConverter;
 	private readonly ChunkJournalEntry _chunkJournalEntry;
 	private readonly WorkingWithDates _workingWithDates;
-	private readonly SentimentService _sentimentService;
+	private readonly ExternalAPIService _externalAPIService;
+	private readonly StatisticsService _statisticsService;
 
-	public DiaryController(AppDbContext context, WorkingWithDates workingWithDates, ILogger<DiaryController> logger, EmbeddingService embeddingService, CosineSimilarityService similarityService, EmbeddingConverter embeddingConverter, ChunkJournalEntry chunkJournalEntry)
+	public DiaryController(AppDbContext context, WorkingWithDates workingWithDates, ILogger<DiaryController> logger, ChunkJournalEntry chunkJournalEntry, StatisticsService statisticsService, ExternalAPIService externalAPIService)
 	{
 		_context = context;
 		_logger = logger;
-		_embeddingService = embeddingService;
-		_similarityService = similarityService;
-		_embeddingConverter = embeddingConverter;
 		_chunkJournalEntry = chunkJournalEntry;
 		_workingWithDates = workingWithDates;
+		_statisticsService = statisticsService;
+		_externalAPIService = externalAPIService;
 	}
 
 	public IActionResult ShowEntries()
@@ -121,7 +119,7 @@ public class DiaryController : Controller
 			return View(entry);
 		}
 
-		entry.Embedding = await _embeddingService.GetEmbedding(entry.Content);
+		entry.Embedding = await _externalAPIService.GetEmbedding(entry.Content);
 
 		entry.DayPhase = _workingWithDates.GetDayPhase(entry.CreatedAt);
 
@@ -150,9 +148,7 @@ public class DiaryController : Controller
 			.Select(e => new
 			{
 				Entry = e,
-				Score = _similarityService.Calculate(
-					target.Embedding, (e.Embedding)
-				)
+				Score = target.Embedding.CosineDistance(e.Embedding)
 			})
 			.OrderByDescending(x => x.Score)
 			.Where(x => x.Score > 0.6)

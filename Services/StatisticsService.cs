@@ -4,6 +4,7 @@ using MentalTrack.Enums;
 using MentalTrack.Models;
 using MentalTrack.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Pgvector;
 using Pgvector.EntityFrameworkCore;
 
 namespace MentalTrack.Services
@@ -11,16 +12,10 @@ namespace MentalTrack.Services
 	public class StatisticsService
 	{
 		private readonly AppDbContext _context;
-		private readonly EmbeddingService _embeddingService;
-		private readonly CosineSimilarityService _similarityService;
-		private readonly EmbeddingConverter _embeddingConverter;
 
-		public StatisticsService(AppDbContext context, EmbeddingConverter embeddingConverter, EmbeddingService embeddingService, CosineSimilarityService similarity)
+		public StatisticsService(AppDbContext context)
 		{
 			_context = context;
-			_similarityService = similarity;
-			_embeddingService = embeddingService;
-			_embeddingConverter = embeddingConverter;
 		}
 
 		public int GetEntriesMode(string CurrentUserId)
@@ -95,7 +90,7 @@ namespace MentalTrack.Services
 				var partEmbedding = part.Embedding;
 				foreach (var state in validUserstates)
 				{
-					double score = _similarityService.Calculate(partEmbedding, state.Embedding);
+					double score = partEmbedding.CosineDistance(state.Embedding);
 					if (score > AppConstants.MinScore && !existingMatches.Contains((part.JournalEntryId, state.Id)))
 					{
 						_context.EntryStates.Add(new EntryStateScore(part.JournalEntry.Id, state.Id, score));
